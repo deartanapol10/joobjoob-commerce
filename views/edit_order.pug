@@ -1,0 +1,17 @@
+extends layout
+
+block content
+    br
+    h1 #{name}
+    form(method='POST', action='/orders/edit/'+order._id)
+        #form-group
+            label Name:
+            input.form-control(name='name', type='text', value=order.name)
+        #form-group
+            label Contact:
+            input.form-control(name='contact', type='text', value=order.contact)
+        #form-group
+            label Order List:
+            textarea.form-control(name='product')= order.product
+        br
+        input.btn.btn-primary(type='submit', value='SUBMIT')

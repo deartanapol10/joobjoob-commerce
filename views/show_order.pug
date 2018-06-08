@@ -1,0 +1,11 @@
+extends layout
+
+block content
+    br
+    h1 Customer Name : #{order.name}
+    h5 Customer Contact : #{order.contact}
+    p= order.product
+    hr
+    a.btn.btn-default(href='/orders/edit/'+order._id) Edit This Order
+    a.btn.btn-danger.delete-article(href='#', data-id=order._id) Delete This Order
+        
