@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-//Article Schema
+//Order Schema
 var orderSchema = mongoose.Schema({
     name: {
         type: String,
