@@ -18,6 +18,16 @@ html(lang="en")
                   span.sr-only (current)
               li.nav-item
                 a.nav-link(href='/orders/add') Add New Order
+            ul.nav.navbar-nav.navbar-right
+                if !user
+                    li
+                        a.nav-link(href='/users/register') Register
+                    li
+                        a.nav-link(href='/users/login') Login
+                else
+                    li
+                        a.nav-link(href='/users/logout') Logout
+
 
         .container
             != messages('flash', locals)

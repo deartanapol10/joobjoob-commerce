@@ -5,13 +5,19 @@ const router = express.Router();
 
 //Import models
 var Order = require('../models/order.model.js');
+var User = require('../models/user.model.js');
 
 //-----------------
 // ---- UPDATE ----
 //-----------------
 //Update each order route
-router.get('/edit/:id', (req, res) => {
+router.get('/edit/:id', ensureAuthenticated, (req, res) => {
     Order.findById(req.params.id, (err, order) => {
+        if(order.name != req.user._id){
+            req.flash('danger', 'Not Authorized')
+            res.redirect('/')
+        }
+
         res.render('edit_order', {
             title: 'Edit Order',
             order: order
@@ -43,7 +49,7 @@ router.post('/edit/:id', (req, res) => {
 // ------ ADD ------
 //-----------------
 //Add order route
-router.get('/add', (req, res) => {
+router.get('/add', ensureAuthenticated, (req, res) => {
     res.render('add_order', {
         title: 'Add Order'
     });
@@ -57,7 +63,7 @@ router.post('/add', (req, res) => {
         product : req.body.product
     });
 
-    req.checkBody('name', 'Name is required').notEmpty();
+    // req.checkBody('name', 'Name is required').notEmpty();
     req.checkBody('contact', 'Contact is required').notEmpty();
     req.checkBody('product', 'Product is required').notEmpty();
 
@@ -71,7 +77,8 @@ router.post('/add', (req, res) => {
             errors: errors
         });
     }else {
-        order.name = req.body.name;
+        // order.name = req.body.name;
+        order.name = req.user._id;
         order.contact = req.body.contact;
         order.product = req.body.product;
 
@@ -88,12 +95,23 @@ router.post('/add', (req, res) => {
 //-----------------
 //Delete order
 router.delete('/:id', (req, res) => {
-    var query = {_id: req.params.id};
-    Order.remove(query, (err) => {
-        return console.log(err);
-    });
 
-    res.send('Success!');
+    if(!req.user._id){
+        res.status(500).send() //error.. can't login
+    }
+
+    var query = {_id: req.params.id};
+
+    Order.findById(req.params._id, (err, order) => {
+        if(order.name != req.user._id){
+            res.status(500).send()
+        }
+
+        order.remove(query, (err) => {
+            return console.log(err);
+        });
+        res.send('Success!');
+    })
 })
 
 //-----------------
@@ -102,11 +120,24 @@ router.delete('/:id', (req, res) => {
 //Show each order routes
 router.get('/:id', (req, res) => {
     Order.findById(req.params.id, (err, order) => {
-        res.render('show_order', {
-            order: order
+        User.findById(order.name, (err, user) => {
+            res.render('show_order', {
+                order: order,
+                name: user.name
+            })
         })
     })
 })
 
+//Access control
+function ensureAuthenticated(req, res, next){
+    if(req.isAuthenticated()){
+        return next()
+    }
+    else{
+        req.flash('danger', 'Please Login')
+        res.redirect('/users/login')
+    }
+}
 
 module.exports = router;

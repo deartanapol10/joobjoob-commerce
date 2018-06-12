@@ -5,9 +5,12 @@ const bodyParser = require('body-parser');
 const expressValidator = require('express-validator');
 const flash = require('connect-flash');
 const session = require('express-session');
+const config = require('./config/database');
+const passport = require('passport');
+
 
 // If run offline, use localhost:27017
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/ecomm');
+mongoose.connect(config.database);
 var db = mongoose.connection;
 
 //Check DB connection
@@ -55,6 +58,17 @@ app.use(function (req, res, next) {
 //Express-Validator Middleware
 app.use(expressValidator());
 
+//Passport config
+require('./config/passport')(passport)
+//Passport Middleware
+app.use(passport.initialize());
+app.use(passport.session());
+
+app.get('*', (req, res, next) => {
+    res.locals.user = req.user || null;
+    next();
+})
+
 //Home route
 app.get('/', (req, res) => {
     Order.find({}, (err, order) => {
@@ -69,10 +83,14 @@ app.get('/', (req, res) => {
     });
 });
 
-//Articles routes
-//Everything that uses './routes/articles.js', send it to articles in routes folder
+//Order route
+//EX. (href='/orders/add') -> run on router.post('/add', ..) in order.route.js 
 var order_route = require('./routes/order.route.js');
 app.use('/orders', order_route);
+
+//User route
+var user_route = require('./routes/user.route.js');
+app.use('/users', user_route);
 
 
 //Start server
