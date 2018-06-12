@@ -69,6 +69,19 @@ app.get('/', (req, res) => {
     });
 });
 
+// Query all order
+app.get('/main', (req, res) => {
+  Order.find({}, (err, order) => {
+    console.log(order);
+    if (err) {
+      console.log(err);
+    }
+    res.render('main_order', {
+      order: order
+    });
+  });
+});
+
 //Articles routes
 //Everything that uses './routes/articles.js', send it to articles in routes folder
 var order_route = require('./routes/order.route.js');
