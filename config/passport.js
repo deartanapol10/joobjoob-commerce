@@ -1,36 +1,27 @@
-const LocalStrategy = require('passport-local').Strategy;
-const User = require('../models/user.model')
-const config = require('../config/database')
-const bcrypt = require('bcryptjs')
+const JwtStrategy = require("passport-jwt").Strategy;
+const ExtractJwt = require("passport-jwt").ExtractJwt;
 
-module.exports = (passport) => {
-    //Local Strategy
-    passport.use(new LocalStrategy((username, password, done) => {
-        //Match Username
-        var query = {username:username}
-        User.findOne(query, (err, user) => {
-            if(err) throw err
+const keys = require("../config/keys");
 
-            if(!user) return done(null, false, {message: 'No user found'})
+// Load User model
+const User = require("../models/User");
 
-            //Match Password
-            bcrypt.compare(password, user.password, (err, isMatch) => {
-                if(err) throw err
+const opts = {};
+opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
+opts.secretOrKey = keys.secretOrKey;
 
-                if(isMatch) return done(null, user)
-                else return done(null, false, {message: 'Wrong password'})
+module.exports = passport => {
+   passport.use(
+      new JwtStrategy(opts, (jwt_payload, done) => {
+         // console.log(jwt_payload)
+         User.findById(jwt_payload.id)
+            .then(user => {
+               if (user) {
+                  return done(null, user);
+               }
+               return done(null, false);
             })
-        })
-    }))
-
-    //https://stackoverflow.com/questions/27637609/understanding-passport-serialize-deserialize
-    passport.serializeUser(function(user, done) {
-        done(null, user.id);
-    });
-
-    passport.deserializeUser(function(id, done) {
-        User.findById(id, function(err, user) {
-            done(err, user);
-        });
-    });
-}
+            .catch(err => console.log(err));
+      })
+   );
+};
