@@ -17,6 +17,13 @@ router.get("/", (req, res) => {
   });
 });
 
+router.get("/paid", (req, res) => {
+  var query = { paymentStatus: "true" };
+  Order.find(query).then(orders => {
+    res.json(orders);
+  });
+});
+
 // @route   Post api/order/
 // @desc    Create a order
 // @access  public
