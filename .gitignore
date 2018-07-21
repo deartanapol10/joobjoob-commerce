@@ -1,5 +1,10 @@
+<<<<<<< HEAD
 node_modules
 .vscode
 public
 views
 .bowerrc
+=======
+node_modules/
+package-lock.json
+>>>>>>> 3f6d909d73191a563848509e917247ba36dbbf10
