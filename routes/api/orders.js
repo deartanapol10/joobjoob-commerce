@@ -12,9 +12,11 @@ var User = require("../../models/User");
 // @desc    Get all orders
 // @access  public
 router.get("/", (req, res) => {
-  Order.find().then(orders => {
-    res.json(orders);
-  });
+  Order.find()
+    .then(orders => {
+      res.json(orders);
+    })
+    .catch(err => res.status(400).json(err));
 });
 
 // @route   Post api/order/
@@ -34,6 +36,7 @@ router.post("/", (req, res) => {
   new Order(orderField)
     .save()
     .then(order => {
+      const url = { URL: "http://shippee.com/order/" + order._id };
       orderField.URL = "http://shippee.com/order/" + order._id;
       Order.findOneAndUpdate(
         { _id: order._id },
