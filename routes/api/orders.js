@@ -19,6 +19,13 @@ router.get("/", (req, res) => {
     .catch(err => res.status(400).json(err));
 });
 
+router.get("/paid", (req, res) => {
+  var query = { paymentStatus: "true" };
+  Order.find(query).then(orders => {
+    res.json(orders);
+  });
+});
+
 // @route   Post api/order/
 // @desc    Create a order
 // @access  public
