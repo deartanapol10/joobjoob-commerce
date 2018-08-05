@@ -5,6 +5,7 @@ const bodyParser = require("body-parser");
 const expressValidator = require("express-validator");
 const flash = require("connect-flash");
 const session = require("express-session");
+const passport = require("passport");
 
 // Import router file
 var orders = require("./routes/api/orders");
@@ -41,12 +42,43 @@ app.use(
   })
 );
 
+// Passport middleware
+app.use(passport.initialize());
+
+// Passport Config
+require("./config/passport-facebook")(passport);
+
+passport.serializeUser(function(user, cb) {
+  cb(null, user);
+});
+
+passport.deserializeUser(function(obj, cb) {
+  cb(null, obj);
+});
+
 //Express-Validator Middleware
 app.use(expressValidator());
 
 app.use("/api/orders", orders);
 app.use("/api/users", users);
 app.use("/api/product", product);
+
+// Test facebook log in
+app.get("/auth/facebook", passport.authenticate("facebook"));
+
+// Callback for login facebook
+app.get(
+  "/auth/facebook/callback",
+  passport.authenticate("facebook", { failureRedirect: "/login" }),
+  function(req, res) {
+    // Successful authentication, redirect home.
+    res.redirect("/");
+  }
+);
+
+app.get("/", (req, res) => {
+  res.json({ greeting: "Hello World" });
+});
 
 //Start server
 app.listen(8000, () => {
