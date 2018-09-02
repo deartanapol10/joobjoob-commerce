@@ -11,6 +11,8 @@ const passport = require("passport");
 var orders = require("./routes/api/orders");
 var users = require("./routes/api/users");
 var product = require("./routes/api/product");
+var category = require("./routes/api/category");
+var store = require("./routes/api/store");
 
 // DB config
 const db = require("./config/keys").mongoURI;
@@ -59,9 +61,11 @@ passport.deserializeUser(function(obj, cb) {
 //Express-Validator Middleware
 app.use(expressValidator());
 
-app.use("/api/orders", orders);
 app.use("/api/users", users);
+app.use("/api/orders", orders);
 app.use("/api/product", product);
+app.use("/api/category", category);
+app.use("/api/store", store);
 
 // Test facebook log in
 app.get("/auth/facebook", passport.authenticate("facebook"));
