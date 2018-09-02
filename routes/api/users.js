@@ -175,6 +175,27 @@ router.post(
   }
 );
 
+router.post(
+  "/deliveryType/:id",
+  // passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    const deliveryField = {};
+    if (req.body.delivery_name) deliveryField.delivery_name = req.body.delivery_name;
+    if (req.body.price) deliveryField.price = req.body.price;
+
+    User.findById(req.params.id).then(user => {
+      if (user) {
+        //Update
+        user.deliveryType.push(deliveryField);
+
+        user.save().then(user => {
+          res.json(user.deliveryType);
+        });
+      }
+    });
+  }
+);
+
 // //Login form
 // router.get("/login", (req, res) => {
 //    res.render("login");
