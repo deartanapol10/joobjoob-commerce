@@ -26,21 +26,21 @@ const UserSchema = new Schema({
   facebookId: {
     type: Schema.Types.ObjectId
   },
+  category: [
+    {
+      main: String,
+      sub: [String]
+    }
+  ],
   store: [
     {
       id: {
         type: Schema.Types.ObjectId
       },
       name: {
-        type: String
-        //required: true
+        type: String,
+        required: true
       },
-      category: [
-        {
-          main: String,
-          sub: [String]
-        }
-      ],
       product: [
         {
           id: {
@@ -50,7 +50,7 @@ const UserSchema = new Schema({
             type: String,
             required: true
           },
-          category: {
+          categoryGroup: {
             type: String
           },
           detail: {
@@ -74,7 +74,7 @@ const UserSchema = new Schema({
     {
       product: [
         {
-          id: {
+          productID: {
             type: Schema.Types.ObjectId,
             ref: "user.store.product"
           },
@@ -101,9 +101,12 @@ const UserSchema = new Schema({
       URL: {
         type: String
       },
-      bankAccount: {
-        type: String,
-        required: true
+      bankID: {
+        type: Schema.Types.ObjectId,
+        ref: "user.bankAccount"
+      },
+      deliveryType: {
+        type: String
       },
       paymentSlip: {
         //Slip image
@@ -128,15 +131,29 @@ const UserSchema = new Schema({
       }
     }
   ],
+  deliveryType: [String],
   address: {
     type: [String]
   },
   phoneNumber: {
     type: String
   },
-  bankAccount: {
-    type: [String]
-  },
+  bankAccount: [
+    {
+      bankName: {
+        type: String,
+        required: true
+      },
+      ownerName: {
+        type: String,
+        required: true
+      },
+      accountNumber: {
+        type: String,
+        required: true
+      }
+    }
+  ],
   createdAt: {
     type: Date
   },

@@ -5,72 +5,83 @@ const _ = require("lodash");
 const router = express.Router();
 
 //Import models
-var Order = require("../../models/Order");
 var User = require("../../models/User");
 
-// @route   GET api/order/
+// @route   GET api/orders/
 // @desc    Get all orders
 // @access  public
-router.get("/", (req, res) => {
-  Order.find()
-    .then(orders => {
-      res.json(orders);
+router.get("/:id", (req, res) => {
+  User.findById(req.params.id)
+    .then(user => {
+      res.json(user.order);
     })
     .catch(err => res.status(400).json(err));
-});
-
-router.get("/paid", (req, res) => {
-  var query = { paymentStatus: "true" };
-  Order.find(query).then(orders => {
-    res.json(orders);
-  });
 });
 
 // @route   Post api/order/
 // @desc    Create a order
 // @access  public
-router.post("/", (req, res) => {
-  const orderField = {};
+router.post("/:id", (req, res) => {
+  User.findById(req.params.id).then(user => {
+    const orderField = {};
+    orderField.product = [];
+    const slicedProduct = req.body.productID.split(",");
+    const slicedQuantity = req.body.quantity.split(",");
+    const slicedSize = req.body.size.split(",");
+    const slicedDescription = req.body.description.split(",");
 
-  if (req.body.userid) orderField.userid = req.body.userid;
+    for (i = 0; i < slicedProduct.length; i++) {
+      var productField = {
+        productID: slicedProduct[i],
+        quantity: slicedQuantity[i],
+        size: slicedSize[i],
+        description: slicedDescription[i]
+      };
 
-  orderField.orders = {};
-  if (req.body.productid) orderField.orders.productid = req.body.productid;
-  if (req.body.quantity) orderField.orders.quantity = req.body.quantity;
-  if (req.body.size) orderField.orders.size = req.body.size;
-  if (req.body.bankAccount) orderField.bankAccount = req.body.bankAccount;
+      orderField.product.push(productField);
+    }
 
-  new Order(orderField)
-    .save()
-    .then(order => {
-      const url = { URL: "http://shippee.com/order/" + order._id };
-      orderField.URL = "http://shippee.com/order/" + order._id;
-      Order.findOneAndUpdate(
-        { _id: order._id },
-        { $set: orderField },
-        { new: true }
-      ).then(newOrder => {
-        res.json(newOrder);
+    user.order.push(orderField);
+
+    user.save().then(user => {
+      const orderLength = user.order.length;
+      const URL = "http://shippee.com/order/" + user.order[orderLength - 1]._id;
+      user.order[orderLength - 1].URL = URL;
+
+      user.save().then(user => {
+        res.json(user.order);
       });
-    })
-    .catch(err => res.json(err));
+    });
+  });
 });
 
 // @route   PATCH api/order/
 // @desc    Update a order
 // @access  public
-router.patch("/:orderID", (req, res) => {
+router.patch("/:id/:orderID", (req, res) => {
   var body = req.body;
 
-  Order.findOneAndUpdate(
-    { _id: req.params.orderID },
-    { $set: body },
-    { new: true }
-  )
-    .then(order => {
-      res.json(order);
-    })
-    .catch(err => res.status(400).json(err));
+  User.findById(req.params.id).then(user => {
+    if (
+      user.order.filter(order => order._id.toString() === req.params.orderID)
+        .length === 0
+    ) {
+      return res.json({ error: "No order map" });
+    }
+
+    const orderField = body;
+
+    //Find index key
+    const indexValueOrder = user.order
+      .map(item => item._id.toString())
+      .indexOf(req.params.orderID);
+
+    user.order[indexValueOrder] = orderField;
+
+    user.save().then(user => {
+      res.json(user.order);
+    });
+  });
 });
 
 module.exports = router;

@@ -9,13 +9,6 @@ const router = express.Router();
 //Import models
 var User = require("../../models/User");
 
-// @route   GET api/user/test
-// @desc    Tests user route
-// @access  Public
-router.get("/test", (req, res) => {
-  res.json({ msg: "api/user/test works!!" });
-});
-
 // @route   POST api/user/register
 // @desc    Register user
 // @access  Public
@@ -154,6 +147,29 @@ router.post(
       } else {
         errors.username = "No username";
         res.status(400).json(errors);
+      }
+    });
+  }
+);
+
+router.post(
+  "/bankAccount/:id",
+  // passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    const bankField = {};
+    if (req.body.bankName) bankField.bankName = req.body.bankName;
+    if (req.body.ownerName) bankField.ownerName = req.body.ownerName;
+    if (req.body.accountNumber)
+      bankField.accountNumber = req.body.accountNumber;
+
+    User.findById(req.params.id).then(user => {
+      if (user) {
+        //Update
+        user.bankAccount.push(bankField);
+
+        user.save().then(user => {
+          res.json(user.bankAccount);
+        });
       }
     });
   }
