@@ -175,25 +175,18 @@ router.post(
   }
 );
 
-// //Login form
-// router.get("/login", (req, res) => {
-//    res.render("login");
-// });
-
-// //Login process
-// router.post("/login", (req, res, next) => {
-//    passport.authenticate("local", {
-//       successRedirect: "/",
-//       failureRedirect: "/users/login",
-//       failureFlash: true
-//    })(req, res, next);
-// });
-
-// //Logout
-// router.get("/logout", (req, res) => {
-//    req.logout();
-//    req.flash("success", "You are logged out");
-//    res.redirect("/users/login");
-// });
+// @route   GET api/users/current
+// @desc    Return current user
+// @access  Private
+router.get(
+  "/current",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    res.json({
+      id: req.user.id,
+      username: req.user.username
+    });
+  }
+);
 
 module.exports = router;
