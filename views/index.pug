@@ -1,0 +1,9 @@
+extends layout
+
+block content
+    br
+    h1 #{title}
+    ul.list-group
+    each i, n in order
+        li.list-group-item
+            a(href='/orders/'+i._id)=i.name
