@@ -21,7 +21,7 @@ const ProductSchema = new Schema({
     required: true
   },
   image: {
-    type: String
+    type: Schema.Types.Mixed
   },
   createdAt: {
     type: Date
