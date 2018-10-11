@@ -43,28 +43,6 @@ router.post("/:id", (req, res) => {
     newProduct.save().then(product => {
       res.json(product);
     });
-
-    // if (
-    //   user.store.filter(store => store.name === req.body.storeName).length === 0
-    // ) {
-    //   res.json({ error: "No store map" });
-    // }
-
-    // //Find index key
-    // const indexValueStore = user.store
-    //   .map(item => item.name)
-    //   .indexOf(req.body.storeName);
-
-    // const productField = {
-    //   name: req.body.name,
-    //   price: req.body.price
-    // };
-
-    // user.store[indexValueStore].product.push(productField);
-
-    // user.save().then(user => {
-    //   res.json(user.store[indexValueStore].product);
-    // });
   });
 });
 

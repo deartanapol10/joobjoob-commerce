@@ -32,47 +32,47 @@ const UserSchema = new Schema({
       sub: [String]
     }
   ],
-  store: [
-    {
-      id: {
-        type: Schema.Types.ObjectId
-      },
-      name: {
-        type: String,
-        required: true
-      },
-      product: [
-        {
-          id: {
-            type: Schema.Types.ObjectId
-          },
-          productName: {
-            type: String,
-            required: true
-          },
-          categoryGroup: {
-            type: String
-          },
-          detail: {
-            type: String
-          },
-          price: {
-            type: Number,
-            required: true
-          },
-          image: {
-            type: String
-          },
-          createdAt: {
-            type: Date
-          },
-          updatedAt: {
-            type: Date
-          }
-        }
-      ]
-    }
-  ],
+  // store: [
+  //   {
+  //     id: {
+  //       type: Schema.Types.ObjectId
+  //     },
+  //     name: {
+  //       type: String,
+  //       required: true
+  //     },
+  //     product: [
+  //       {
+  //         id: {
+  //           type: Schema.Types.ObjectId
+  //         },
+  //         productName: {
+  //           type: String,
+  //           required: true
+  //         },
+  //         categoryGroup: {
+  //           type: String
+  //         },
+  //         detail: {
+  //           type: String
+  //         },
+  //         price: {
+  //           type: Number,
+  //           required: true
+  //         },
+  //         image: {
+  //           type: String
+  //         },
+  //         createdAt: {
+  //           type: Date
+  //         },
+  //         updatedAt: {
+  //           type: Date
+  //         }
+  //       }
+  //     ]
+  //   }
+  // ],
   order: [
     {
       products: [
@@ -140,7 +140,9 @@ const UserSchema = new Schema({
       }
     }
   ],
-  deliveryType: [String],
+  // deliveryType: {
+  //   type: [String]
+  // },
   address: {
     type: [String]
   },

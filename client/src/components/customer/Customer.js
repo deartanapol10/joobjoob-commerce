@@ -250,7 +250,9 @@ class Customer extends Component {
                   <List disablePadding>
                     <ListItem className={classes.listItem}>
                       <ListItemText primary="ชื่อลูกค้า" />
-                      <Typography variant="body1">{order.name}</Typography>
+                      <Typography variant="body1">
+                        {order.customerName}
+                      </Typography>
                     </ListItem>
                     <ListItem className={classes.listItem}>
                       <ListItemText primary="ออกบิลเมื่อ" />

@@ -55,21 +55,22 @@ router.post("/:id", (req, res) => {
   User.findById(req.params.id)
     .then(user => {
       const orderField = {};
-      orderField.product = [];
-      const slicedProduct = req.body.productID.split(",");
+      orderField.customerName = req.body.customerName;
+      orderField.products = [];
+      const slicedProduct = req.body.product.split(",");
       const slicedQuantity = req.body.quantity.split(",");
-      const slicedSize = req.body.size.split(",");
+      //const slicedSize = req.body.size.split(",");
       //const slicedDescription = req.body.description.split(",");
 
       for (i = 0; i < slicedProduct.length; i++) {
         var productField = {
-          productID: slicedProduct[i],
-          quantity: slicedQuantity[i],
-          size: slicedSize[i],
-          description: slicedDescription[i]
+          product: slicedProduct[i],
+          quantity: slicedQuantity[i]
+          //size: slicedSize[i],
+          //description: slicedDescription[i]
         };
 
-        orderField.product.push(productField);
+        orderField.products.push(productField);
       }
 
       user.order.push(orderField);
