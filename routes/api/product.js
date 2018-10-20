@@ -5,6 +5,7 @@ const router = express.Router();
 
 //Import models
 var User = require("../../models/User");
+var Product = require("../../models/Product");
 
 // @route   GET api/product/
 // @desc    Get all products
@@ -31,26 +32,16 @@ router.get("/:id/:name", (req, res) => {
 // @access  public
 router.post("/:id", (req, res) => {
   User.findById(req.params.id).then(user => {
-    if (
-      user.store.filter(store => store.name === req.body.storeName).length === 0
-    ) {
-      res.json({ error: "No store map" });
-    }
-
-    //Find index key
-    const indexValueStore = user.store
-      .map(item => item.name)
-      .indexOf(req.body.storeName);
-
     const productField = {
-      name: req.body.name,
+      user: req.params.id,
+      productName: req.body.name,
       price: req.body.price
     };
 
-    user.store[indexValueStore].product.push(productField);
+    const newProduct = new Product(productField);
 
-    user.save().then(user => {
-      res.json(user.store[indexValueStore].product);
+    newProduct.save().then(product => {
+      res.json(product);
     });
   });
 });

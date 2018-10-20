@@ -3,7 +3,6 @@ const path = require("path");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const expressValidator = require("express-validator");
-const flash = require("connect-flash");
 const session = require("express-session");
 const passport = require("passport");
 
@@ -48,15 +47,7 @@ app.use(
 app.use(passport.initialize());
 
 // Passport Config
-require("./config/passport-facebook")(passport);
-
-passport.serializeUser(function(user, cb) {
-  cb(null, user);
-});
-
-passport.deserializeUser(function(obj, cb) {
-  cb(null, obj);
-});
+require("./config/passport")(passport);
 
 //Express-Validator Middleware
 app.use(expressValidator());
@@ -66,23 +57,6 @@ app.use("/api/orders", orders);
 app.use("/api/product", product);
 app.use("/api/category", category);
 app.use("/api/store", store);
-
-// Test facebook log in
-app.get("/auth/facebook", passport.authenticate("facebook"));
-
-// Callback for login facebook
-app.get(
-  "/auth/facebook/callback",
-  passport.authenticate("facebook", { failureRedirect: "/login" }),
-  function(req, res) {
-    // Successful authentication, redirect home.
-    res.redirect("/");
-  }
-);
-
-app.get("/", (req, res) => {
-  res.json({ greeting: "Hello World" });
-});
 
 //Start server
 app.listen(8000, () => {

@@ -32,65 +32,70 @@ const UserSchema = new Schema({
       sub: [String]
     }
   ],
-  store: [
-    {
-      id: {
-        type: Schema.Types.ObjectId
-      },
-      name: {
-        type: String,
-        required: true
-      },
-      product: [
-        {
-          id: {
-            type: Schema.Types.ObjectId
-          },
-          name: {
-            type: String,
-            required: true
-          },
-          categoryGroup: {
-            type: String
-          },
-          detail: {
-            type: String
-          },
-          price: {
-            type: Number,
-            required: true
-          },
-          createdAt: {
-            type: Date
-          },
-          updatedAt: {
-            type: Date
-          }
-        }
-      ]
-    }
-  ],
+  // store: [
+  //   {
+  //     id: {
+  //       type: Schema.Types.ObjectId
+  //     },
+  //     name: {
+  //       type: String,
+  //       required: true
+  //     },
+  //     product: [
+  //       {
+  //         id: {
+  //           type: Schema.Types.ObjectId
+  //         },
+  //         productName: {
+  //           type: String,
+  //           required: true
+  //         },
+  //         categoryGroup: {
+  //           type: String
+  //         },
+  //         detail: {
+  //           type: String
+  //         },
+  //         price: {
+  //           type: Number,
+  //           required: true
+  //         },
+  //         image: {
+  //           type: String
+  //         },
+  //         createdAt: {
+  //           type: Date
+  //         },
+  //         updatedAt: {
+  //           type: Date
+  //         }
+  //       }
+  //     ]
+  //   }
+  // ],
   order: [
     {
-      product: [
+      products: [
         {
-          productID: {
+          product: {
             type: Schema.Types.ObjectId,
-            ref: "user.store.product"
+            ref: "product"
           },
           quantity: {
             type: Number,
             required: true
           },
           size: {
-            type: String,
-            required: true
+            type: String
           },
           description: {
             type: String
           }
         }
       ],
+      customerName: {
+        type: String
+      },
       comment: {
         type: String
       },
@@ -125,6 +130,10 @@ const UserSchema = new Schema({
       createdAt: {
         type: Date,
         default: Date.now
+      },
+      expiredAt: {
+        type: Date,
+        default: new Date(+new Date() + 2 * 24 * 60 * 60 * 1000)
       },
       updatedAt: {
         type: Date
