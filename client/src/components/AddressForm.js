@@ -41,7 +41,7 @@ class AddressForm extends Component {
                     gutterBottom
                     className={classes.titleSecondary}
                 >
-                    ที่อยู่สำหรับจัดส่ง
+                    ที่อยู่สำหรับจัดส่งแบบ1
             </Typography>
                 <Grid container spacing={16}>
                     <Grid item xs={12} sm={6}>

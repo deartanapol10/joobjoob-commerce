@@ -1,18 +1,19 @@
 import React, { Component } from 'react';
+import { FormErrors } from './FormErrors';
 
 import {
-   Grid,
+	Grid,
 	Typography,
 	TextField,
 	Button,
-   FormControl,
+	FormControl,
 	Divider,
 	Input,
 	InputLabel,
 	InputAdornment,
-   Card,
-   CardContent,
-   CardMedia
+	Card,
+	CardContent,
+	CardMedia
 } from "@material-ui/core";
 
 const banks = [
@@ -33,6 +34,51 @@ const banks = [
 ]
 
 class PaymentForm extends Component {
+	constructor(props) {
+		super(props);
+		this.state = {
+			money: '',
+			formErrors: { money: '' },
+			moneyValid: false,
+			formValid: false
+		}
+	}
+
+	handleUserInput = (e) => {
+		const name = e.target.name;
+		const value = e.target.value;
+		this.setState({ [name]: value },
+			() => { this.validateField(name, value) });
+	}
+
+	validateField(fieldName, value) {
+		let fieldValidationErrors = this.state.formErrors;
+		let moneyValid = this.state.moneyValid;
+
+		switch (fieldName) {
+			case 'money':
+				// moneyValid = value.match(/^\d/)
+				moneyValid = value.match(this.props.total)
+				fieldValidationErrors.money = moneyValid ? '' : ' is invalid';
+				break;
+			default:
+				break;
+		}
+		this.setState({
+			formErrors: fieldValidationErrors,
+			moneyValid: moneyValid,
+		}, this.validateForm);
+	}
+
+	validateForm() {
+		this.setState({
+			formValid: this.state.moneyValid
+		});
+	}
+
+	errorClass(error) {
+		return (error.length === 0 ? '' : 'has-error');
+	}
 	render() {
 		const { classes } = this.props;
 		return (
@@ -52,7 +98,7 @@ class PaymentForm extends Component {
 												className={classes.bankMedia}
 												image={banks[0].image}
 												title={banks[0].name}
-												/>
+											/>
 											<CardContent className={classes.bankContent}>
 												<Typography variant="headline" className={classes.itemName}>{banks[0].account}</Typography>
 												<Typography variant="body1" color="textSecondary">{banks[0].name}</Typography>
@@ -69,7 +115,7 @@ class PaymentForm extends Component {
 												className={classes.bankMedia}
 												image={banks[1].image}
 												title={banks[1].name}
-												/>
+											/>
 											<CardContent className={classes.bankContent}>
 												<Typography variant="headline" className={classes.itemName}>{banks[1].account}</Typography>
 												<Typography variant="body1" color="textSecondary">{banks[1].name}</Typography>
@@ -80,18 +126,22 @@ class PaymentForm extends Component {
 								</div>
 							</div>
 						</FormControl>
-						<Divider className={classes.divider}/>
-						<FormControl className={classes.formControl} margin="normal">
-							<InputLabel htmlFor="transfered-amount">เงินที่โอน</InputLabel>
-							<Input
+						<Divider className={classes.divider} />
+						<div className="panel panel-default">
+							<FormErrors formErrors={this.state.formErrors} />
+						</div>
+						<div className={`form-group ${this.errorClass(this.state.formErrors.money)}`} margin="normal">
+							<InputLabel  htmlFor="transfered-amount">เงินที่โอน</InputLabel>
+							<Input margin="normal" type="money" required className="form-control" name="money"
 								required
 								id="transfered-amount"
 								placeholder={this.props.total}
 								type="number"
-								onChange={this.props.handleUserAmount}
+								value={this.state.money}
+								onChange={this.handleUserInput}
 								endAdornment={<InputAdornment position="end">บาท</InputAdornment>}
-								/>
-						</FormControl>
+							/>
+						</div>
 					</Grid>
 					<Grid item xs={12} sm={6}>
 						<FormControl className={classes.formControl} margin="normal">
@@ -105,7 +155,7 @@ class PaymentForm extends Component {
 								InputLabelProps={{
 									shrink: true,
 								}}
-								/>
+							/>
 						</FormControl>
 					</Grid>
 					<Grid item xs={12} sm={6}>
@@ -118,12 +168,12 @@ class PaymentForm extends Component {
 								defaultValue="08:00"
 								onChange={this.props.handleUserTime}
 								InputLabelProps={{
-									shrink:true,
+									shrink: true,
 								}}
 								inputProps={{
 									step: 300,
 								}}
-								/>
+							/>
 						</FormControl>
 					</Grid>
 					<Grid item xs={12}>
@@ -140,17 +190,17 @@ class PaymentForm extends Component {
 								multiple
 								type="file"
 								onChange={this.props.handleUserFile}
-								/>
+							/>
 							<Input
 								id="transfered-file-display"
 								type="text"
 								className={classes.fileDisplayInput}
 								value={this.props.userFile}
-								/>
+							/>
 						</FormControl>
 					</Grid>
 					<Grid item xs={12} className={classes.centerButton}>
-						<Button fullWidth onClick={this.props.handleNext} className={classes.nextButton}>ทำต่อ</Button>
+						<Button disabled={!this.state.formValid} fullWidth onClick={this.props.handleNext} className={classes.nextButton}>ทำต่อ</Button>
 					</Grid>
 				</Grid>
 			</React.Fragment>
