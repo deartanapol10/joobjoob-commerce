@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Route } from "react-router-dom";
 import { Provider } from "react-redux";
 import store from "./store";
 
+import Login from "./components/auth/Login";
 import Customer from "./components/customer/Customer";
 
 class App extends Component {
@@ -11,7 +12,10 @@ class App extends Component {
     return (
       <Provider store={store}>
         <Router>
-          <Route exact path="/:userid/:orderid" component={Customer} />
+          <div className={"App"}>
+            <Route exact path="/login" component={Login} />
+            <Route exact path="/:userid/:orderid" component={Customer} />
+          </div>
         </Router>
       </Provider>
     );

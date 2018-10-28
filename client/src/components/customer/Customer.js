@@ -24,7 +24,8 @@ import {
   Divider,
   Card,
   CardContent,
-  CardMedia
+  CardMedia,
+  CircularProgress
 } from "@material-ui/core";
 
 import SALogo from "../../images/sa-logo.png";
@@ -193,7 +194,7 @@ class Customer extends Component {
     const { order, loading } = this.props.order;
 
     if (order === null || loading) {
-      return <Spinner />;
+      return <CircularProgress className={classes.loading} />;
     } else {
       // create a product item to add in product component
       var newItem = [];
