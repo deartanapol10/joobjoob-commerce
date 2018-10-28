@@ -140,9 +140,12 @@ const UserSchema = new Schema({
       }
     }
   ],
-  // deliveryType: {
-  //   type: [String]
-  // },
+  deliveryType: [
+    {
+    delivery_name : String,
+    price : String
+    }
+  ],
   address: {
     type: [String]
   },

@@ -103,6 +103,7 @@ class Success extends Component {
                   </Grid>
                </Grid>
             );
+            default:
       }
    };
 

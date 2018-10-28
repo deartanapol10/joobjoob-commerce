@@ -8,6 +8,7 @@ export default createMuiTheme({
 		secondary: pink,
 	},
 	typography: {
+		useNextVariants: true,
 		fontFamily: [
 			'Mitr',
 			'Roboto',

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 import { getOrder } from "../../actions/orderAction";
 import { connect } from "react-redux";
 import Spinner from "../common/Spinner";
@@ -144,7 +144,8 @@ class Customer extends Component {
 
   calculateTotal = () => {
     let total = 0;
-    let shipping = parseInt(this.state.shipping);
+    // parseInt(string, radix)
+    let shipping = parseInt(this.state.shipping, 10);
     for (let i = 0; i < items.length; i++) {
       total += items[i].price * items[i].amount;
     }

@@ -27,7 +27,8 @@ const banks = [
 		id: 2,
 		name: 'ธนาคาร ไทยพานิชย์',
 		account: '406-3-08163-3',
-		owner: 'ฉันชนก วุฒิอังสโวทัย',
+		// owner: 'ฉันชนก วุฒิอังสโวทัย',
+		owner: 'Patcharana J.',
 		image: 'https://apprecs.org/gp/images/app-icons/300/ed/com.scb.phone.jpg',
 	},
 ]
