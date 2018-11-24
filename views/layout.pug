@@ -1,0 +1,38 @@
+
+doctype html
+html(lang="en")
+    head
+        title E-COMMERCE ORDER DEMO
+        //- bower install bootstrap
+        //- bower install jquery
+        link(rel='stylesheet' href='/bower_components/bootstrap/dist/css/bootstrap.css')
+        link(rel='stylesheet' href='/bower_components/css/style.css')
+    body
+        //- from getbootstrap
+        nav.navbar.navbar-expand-md.navbar-dark.bg-dark
+            a.navbar-brand(href='/') Welcome to ECommerce.com
+            ul.navbar-nav.mr-auto
+              li.nav-item
+                a.nav-link(href='/')
+                  | Home 
+                  span.sr-only (current)
+              li.nav-item
+                a.nav-link(href='/orders/add') Add New Order
+              li.nav-item
+                a.nav-link(href='/main') All Orders 
+
+        .container
+            != messages('flash', locals)
+            //- above string 'message' is set to be the same of message.pug
+            if errors
+                each error, i in errors
+                    div(class='alert alert-danger') #{error.msg}
+            block content
+            br
+            hr
+            footer
+                p Dear | Copyright &copy; 2018
+
+        script(src='/bower_components/jquery/dist/jquery.js')
+        script(src='/bower_components/bootstrap/dist/js/bootstrap.js')
+        script(src='/bower_components/js/main.js')

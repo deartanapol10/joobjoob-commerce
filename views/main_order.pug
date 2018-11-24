@@ -1,0 +1,11 @@
+extends layout
+
+block content
+  br
+  h1 Your Orders
+  ul.list-group
+  each oneOrder in order
+    h3= "Customer Name: " + oneOrder.name
+    p= "Customer Contact: " + oneOrder.contact
+    p= "Customer Product: " + oneOrder.product
+    hr
