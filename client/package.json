@@ -5,6 +5,10 @@
   "dependencies": {
     "@material-ui/core": "^3.1.1",
     "@material-ui/icons": "^3.0.1",
+<<<<<<< HEAD
+=======
+    "bootstrap": "^4.1.3",
+>>>>>>> 5cc73412c5fb872e2dac8ae0b62485f1d75b4521
     "moment": "^2.22.2",
     "peer": "^0.2.10",
     "react": "^16.5.2",
@@ -13,6 +17,10 @@
     "react-redux": "^5.0.7",
     "react-router-dom": "^4.3.1",
     "react-scripts": "^1.1.5",
+<<<<<<< HEAD
+=======
+    "reactstrap": "^6.5.0",
+>>>>>>> 5cc73412c5fb872e2dac8ae0b62485f1d75b4521
     "redux": "^4.0.1",
     "redux-thunk": "^2.3.0"
   },
