@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 
 import classNames from "classnames";
 
@@ -75,7 +76,8 @@ const styles = theme => ({
       minWidth: 275,
       marginBottom: theme.spacing.unit,
       display: "flex",
-      alignItems: "flex-start"
+      alignItems: "flex-start",
+      cursor: "pointer"
    },
    cardContent: {
       width: "100%"
@@ -724,6 +726,10 @@ class App extends Component {
       this.filterOrders(this.state.value);
    }
 
+   orderInfo(e, order) {
+      console.log(order);
+   }
+
    render() {
       const { classes } = this.props;
       const {
@@ -831,7 +837,13 @@ class App extends Component {
       const table = (
          <React.Fragment>
             {filteredOrders.map(order => (
-               <Card className={classes.card} key={order.orderID}>
+               <Card
+                  className={classes.card}
+                  key={order.orderID}
+                  onClick={e => {
+                     this.orderInfo(e, order);
+                  }}
+               >
                   <Checkbox
                      onChange={this.handleToggle(order.orderID)}
                      checked={this.state.checked.indexOf(order.orderID) !== -1}

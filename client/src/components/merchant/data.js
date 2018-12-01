@@ -98,7 +98,7 @@ export const originalOrders = [
       orderID: "0002",
       url:
          "https://shippee.com/5b715fcf03656e1cf0beaaa6/5b8b631c0f611d2acc29f55f",
-      status: "created",
+      status: "submitted",
       paymentStatus: "waitForConfirmation",
       name: "คุณแดง",
       customerName: "แดง แด๊ง แดง",
