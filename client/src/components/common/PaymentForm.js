@@ -132,8 +132,7 @@ class PaymentForm extends Component {
 						</div>
 						<div className={`form-group ${this.errorClass(this.state.formErrors.money)}`} margin="normal">
 							<InputLabel  htmlFor="transfered-amount">เงินที่โอน</InputLabel>
-							<Input margin="normal" type="money" required className="form-control" name="money"
-								required
+							<Input margin="normal" required className="form-control" name="money"
 								id="transfered-amount"
 								placeholder={this.props.total}
 								type="number"

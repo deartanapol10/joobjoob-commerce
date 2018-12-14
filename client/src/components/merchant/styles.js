@@ -7,10 +7,11 @@ const styles = theme => ({
       flexDirection: "column"
    },
    header: {
-      backgroundColor: theme.palette.primary[100]
+      backgroundColor: theme.palette.primary[200]
    },
    footer: {
-      backgroundColor: theme.palette.primary[200]
+      backgroundColor: "#bf5f82",
+      height: 56,
    },
    content: {
       flex: 1,
@@ -61,7 +62,13 @@ const styles = theme => ({
       fontWeight: "300",
       padding: "0 5px",
       minWidth: 24,
-      minHeight: 24
+      minHeight: 24,
+      color: 'white !important',
+      width: 64,
+   },
+   statusText: {
+      backgroundColor: 'transparent !important',
+      display: 'inline',
    },
    checkbox: {
       paddingRight: 0
@@ -75,7 +82,7 @@ const styles = theme => ({
    title: {
       display: "none",
       [theme.breakpoints.up("sm")]: {
-         display: "block"
+         display: "block",
       }
    },
    titleMarginBottom: {
@@ -141,24 +148,28 @@ const styles = theme => ({
       flexDirection: "column"
    },
    created: {
-      backgroundColor: "#555",
+      color: "#FF1400",
+      backgroundColor: "#FF1400",
       "&:hover": {
-         backgroundColor: fade("#555555", 0.55)
+         backgroundColor: fade("#FF1400", 0.5)
       }
    },
    submitted: {
+      color: "red",
       backgroundColor: "red",
       "&:hover": {
          backgroundColor: fade("#ff0000", 0.55)
       }
    },
    shipped: {
+      color: "green",
       backgroundColor: "green",
       "&:hover": {
          backgroundColor: fade("#00ff00", 0.55)
       }
    },
    success: {
+      color: "grey",
       backgroundColor: "grey",
       "&:hover": {
          backgroundColor: fade("#999999", 0.55)

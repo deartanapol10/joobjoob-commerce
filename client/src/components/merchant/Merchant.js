@@ -598,16 +598,21 @@ class App extends Component {
                      className={classes.checkbox}
                   />
                   <CardContent className={classes.cardContent}>
-                     <Button
-                        variant="contained"
-                        color="primary"
-                        className={classNames(
-                           statusColor(order.status),
-                           classes.statusButton
-                        )}
-                     >
-                        {statusText(order.status)}
-                     </Button>
+                     <div className={classes.receiptDetailLess2}>
+                        <Button
+                           variant="contained"
+                           color="primary"
+                           className={classNames(
+                              statusColor(order.status),
+                              classes.statusButton,
+                              classes.textLeft
+                           )}
+                        >
+                        {`#${order.orderID}`}
+                        </Button>
+                        <span><Typography variant="body1" className={classNames(
+                              statusColor(order.status), classes.statusText, classes.textLeft)}>{` ${statusText(order.status)}`}</Typography></span>
+                     </div>
                      <Button
                         variant="contained"
                         color="primary"
@@ -965,6 +970,7 @@ class App extends Component {
                   </div>
                </div>
 
+<<<<<<< HEAD
                <Drawer
                   open={this.state.isMenuDrawerOpened}
                   onClose={this.toggleMenuDrawer.bind(this, false)}
@@ -995,6 +1001,9 @@ class App extends Component {
                </Drawer>
 
                <div className={classes.footer}>Footer</div>
+=======
+               <div className={classes.footer}></div>
+>>>>>>> 9a3620d3b6a4396afe9283c6f91c3ee990fffce5
             </main>
          </React.Fragment>
       );

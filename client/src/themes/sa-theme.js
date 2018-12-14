@@ -4,8 +4,8 @@ import pink from '@material-ui/core/colors/pink';
 
 export default createMuiTheme({
 	palette: {
-		primary: red,
-		secondary: pink,
+		primary: pink,
+		secondary: red,
 	},
 	typography: {
 		useNextVariants: true,
