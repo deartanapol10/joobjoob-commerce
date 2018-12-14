@@ -22,8 +22,16 @@ import {
    ListItemText,
    Modal,
    TextField,
-   MenuList
+   MenuList,
+   Drawer
 } from "@material-ui/core";
+
+import List from "@material-ui/core/List";
+import Divider from "@material-ui/core/Divider";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import InboxIcon from "@material-ui/icons/MoveToInbox";
+import MailIcon from "@material-ui/icons/Mail";
 
 import CreateIcon from "@material-ui/icons/Create";
 
@@ -71,7 +79,9 @@ class App extends Component {
       products: productsList,
       options: optionsList,
       selectedProduct: {},
-      newProduct: {}
+      newProduct: {},
+      isMenuDrawerOpened: false,
+      isBottomDrawerOpened: false
    };
 
    getOrderStepContent = step => {
@@ -453,6 +463,20 @@ class App extends Component {
       console.log(order);
    }
 
+   toggleMenuDrawer = open => {
+      this.setState({
+         isMenuDrawerOpened: open
+      });
+      console.log(this.state.isMenuDrawerOpened);
+   };
+
+   toggleBottomDrawer = open => {
+      this.toggleMenuDrawer(false);
+      this.setState({
+         isBottomDrawerOpened: open
+      });
+   };
+
    render() {
       const { classes } = this.props;
       const {
@@ -610,6 +634,29 @@ class App extends Component {
          </React.Fragment>
       );
 
+      const sideList = (
+         <div className={classes.list}>
+            <List>
+               {["เปิดบิลใหม่", "เพิ่มสินค้าใหม่", "เพิ่ม/แก้ไขการส่งใหม่"].map(
+                  (text, index) => (
+                     <ListItem button key={text}>
+                        <ListItemIcon>
+                           {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                        </ListItemIcon>
+                        <ListItemText primary={text} />
+                     </ListItem>
+                  )
+               )}
+            </List>
+         </div>
+      );
+
+      const fullList = (
+         <div className={classes.fullList}>
+            <Typography>heeeeeeeeeeeeey</Typography>
+         </div>
+      );
+
       return (
          <React.Fragment>
             <main className={classes.layout}>
@@ -622,7 +669,7 @@ class App extends Component {
                      <IconButton
                         className={classes.menuButton}
                         color="inherit"
-                        aria-label="Open drawer"
+                        onClick={this.toggleMenuDrawer.bind(this, true)}
                      >
                         <Avatar
                            alt="Something Apparel"
@@ -917,6 +964,35 @@ class App extends Component {
                      </Modal>
                   </div>
                </div>
+
+               <Drawer
+                  open={this.state.isMenuDrawerOpened}
+                  onClose={this.toggleMenuDrawer.bind(this, false)}
+               >
+                  <div
+                     tabIndex={0}
+                     role="button"
+                     onClick={this.toggleBottomDrawer.bind(this, true)}
+                     onKeyDown={this.toggleMenuDrawer.bind(this, false)}
+                  >
+                     {sideList}
+                  </div>
+               </Drawer>
+
+               <Drawer
+                  anchor="bottom"
+                  open={this.state.isBottomDrawerOpened}
+                  onClose={this.toggleBottomDrawer.bind(this, false)}
+               >
+                  <div
+                     tabIndex={0}
+                     role="button"
+                     onClick={this.toggleBottomDrawer.bind(this, false)}
+                     onKeyDown={this.toggleBottomDrawer.bind(this, false)}
+                  >
+                     {fullList}
+                  </div>
+               </Drawer>
 
                <div className={classes.footer}>Footer</div>
             </main>

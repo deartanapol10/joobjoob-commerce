@@ -274,6 +274,12 @@ const styles = theme => ({
       overflow: "scroll",
       padding: 2,
       marginTop: theme.spacing.unit * 2
+   },
+   list: {
+      width: 250
+   },
+   fullList: {
+      width: "auto"
    }
 });
 
