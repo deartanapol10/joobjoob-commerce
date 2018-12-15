@@ -35,7 +35,8 @@ router.get("/:userid/:orderid", (req, res) => {
 
 // @route   GET api/orders/
 // @desc    Get all orders
-// @access  public
+// @access  private
+// @url     /api/orders
 router.get(
   "/",
   passport.authenticate("jwt", { session: false }),

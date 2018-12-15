@@ -192,7 +192,7 @@ class Customer extends Component {
 
   render() {
     const { classes } = this.props;
-    const { order, loading } = this.props.order;
+    const { order, loading } = this.props;
 
     if (order === null || loading) {
       return <CircularProgress className={classes.loading} />;
