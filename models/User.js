@@ -3,6 +3,9 @@ const Schema = mongoose.Schema;
 
 //Create Schema
 const UserSchema = new Schema({
+  userId: {
+    type: Schema.Types.ObjectId
+  },
   username: {
     type: String,
     required: true
@@ -51,14 +54,6 @@ const UserSchema = new Schema({
       accountNumber: {
         type: String,
         required: true
-      }
-    }
-  ],
-  store: [
-    {
-      storeId: {
-        type: Schema.Types.ObjectId,
-        ref: "store"
       }
     }
   ],
