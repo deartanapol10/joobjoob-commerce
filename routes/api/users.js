@@ -83,8 +83,8 @@ router.post("/login", (req, res) => {
 
         const payload = {
           // Create jwt payload (put whatever you want into payload)
-          id: user.id
-          // name: user.name,
+          id: user.id,
+          name: user.username
           // avatar: user.avatar
         };
 
@@ -180,7 +180,8 @@ router.post(
   // passport.authenticate("jwt", { session: false }),
   (req, res) => {
     const deliveryField = {};
-    if (req.body.delivery_name) deliveryField.delivery_name = req.body.delivery_name;
+    if (req.body.delivery_name)
+      deliveryField.delivery_name = req.body.delivery_name;
     if (req.body.price) deliveryField.price = req.body.price;
 
     User.findById(req.params.id).then(user => {

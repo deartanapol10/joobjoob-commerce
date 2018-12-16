@@ -8,6 +8,7 @@ const router = express.Router();
 
 //Import models
 var User = require("../../models/User");
+var User = require("../../models/Order");
 
 // @route   GET api/orders/:userid/:orderid
 // @desc    Get a order
@@ -35,7 +36,8 @@ router.get("/:userid/:orderid", (req, res) => {
 
 // @route   GET api/orders/
 // @desc    Get all orders
-// @access  public
+// @access  private
+// @url     /api/orders
 router.get(
   "/",
   passport.authenticate("jwt", { session: false }),

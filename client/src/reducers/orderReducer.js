@@ -1,17 +1,14 @@
 import {
-<<<<<<< HEAD
-  GET_PROFILE,
-  GET_PROFILES,
-  PROFILE_LOADING,
-  CLEAR_CURRENT_PROFILE,
   GET_ORDER,
-  ORDER_LOADING
+  LOADING,
+  CHANGE_ORDER_STATUS,
+  CREATE_ORDER,
+  GET_ALL_ORDERS
 } from "../actions/types";
 
 const initialState = {
-  order: null,
-  profile: null,
-  profiles: null,
+  order: [],
+  allOrders: [],
   loading: false
 };
 
@@ -23,89 +20,30 @@ export default function(state = initialState, action) {
         order: action.payload,
         loading: false
       };
-    case ORDER_LOADING:
+    case LOADING:
       return {
         ...state,
         loading: true
       };
-    case PROFILE_LOADING:
+    case CHANGE_ORDER_STATUS:
       return {
         ...state,
-        loading: true
-      };
-    case GET_PROFILE:
-      return {
-        ...state,
-        profile: action.payload,
+        order: action.payload,
         loading: false
       };
-    case GET_PROFILES:
+    case CREATE_ORDER:
       return {
         ...state,
-        profiles: action.payload,
+        order: action.payload,
         loading: false
       };
-    case CLEAR_CURRENT_PROFILE:
+    case GET_ALL_ORDERS:
       return {
         ...state,
-        profile: null
+        allOrders: action.payload,
+        loading: false
       };
     default:
       return state;
   }
-=======
-   GET_PROFILE,
-   GET_PROFILES,
-   PROFILE_LOADING,
-   CLEAR_CURRENT_PROFILE,
-   GET_ORDER,
-   ORDER_LOADING
-} from "../actions/types";
-
-const initialState = {
-   order: null,
-   profile: null,
-   profiles: null,
-   loading: false
-};
-
-export default function(state = initialState, action) {
-   switch (action.type) {
-      case GET_ORDER:
-         return {
-            ...state,
-            order: action.payload,
-            loading: false
-         };
-      case ORDER_LOADING:
-         return {
-            ...state,
-            loading: true
-         };
-      case PROFILE_LOADING:
-         return {
-            ...state,
-            loading: true
-         };
-      case GET_PROFILE:
-         return {
-            ...state,
-            profile: action.payload,
-            loading: false
-         };
-      case GET_PROFILES:
-         return {
-            ...state,
-            profiles: action.payload,
-            loading: false
-         };
-      case CLEAR_CURRENT_PROFILE:
-         return {
-            ...state,
-            profile: null
-         };
-      default:
-         return state;
-   }
->>>>>>> 5cc73412c5fb872e2dac8ae0b62485f1d75b4521
 }

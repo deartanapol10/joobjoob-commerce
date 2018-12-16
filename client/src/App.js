@@ -4,20 +4,6 @@ import { BrowserRouter as Router, Route } from "react-router-dom";
 import { Provider } from "react-redux";
 import store from "./store";
 
-<<<<<<< HEAD
-import Customer from "./components/customer/Customer";
-
-class App extends Component {
-  render() {
-    return (
-      <Provider store={store}>
-        <Router>
-          <Route exact path="/:userid/:orderid" component={Customer} />
-        </Router>
-      </Provider>
-    );
-  }
-=======
 import Login from "./components/auth/Login";
 import Customer from "./components/customer/Customer";
 import Merchant from "./components/merchant/Merchant";
@@ -38,7 +24,6 @@ class App extends Component {
          </Provider>
       );
    }
->>>>>>> 5cc73412c5fb872e2dac8ae0b62485f1d75b4521
 }
 
 export default App;

@@ -2,9 +2,9 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const ProductSchema = new Schema({
-  user: {
+  storeId: {
     type: Schema.Types.ObjectId,
-    ref: "user"
+    ref: "store"
   },
   productName: {
     type: String,
@@ -28,6 +28,9 @@ const ProductSchema = new Schema({
   },
   updatedAt: {
     type: Date
+  },
+  deletedFlag: {
+    type: Boolean
   }
 });
 

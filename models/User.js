@@ -3,6 +3,9 @@ const Schema = mongoose.Schema;
 
 //Create Schema
 const UserSchema = new Schema({
+  userId: {
+    type: Schema.Types.ObjectId
+  },
   username: {
     type: String,
     required: true
@@ -32,120 +35,6 @@ const UserSchema = new Schema({
       sub: [String]
     }
   ],
-  // store: [
-  //   {
-  //     id: {
-  //       type: Schema.Types.ObjectId
-  //     },
-  //     name: {
-  //       type: String,
-  //       required: true
-  //     },
-  //     product: [
-  //       {
-  //         id: {
-  //           type: Schema.Types.ObjectId
-  //         },
-  //         productName: {
-  //           type: String,
-  //           required: true
-  //         },
-  //         categoryGroup: {
-  //           type: String
-  //         },
-  //         detail: {
-  //           type: String
-  //         },
-  //         price: {
-  //           type: Number,
-  //           required: true
-  //         },
-  //         image: {
-  //           type: String
-  //         },
-  //         createdAt: {
-  //           type: Date
-  //         },
-  //         updatedAt: {
-  //           type: Date
-  //         }
-  //       }
-  //     ]
-  //   }
-  // ],
-  order: [
-    {
-      products: [
-        {
-          product: {
-            type: Schema.Types.ObjectId,
-            ref: "product"
-          },
-          quantity: {
-            type: Number,
-            required: true
-          },
-          size: {
-            type: String
-          },
-          description: {
-            type: String
-          }
-        }
-      ],
-      customerName: {
-        type: String
-      },
-      comment: {
-        type: String
-      },
-      orderStatus: {
-        type: String,
-        default: "created"
-      },
-      URL: {
-        type: String
-      },
-      bankID: {
-        type: Schema.Types.ObjectId,
-        ref: "user.bankAccount"
-      },
-      deliveryType: {
-        type: String
-      },
-      paymentSlip: {
-        //Slip image
-        type: String
-      },
-      paymentStatus: {
-        type: String,
-        default: false
-      },
-      paymentTime: {
-        type: Date
-      },
-      trackingNumber: {
-        type: Date
-      },
-      createdAt: {
-        type: Date,
-        default: Date.now
-      },
-      expiredAt: {
-        type: Date,
-        default: new Date(+new Date() + 2 * 24 * 60 * 60 * 1000)
-      },
-      updatedAt: {
-        type: Date
-      }
-    }
-  ],
-  deliveryType: [
-    {
-    delivery_name : String,
-    price : String
-    }
-  ],
   address: {
     type: [String]
   },
@@ -169,10 +58,14 @@ const UserSchema = new Schema({
     }
   ],
   createdAt: {
-    type: Date
+    type: Date,
+    default: Date.now
   },
   updatedAt: {
     type: Date
+  },
+  deletedFlag: {
+    type: Boolean
   }
 });
 
