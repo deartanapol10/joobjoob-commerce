@@ -3,53 +3,70 @@ const Schema = mongoose.Schema;
 
 //Create Schema
 const UserSchema = new Schema({
-   username: {
-      type: String,
-      required: true
-   },
-   password: {
-      type: String,
-      required: true
-   },
-   email: {
-      type: String,
-      required: true
-   },
-   firstname: {
-      type: String,
-      required: true
-   },
-   lastname: {
-      type: String,
-      required: true
-   },
-   store: [
-      {
-         id: {
-            type: Schema.Types.ObjectId
-            // required: true
-         },
-         name: {
-            type: String
-            // required: true
-         }
+  userId: {
+    type: Schema.Types.ObjectId
+  },
+  username: {
+    type: String,
+    required: true
+  },
+  password: {
+    type: String,
+    required: true
+  },
+  email: {
+    type: String,
+    required: true
+  },
+  firstname: {
+    type: String,
+    required: true
+  },
+  lastname: {
+    type: String,
+    required: true
+  },
+  facebookId: {
+    type: Schema.Types.ObjectId
+  },
+  category: [
+    {
+      main: String,
+      sub: [String]
+    }
+  ],
+  address: {
+    type: [String]
+  },
+  phoneNumber: {
+    type: String
+  },
+  bankAccount: [
+    {
+      bankName: {
+        type: String,
+        required: true
+      },
+      ownerName: {
+        type: String,
+        required: true
+      },
+      accountNumber: {
+        type: String,
+        required: true
       }
-   ],
-   address: {
-      type: [String]
-   },
-   phoneNumber: {
-      type: String
-   },
-   bankAccount: {
-      type: [String]
-   },
-   createdAt: {
-      type: Date
-   },
-   updatedAt: {
-      type: Date
-   }
+    }
+  ],
+  createdAt: {
+    type: Date,
+    default: Date.now
+  },
+  updatedAt: {
+    type: Date
+  },
+  deletedFlag: {
+    type: Boolean
+  }
 });
 
 module.exports = User = mongoose.model("user", UserSchema);

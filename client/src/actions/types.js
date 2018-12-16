@@ -1,0 +1,13 @@
+export const GET_ERRORS = "GET_ERRORS";
+export const SET_CURRENT_USER = "SET_CURRENT_USER";
+export const GET_ORDER = "GET_ORDER";
+export const GET_ALL_ORDERS = "GET_ALL_ORDERS";
+export const LOADING = "LOADING";
+export const CHANGE_ORDER_STATUS = "CHANGE_ORDER_STATUS";
+export const CREATE_ORDER = "CREATE_ORDER";
+export const LOGIN = "LOGIN";
+export const SET_USER_LOADING = "SET_USER_LOADING";
+export const GET_ALL_PRODUCT = "GET_ALL_PRODUCT";
+export const ADD_PRODUCT = "ADD_PRODUCT";
+export const EDIT_PRODUCT = "EDIT_PRODUCT";
+export const DELETE_PRODUCT = "DELETE_PRODUCT";

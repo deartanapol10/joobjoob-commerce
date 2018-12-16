@@ -1,16 +1,26 @@
 const express = require("express");
+const path = require("path");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
+const expressValidator = require("express-validator");
+const session = require("express-session");
 const passport = require("passport");
 
-// DB Config
+// Import router file
+var orders = require("./routes/api/orders");
+var users = require("./routes/api/users");
+var product = require("./routes/api/product");
+var category = require("./routes/api/category");
+var store = require("./routes/api/store");
+
+// DB config
 const db = require("./config/keys").mongoURI;
 
-//Connect to MongoDB
+// Connect to MongoDB
 mongoose
-   .connect(db)
-   .then(() => console.log("MongoDB connected"))
-   .catch(err => console.log(err));
+  .connect(db)
+  .then(() => console.log("MongoDB Connected"))
+  .catch(e => console.log(e));
 
 //Init app
 const app = express();
@@ -21,21 +31,34 @@ app.use(bodyParser.urlencoded({ extended: false }));
 // parse application/json
 app.use(bodyParser.json());
 
-//Passport config
-require("./config/passport")(passport);
-//Passport Middleware
+//Set public folder
+app.use(express.static(path.join(__dirname, "public")));
+
+//Express-Session Middleware
+app.use(
+  session({
+    secret: "keyboard cat",
+    resave: true,
+    saveUninitialized: true
+  })
+);
+
+// Passport middleware
 app.use(passport.initialize());
 
-// const order = require("./routes/api/order");
-const user = require("./routes/api/user");
-//Use routes
-// app.use("/api/order", order);
-app.use("/api/user", user);
+// Passport Config
+require("./config/passport")(passport);
 
-// process.env.PORT : for deploying on Heroku
-const port = process.env.PORT || 6666;
+//Express-Validator Middleware
+app.use(expressValidator());
+
+app.use("/api/users", users);
+app.use("/api/orders", orders);
+app.use("/api/product", product);
+app.use("/api/category", category);
+app.use("/api/store", store);
 
 //Start server
-app.listen(port, () => {
-   console.log(`Server started on port ${port}`);
+app.listen(8000, () => {
+  console.log("Server started on port 8000.");
 });

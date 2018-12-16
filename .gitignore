@@ -1,5 +1,11 @@
+<<<<<<< HEAD
 node_modules
 .vscode
 public
 views
 .bowerrc
+=======
+node_modules/
+package-lock.json/
+passport-facebook.js/
+>>>>>>> 126bb898b32404dfcd2a63a676b416f261ff9623

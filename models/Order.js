@@ -1,63 +1,82 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-//Create Schema
+// Create Order Scheme
 const OrderSchema = new Schema({
-   userid: {
-      type: Schema.Types.ObjectId,
-      ref: "user"
-   },
-   orders: [
-      {
-         productid: {
+  order: [
+    {
+      storeId: {
+        type: Schema.Types.ObjectId,
+        ref: "store"
+      },
+      products: [
+        {
+          product: {
             type: Schema.Types.ObjectId,
-            ref: "product",
-            required: true
-         },
-         quantity: {
+            ref: "product"
+          },
+          quantity: {
             type: Number,
             required: true
-         },
-         size: {
-            type: String,
-            required: true
-         },
-         description: {
+          },
+          size: {
             type: String
-         }
+          },
+          description: {
+            type: String
+          }
+        }
+      ],
+      customerName: {
+        type: String
+      },
+      comment: {
+        type: String
+      },
+      orderStatus: {
+        type: String,
+        default: "created"
+      },
+      URL: {
+        type: String
+      },
+      bankID: {
+        type: Schema.Types.ObjectId,
+        ref: "user.bankAccount"
+      },
+      deliveryType: {
+        type: String
+      },
+      paymentSlip: {
+        //Slip image
+        type: String
+      },
+      paymentStatus: {
+        type: String,
+        default: false
+      },
+      paymentTime: {
+        type: Date
+      },
+      trackingNumber: {
+        type: Date
+      },
+      createdAt: {
+        type: Date,
+        default: Date.now
+      },
+      expiredAt: {
+        type: Date,
+        default: new Date(+new Date() + 2 * 24 * 60 * 60 * 1000)
+      },
+      updatedAt: {
+        type: Date
+      },
+      deletedFlag: {
+        type: Boolean
       }
-   ],
-   comment: {
-      type: String
-   },
-   orderStatus: {
-      type: String,
-      required: true
-   },
-   bankAccount: {
-      type: String,
-      required: true
-   },
-   paymentSlip: {
-      //Slip image
-      type: String
-   },
-   paymentStatus: {
-      type: String,
-      required: true
-   },
-   paymentTime: {
-      type: Date
-   },
-   trackingNumber: {
-      type: Date
-   },
-   createdAt: {
-      type: Date
-   },
-   updatedAt: {
-      type: Date
-   }
+    }
+  ]
 });
 
 module.exports = Order = mongoose.model("order", OrderSchema);
