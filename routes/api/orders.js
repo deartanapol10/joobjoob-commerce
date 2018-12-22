@@ -8,7 +8,7 @@ const router = express.Router();
 
 //Import models
 var User = require("../../models/User");
-var User = require("../../models/Order");
+var Order = require("../../models/Order");
 
 // @route   GET api/orders/:userid/:orderid
 // @desc    Get a order
@@ -50,7 +50,7 @@ router.get(
   }
 );
 
-// @route   Post api/order/
+// @route   Post api/orders/
 // @desc    Create a order
 // @access  public
 router.post("/:id", (req, res) => {
@@ -91,7 +91,7 @@ router.post("/:id", (req, res) => {
     .catch(err => res.json(err));
 });
 
-// @route   PATCH api/order/
+// @route   PATCH api/orders/
 // @desc    Update a order
 // @access  public
 router.patch("/:id/:orderID", (req, res) => {
@@ -119,5 +119,24 @@ router.patch("/:id/:orderID", (req, res) => {
     });
   });
 });
+
+//test router
+router.get('/test', function(req, res) {
+  res.send('Hello World')
+})
+//add order
+router.post('/add_order', function(req, res){
+const new_order = new Order(req.body);
+  new_order.save()
+  .then(new_order => {
+  console.log(new_order)    
+  res.status(200).json({'new_order': 'Save successfully'});
+  })
+  .catch(err => {
+  res.status(400).send("unable to save the data into database");
+  });
+})
+
+
 
 module.exports = router;

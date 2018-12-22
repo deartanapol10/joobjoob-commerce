@@ -5,6 +5,8 @@ const router = express.Router();
 
 //Import models
 var User = require("../../models/User");
+var Store = require("../../models/Store");
+
 
 // @route   GET api/product/
 // @desc    Get all products
@@ -31,5 +33,21 @@ router.post("/:id", (req, res) => {
     });
   });
 });
+
+// @route   POST api/store/
+// @desc    Post a store
+// @access  public
+router.post('/add_store', function(req, res){
+  const new_store = new Store(req.body);
+  new_store.save()
+    .then(new_store => {
+    console.log(new_store)    
+    res.status(200).json({'new_store': 'New Store Created Successfully'});
+    })
+    .catch(err => {
+    res.status(400).send("unable to save the data into database");
+    });
+  })
+
 
 module.exports = router;
