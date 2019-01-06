@@ -3,8 +3,8 @@ const Schema = mongoose.Schema;
 
 // Create Order Scheme
 const OrderSchema = new Schema({
-  order: [
-    {
+  // order: [
+  //   {
       storeId: {
         type: Schema.Types.ObjectId,
         ref: "store"
@@ -40,10 +40,10 @@ const OrderSchema = new Schema({
       URL: {
         type: String
       },
-      bankID: {
-        type: Schema.Types.ObjectId,
-        ref: "user.bankAccount"
-      },
+      // bankID: {
+      //   type: Schema.Types.ObjectId,
+      //   ref: "user"
+      // },
       deliveryType: {
         type: String
       },
@@ -75,8 +75,8 @@ const OrderSchema = new Schema({
       deletedFlag: {
         type: Boolean
       }
-    }
-  ]
+  //   }
+  // ]
 });
 
 module.exports = Order = mongoose.model("order", OrderSchema);
