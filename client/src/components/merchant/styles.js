@@ -351,6 +351,7 @@ const styles = theme => ({
       padding: 2,
       marginTop: theme.spacing.unit * 2
    },
+<<<<<<< HEAD
    footerAppBar: {
       top: 'auto',
       bottom: 0,
@@ -372,6 +373,13 @@ const styles = theme => ({
       "&:hover": {
          backgroundColor: theme.palette.primary[300],
       }
+=======
+   list: {
+      width: 250
+   },
+   fullList: {
+      width: "auto"
+>>>>>>> 125db306e8be045cff796e9a31a094ebf9688d3b
    }
 });
 
