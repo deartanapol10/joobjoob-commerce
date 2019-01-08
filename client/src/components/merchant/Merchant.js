@@ -86,12 +86,7 @@ class App extends Component {
       options: optionsList,
       selectedProduct: {},
       newProduct: {},
-<<<<<<< HEAD
       print: {},
-=======
-      isMenuDrawerOpened: false,
-      isBottomDrawerOpened: false
->>>>>>> 125db306e8be045cff796e9a31a094ebf9688d3b
    };
 
    getOrderStepContent = step => {
@@ -1058,7 +1053,6 @@ class App extends Component {
                   </div>
                </div>
 
-<<<<<<< HEAD
                <div className={classes.footer}>
                   <AppBar position="fixed" className={classes.footerAppBar}>
                      <Toolbar className={classes.footerToolbar}>
@@ -1068,8 +1062,7 @@ class App extends Component {
                      </Toolbar>
                   </AppBar>
                </div>
-=======
-<<<<<<< HEAD
+
                <Drawer
                   open={this.state.isMenuDrawerOpened}
                   onClose={this.toggleMenuDrawer.bind(this, false)}
@@ -1098,12 +1091,6 @@ class App extends Component {
                      {fullList}
                   </div>
                </Drawer>
-
-               <div className={classes.footer}>Footer</div>
-=======
-               <div className={classes.footer}></div>
->>>>>>> 9a3620d3b6a4396afe9283c6f91c3ee990fffce5
->>>>>>> 125db306e8be045cff796e9a31a094ebf9688d3b
             </main>
          </React.Fragment>
       );
