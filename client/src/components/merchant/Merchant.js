@@ -6,8 +6,10 @@ import {
    AppBar,
    Toolbar,
    IconButton,
+   InputBase,
    Typography,
    MenuItem,
+   Fab,
    Menu,
    Button,
    Avatar,
@@ -31,6 +33,9 @@ import { withStyles } from "@material-ui/core/styles";
 
 import AddIcon from "@material-ui/icons/Add";
 import AddCircleIcon from "@material-ui/icons/AddCircle";
+import PrintIcon from "@material-ui/icons/Print";
+import MenuIcon from "@material-ui/icons/Menu";
+import SearchIcon from "@material-ui/icons/Search";
 
 import SALogo from "../../images/sa-logo.png";
 
@@ -53,7 +58,8 @@ function TabContainer(props) {
 
 class App extends Component {
    state = {
-      anchorEl: null,
+      statusAnchorEl: null,
+      menuAnchorEl: null,
       mobileMoreAnchorEl: null,
       value: 0,
       checked: [],
@@ -71,7 +77,8 @@ class App extends Component {
       products: productsList,
       options: optionsList,
       selectedProduct: {},
-      newProduct: {}
+      newProduct: {},
+      print: {},
    };
 
    getOrderStepContent = step => {
@@ -256,11 +263,16 @@ class App extends Component {
    };
 
    handleStatusMenuOpen = event => {
-      this.setState({ anchorEl: event.currentTarget });
+      this.setState({ statusAnchorEl: event.currentTarget });
+   };
+   
+   handleMenuOpen = event => {
+      this.setState({ menuAnchorEl: event.currentTarget });
    };
 
    handleMenuClose = () => {
-      this.setState({ anchorEl: null });
+      this.setState({statusAnchorEl: null });
+      this.setState({ menuAnchorEl: null });
       this.handleMobileMenuClose();
    };
 
@@ -456,8 +468,10 @@ class App extends Component {
    render() {
       const { classes } = this.props;
       const {
-         anchorEl,
+         statusAnchorEl,
+         menuAnchorEl,
          mobileMoreAnchorEl,
+         checked,
          value,
          orders,
          filteredOrders,
@@ -470,7 +484,8 @@ class App extends Component {
          cart,
          newProduct
       } = this.state;
-      const isMenuOpen = Boolean(anchorEl);
+      const isStatusMenuOpen = Boolean(statusAnchorEl);
+      const isMenuOpen = Boolean(menuAnchorEl);
       const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
       function statusColor(status) {
@@ -523,12 +538,12 @@ class App extends Component {
          }
       }
 
-      const renderMenu = (
+      const renderStatusMenu = (
          <Menu
-            anchorEl={anchorEl}
+            anchorEl={statusAnchorEl}
             anchorOrigin={{ vertical: "top", horizontal: "right" }}
             transformOrigin={{ vertical: "top", horizontal: "right" }}
-            open={isMenuOpen}
+            open={isStatusMenuOpen}
             onClose={this.handleMenuClose}
          >
             {orderStatus.map(status => (
@@ -539,6 +554,20 @@ class App extends Component {
                   {status.name.th}
                </MenuItem>
             ))}
+         </Menu>
+      );
+
+      const renderMenu = (
+         <Menu
+            anchorEl={menuAnchorEl}
+            anchorOrigin={{ vertical: "top", horizontal: "right" }}
+            transformOrigin={{ vertical: "top", horizontal: "right" }}
+            open={isMenuOpen}
+            onClose={this.handleMenuClose}
+         >
+            <MenuItem key="new_bill">เปิดบิลใหม่</MenuItem>
+            <MenuItem key="select_all">เลือกทั้งหมด</MenuItem>
+            <MenuItem key="print_selected">พิมพ์ที่เลือก</MenuItem>
          </Menu>
       );
 
@@ -561,7 +590,13 @@ class App extends Component {
          <React.Fragment>
             {filteredOrders.map(order => (
                <Card
-                  className={classes.card}
+                  className={
+                     checked.indexOf(order.orderID) === -1
+                     ?
+                     classes.card
+                     :
+                     classNames(classes.card, classes.cardActive)
+                  }
                   key={order.orderID}
                   onClick={e => {
                      this.orderInfo(e, order);
@@ -569,9 +604,14 @@ class App extends Component {
                >
                   <Checkbox
                      onChange={this.handleToggle(order.orderID)}
-                     checked={this.state.checked.indexOf(order.orderID) !== -1}
+                     checked={checked.indexOf(order.orderID) !== -1}
                      value={order.orderID}
-                     className={classes.checkbox}
+                     className={checked.indexOf(order.orderID) === -1
+                        ?
+                        classes.orderCheckbox
+                        :
+                        classNames(classes.orderCheckbox, classes.orderCheckboxActive)
+                     }
                   />
                   <CardContent className={classes.cardContent}>
                      <div className={classes.receiptDetailLess2}>
@@ -584,12 +624,20 @@ class App extends Component {
                               classes.textLeft
                            )}
                         >
-                        {`#${order.orderID}`}
+                        <Typography variant="body2" className={classes.orderNumber}>{`#${order.orderID}`}</Typography>
                         </Button>
                         <span><Typography variant="body1" className={classNames(
                               statusColor(order.status), classes.statusText, classes.textLeft)}>{` ${statusText(order.status)}`}</Typography></span>
+                        <IconButton
+                           aria-haspopup="true"
+                           onClick={this.handleMenuOpen}
+                           color="inherit"
+                           className={classNames(classes.printButton, classes.floatRight)}
+                        >
+                           <PrintIcon />
+                        </IconButton>
                      </div>
-                     <Button
+                     {/* <Button
                         variant="contained"
                         color="primary"
                         className={classNames(
@@ -598,16 +646,22 @@ class App extends Component {
                            classes.paymentButton
                         )}
                      >
-                        {paymentText(order.paymentStatus)}
-                     </Button>
+                        <Typography variant="body2" className={classes.orderStatus}>{paymentText(order.paymentStatus)}</Typography>
+                     </Button> */}
+                     <div className={classes.clearBoth}></div>
                      <div className={classes.receiptDetailLess}>
-                        <Typography variant="body2">{order.name}</Typography>
+                        <Typography variant="body2" className={classes.orderClientName}>{order.name}</Typography>
                         <Typography
                            variant="body1"
-                           className={classes.textRight}
+                           className={classNames(classes.textRight, classes.orderPrice)}
                         >
                            {order.price} บาท
                         </Typography>
+                     </div>
+                     <div className={classes.receiptDetailLess}>
+                           <Typography variant="subheading" className={classes.orderTimeStamp}>
+                              {order.updatedTime}
+                           </Typography>
                      </div>
                   </CardContent>
                </Card>
@@ -643,7 +697,18 @@ class App extends Component {
                      >
                         Shippee Shop Name
                      </Typography>
-
+                     <div className={classes.search}>
+                        <div className={classes.searchIcon}>
+                           <SearchIcon />
+                        </div>
+                        <InputBase
+                           placeholder="ชื่อลูกค้า / เลขบิล"
+                           classes={{
+                              root: classes.inputRoot,
+                              input: classes.inputInput,
+                           }}
+                        />
+                     </div>
                      <div className={classes.grow} />
                      <div className={classes.sectionDesktop}>
                         <Button
@@ -671,7 +736,7 @@ class App extends Component {
                               classes.lastItem
                            )}
                         >
-                           <AddCircleIcon className={classes.menuIcon} />
+                           <MenuIcon className={classes.menuIcon} />
                            <Typography
                               className={classes.title}
                               variant="body1"
@@ -692,10 +757,10 @@ class App extends Component {
                         </IconButton>
                         <IconButton
                            aria-haspopup="true"
-                           onClick={this.handleOrderPopupOpen}
+                           onClick={this.handleMenuOpen}
                            color="inherit"
                         >
-                           <AddCircleIcon />
+                           <MenuIcon />
                         </IconButton>
                      </div>
                   </Toolbar>
@@ -730,28 +795,48 @@ class App extends Component {
                      >
                         ไม่มีออเดอร์
                      </Typography>
-                  ) : (
+                  )
+                  :
+                  ( 
+                     checked.length === 0
+                     ?
                      <div className={classes.selectAll}>
                         <FormControlLabel
                            control={
                               <Checkbox
                                  checked={
-                                    this.state.checked.length ===
+                                    checked.length ===
                                     filteredOrders.length
                                  }
                                  onChange={this.handleSelectAll}
+                                 className={classes.selectAllCheckbox}
                               />
                            }
-                           label={
-                              this.state.checked.length === 0
-                                 ? "เลือกทั้งหมด"
-                                 : `เลือก ${this.state.checked.length}`
-                           }
-                           className={classes.formLabel}
+                           label="เลือกทั้งหมด"
+                           className={classes.selectAllLabel}
                         />
                      </div>
-                  )}
+                     :
+                     <div className={classNames(classes.selectAll, classes.selectAllActive)}>
+                        <FormControlLabel
+                           control={
+                              <Checkbox
+                                 checked={
+                                    checked.length ===
+                                    filteredOrders.length
+                                 }
+                                 onChange={this.handleSelectAll}
+                                 className={classNames(classes.selectAllCheckbox,classes.selectAllCheckboxActive)}
+                              />
+                           }
+                           label={`เลือก ${checked.length}`}
+                           className={classNames(classes.selectAllLabel, classes.selectAllLabelActive)}
+                        />
+                     </div>
+                  )
+               }
                </Paper>
+               {renderStatusMenu}
                {renderMenu}
                {/*renderMobileMenu*/}
                <div className={classes.content}>
@@ -923,7 +1008,15 @@ class App extends Component {
                   </div>
                </div>
 
-               <div className={classes.footer}></div>
+               <div className={classes.footer}>
+                  <AppBar position="fixed" className={classes.footerAppBar}>
+                     <Toolbar className={classes.footerToolbar}>
+                        <Fab aria-label="Add" className={classes.footerFabButton} onClick={this.handleOrderPopupOpen}>
+                           <AddIcon />
+                        </Fab>
+                     </Toolbar>
+                  </AppBar>
+               </div>
             </main>
          </React.Fragment>
       );

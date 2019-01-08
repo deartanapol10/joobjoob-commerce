@@ -30,6 +30,11 @@ export default createMuiTheme({
 				}
 			},
 		},
+		MuiFormControlLabel: {
+			root: {
+				marginBottom: 0,
+			}
+		},
 		MuiStepLabel: {
 			iconContainer: {
 				paddingRight: 0,

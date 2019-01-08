@@ -56,7 +56,7 @@ export const originalOrders = [
          "https://shippee.com/5b715fcf03656e1cf0beaaa6/5b8b631c0f611d2acc29f55f",
       status: "created",
       paymentStatus: "pending",
-      name: "คุณดำ",
+      name: "คุณมิ",
       customerName: "",
       address: {
          houseNo: "",

@@ -33,7 +33,16 @@ const styles = theme => ({
       marginBottom: theme.spacing.unit,
       display: "flex",
       alignItems: "flex-start",
-      cursor: "pointer"
+      cursor: "pointer",
+      "&:hover": {
+         backgroundColor: fade("#000", 0.02),
+      },
+      "&:focus": {
+         backgroundColor: fade("#000", 0.02),
+      },
+   },
+   cardActive: {
+      backgroundColor: fade("#000", 0.05),
    },
    cardContent: {
       width: "100%"
@@ -49,6 +58,48 @@ const styles = theme => ({
    avatar: {
       backgroundColor: fade(theme.palette.common.white, 0.85)
    },
+   search: {
+      position: 'relative',
+      borderRadius: theme.shape.borderRadius,
+      border: "1px white solid",
+      backgroundColor: fade(theme.palette.common.white, 0.15),
+      '&:hover': {
+         backgroundColor: fade(theme.palette.common.white, 0.25),
+      },
+      marginRight: theme.spacing.unit * 2,
+      marginLeft: 0,
+      width: '100%',
+      [theme.breakpoints.up('sm')]: {
+         marginLeft: theme.spacing.unit * 3,
+         width: 'auto',
+      },
+   },
+   searchIcon: {
+      width: theme.spacing.unit * 5,
+      height: '100%',
+      right: 0,
+      position: 'absolute',
+      pointerEvents: 'none',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+   },
+   inputRoot: {
+      color: 'inherit',
+      width: '100%',
+   },
+   inputInput: {
+      paddingTop: theme.spacing.unit,
+      paddingRight: theme.spacing.unit,
+      paddingBottom: theme.spacing.unit,
+      paddingLeft: theme.spacing.unit,
+      transition: theme.transitions.create('width'),
+      width: '100%',
+      fontWeight: 300,
+      [theme.breakpoints.up('md')]: {
+         width: 200,
+      },
+   },
    menuIcon: {
       paddingLeft: 0,
       paddingRight: 8
@@ -58,23 +109,45 @@ const styles = theme => ({
       marginRight: theme.spacing.unit * 2
    },
    statusButton: {
-      fontSize: "0.675rem",
-      fontWeight: "300",
       padding: "0 5px",
+      float: "left",
       minWidth: 24,
       minHeight: 24,
-      color: 'white !important',
+      color: "white !important",
       width: 64,
    },
+   printButton: {
+      padding: 0,
+   },
    statusText: {
-      backgroundColor: 'transparent !important',
-      display: 'inline',
+      backgroundColor: "transparent !important",
+      display: "inline-block",
+      float: "left",
+      fontSize: "0.750rem",
+      marginLeft: theme.spacing.unit,
+      marginTop: theme.spacing.unit / 2,
    },
-   checkbox: {
-      paddingRight: 0
+   selectAll: {
+      display: "flex",
+      alignItems: "center",
+      backgroundColor: "white",
    },
-   formLabel: {
+   selectAllActive: {
+      backgroundColor: "#BF5F82",
+   },
+   selectAllCheckbox: {
+      
+   },
+   selectAllCheckboxActive: {
+      color: "white !important",
+   },
+   selectAllLabel: {
       paddingLeft: theme.spacing.unit * 2
+   },
+   selectAllLabelActive: {
+      "& span": {
+         color: "white !important",
+      },
    },
    lastItem: {
       marginRight: 0
@@ -90,47 +163,6 @@ const styles = theme => ({
    },
    titleMarginTop: {
       marginTop: theme.spacing.unit * 2
-   },
-   search: {
-      position: "relative",
-      borderRadius: theme.shape.borderRadius,
-      backgroundColor: fade(theme.palette.common.white, 0.35),
-      "&:hover": {
-         backgroundColor: fade(theme.palette.common.white, 0.55)
-      },
-      marginRight: theme.spacing.unit * 2,
-      marginLeft: 0,
-      width: "100%",
-      [theme.breakpoints.up("sm")]: {
-         marginLeft: theme.spacing.unit * 3,
-         width: "auto"
-      }
-   },
-   searchIcon: {
-      width: 40,
-      height: "100%",
-      position: "absolute",
-      pointerEvents: "none",
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center"
-   },
-   inputRoot: {
-      color: "inherit",
-      width: "100%"
-   },
-   inputInput: {
-      paddingTop: theme.spacing.unit,
-      paddingRight: theme.spacing.unit,
-      paddingBottom: theme.spacing.unit,
-      paddingLeft: theme.spacing.unit * 5,
-      transition: theme.transitions.create("width"),
-      fontWeight: 300,
-      fontSize: "0.875rem",
-      width: "100%",
-      [theme.breakpoints.up("md")]: {
-         width: 200
-      }
    },
    sectionDesktop: {
       display: "none",
@@ -148,31 +180,31 @@ const styles = theme => ({
       flexDirection: "column"
    },
    created: {
-      color: "#FF1400",
-      backgroundColor: "#FF1400",
+      color: fade("#FF1400", 0.7),
+      backgroundColor: fade("#FF1400", 0.7),
       "&:hover": {
-         backgroundColor: fade("#FF1400", 0.5)
+         backgroundColor: fade("#FF1400", 0.9)
       }
    },
    submitted: {
-      color: "red",
-      backgroundColor: "red",
+      color: fade("#FB8C00", 0.7),
+      backgroundColor: fade("#FB8C00", 0.7),
       "&:hover": {
-         backgroundColor: fade("#ff0000", 0.55)
+         backgroundColor: fade("#FB8C00", 0.55)
       }
    },
    shipped: {
-      color: "green",
-      backgroundColor: "green",
+      color: fade("#00BFA5", 0.7),
+      backgroundColor: fade("#00BFA5", 0.7),
       "&:hover": {
-         backgroundColor: fade("#00ff00", 0.55)
+         backgroundColor: fade("#00BFA5", 0.55)
       }
    },
    success: {
-      color: "grey",
-      backgroundColor: "grey",
+      color: fade("#90A4AE", 0.7),
+      backgroundColor: fade("#90A4AE", 0.7),
       "&:hover": {
-         backgroundColor: fade("#999999", 0.55)
+         backgroundColor: fade("#90A4AE", 0.55)
       }
    },
    pending: {
@@ -191,12 +223,21 @@ const styles = theme => ({
       }
    },
    paymentButton: {
-      marginLeft: theme.spacing.unit
+      marginLeft: theme.spacing.unit,
    },
    receiptDetailLess: {
-      marginTop: theme.spacing.unit,
+      marginTop: theme.spacing.unit * 1.5,
       display: "flex",
       justifyContent: "space-between"
+   },
+   floatLefT: {
+      float: "left",
+   },
+   floatRight: {
+      float: "right",
+   },
+   clearBoth: {
+      clear: "both",
    },
    textLeft: {
       textAlign: "left"
@@ -209,10 +250,6 @@ const styles = theme => ({
    },
    marginRight: {
       marginRight: theme.spacing.unit * 2
-   },
-   selectAll: {
-      display: "flex",
-      alignItems: "center"
    },
    orderPopup: {
       position: "absolute",
@@ -230,6 +267,34 @@ const styles = theme => ({
    orderPopupButton: {
       padding: "0 12px",
       marginTop: theme.spacing.unit * 3
+   },
+   orderCheckbox: {
+      paddingRight: 0
+   },
+   orderCheckboxActive: {
+      color: "#747474 !important",
+   },
+   orderNumber: {
+      fontWeight: "600",
+      color: "white !important",
+      fontSize: "0.750rem",
+   },
+   orderClientName: {
+      fontWeight: "500",
+      fontSize: "1rem",
+   },
+   orderPrice: {
+      fontWeight: "400",
+      color: fade("#000", 0.6),
+   },
+   orderTimeStamp: {
+      fontWeight: "300",
+      fontSize: "0.625rem",
+      color: fade("#000", 0.6),
+   },
+   orderStatus: {
+      fontWeight: "300",
+      fontSize: "0.875rem",
    },
    textField: {},
    menuItem: {
@@ -285,6 +350,28 @@ const styles = theme => ({
       overflow: "scroll",
       padding: 2,
       marginTop: theme.spacing.unit * 2
+   },
+   footerAppBar: {
+      top: 'auto',
+      bottom: 0,
+      backgroundColor: "#BF5F82",
+   },
+   footerToolBar: {
+      alignItems: 'center',
+      justifyContent: 'space-between',
+   },
+   footerFabButton: {
+      position: 'absolute',
+      zIndex: 1,
+      top: -30,
+      left: 0,
+      right: 0,
+      margin: '0 auto',
+      color: "white",
+      backgroundColor: theme.palette.primary[200],
+      "&:hover": {
+         backgroundColor: theme.palette.primary[300],
+      }
    }
 });
 
