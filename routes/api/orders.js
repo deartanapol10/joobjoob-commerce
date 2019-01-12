@@ -121,45 +121,73 @@ router.get(
 // });
 
 //test router
-router.get('/test_add_order', function(req, res) {
+router.get('/test_add_order', function (req, res) {
   res.send('Hello World Test add order')
-})
-//add order
-router.post('/add_order', function(req, res){
-const new_order = new Order();
-// new_order.save()
-//   .then(new_order => {
-//   res.status(200).json({'New Order': 'Add New Order successfully'});
-//   })
-//   .catch(err => {
-//   res.status(400).send("Unable to add the order!!");
-//   });
-// })
-//----------------------------------------------------//
-new_order.storeId = req.body.storeId
-new_order.products = req.body.products
-new_order.customerName = req.body.customerName
-new_order.comment = req.body.comment
-new_order.orderStatus = req.body.orderStatus
-new_order.URL = req.body.URL
-// new_order.bankID = req.body.bankID
-new_order.deliveryType = req.body.deliveryType
-new_order.paymentSlip = req.body.paymentSlip
-new_order.paymentStatus = req.body.paymentStatus
-new_order.trackingNumber = req.body.trackingNumber
-new_order.createdAt= req.body.createdAt
-new_order.expiredAt = req.body.expiredAt
-new_order.updatedAt = req.body.updatedAt
-new_order.deletedFlag = req.body.deletedFlag
-new_order.save(function (err) {
-  res.status(200).json({'new_order': 'Add New Order successfully',
-                        'data_id' : new_order.customerName,
-                      'data_obj' : new_order });
-  });
-
 });
 
- 
+//get orders
+router.get('/get_order/:id', function (req, res) {
+  if (req.params.id != null) {
+    Order.findById(req.params.id).then(order => {
+      res.json(order);
+    });
+  }
+  else {
+    return res.json({ error: "No order map" });
+  }
+});
+
+//add order
+router.post('/add_order', function (req, res) {
+  const new_order = new Order();
+  // new_order.save()
+  //   .then(new_order => {
+  //   res.status(200).json({'New Order': 'Add New Order successfully'});
+  //   })
+  //   .catch(err => {
+  //   res.status(400).send("Unable to add the order!!");
+  //   });
+  // })
+  //----------------------------------------------------//
+  new_order.storeId = req.body.storeId
+  new_order.products = req.body.products
+  new_order.customerName = req.body.customerName
+  new_order.comment = req.body.comment
+  new_order.orderStatus = req.body.orderStatus
+  new_order.URL = req.body.URL
+  // new_order.bankID = req.body.bankID
+  new_order.deliveryType = req.body.deliveryType
+  new_order.paymentSlip = req.body.paymentSlip
+  new_order.paymentStatus = req.body.paymentStatus
+  new_order.trackingNumber = req.body.trackingNumber
+  new_order.createdAt = req.body.createdAt
+  new_order.expiredAt = req.body.expiredAt
+  new_order.updatedAt = req.body.updatedAt
+  new_order.deletedFlag = req.body.deletedFlag
+  new_order.save(function (err) {
+    if (err) throw err;
+    else {
+      res.status(200).json({
+        'Message': 'Add New Order successfully',
+        'Data id': new_order.customerName,
+        'Data obj': new_order
+      });
+    }
+  });
+});
+
+// del order
+router.get('/del_order/:id', function (req, res) {
+  if (req.params.id != null) {
+    Order.findById(req.params.id).then(order => {
+      order.remove();
+      res.status(200).json({ 'Message': 'Deleted Order' });
+    });
+  }
+  else {
+    res.status(400).send("Unable to delete the order!!");
+  }
+});
 
 
 module.exports = router;
