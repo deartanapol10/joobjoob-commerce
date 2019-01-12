@@ -47,6 +47,9 @@ const OrderSchema = new Schema({
       deliveryType: {
         type: String
       },
+      deliveryPrice: {
+        type: Number
+      },
       paymentSlip: {
         //Slip image
         type: String

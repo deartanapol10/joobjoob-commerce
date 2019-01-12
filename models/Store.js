@@ -22,7 +22,8 @@ const StoreSchema = new Schema({
     type: Date
   },
   deletedFlag: {
-    type: Boolean
+    type: Boolean,
+    default: false
   }
 });
 

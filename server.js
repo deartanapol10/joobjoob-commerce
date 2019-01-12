@@ -52,7 +52,7 @@ require("./config/passport")(passport);
 //Express-Validator Middleware
 app.use(expressValidator());
 
-app.use("/api/users", users);
+app.use("/api/user", users);
 app.use("/api/orders", orders);
 app.use("/api/product", product);
 app.use("/api/category", category);

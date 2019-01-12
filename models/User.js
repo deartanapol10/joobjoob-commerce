@@ -57,6 +57,18 @@ const UserSchema = new Schema({
       }
     }
   ],
+  delivery: [
+    {
+      deliveryName: {
+        type: String,
+        required: true
+      },
+      price: {
+        type: Number,
+        required: true
+      }
+    }
+  ],
   createdAt: {
     type: Date,
     default: Date.now
@@ -65,7 +77,8 @@ const UserSchema = new Schema({
     type: Date
   },
   deletedFlag: {
-    type: Boolean
+    type: Boolean,
+    default: false
   }
 });
 
