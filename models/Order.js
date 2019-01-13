@@ -40,10 +40,10 @@ const OrderSchema = new Schema({
       URL: {
         type: String
       },
-      // bankID: {
-      //   type: Schema.Types.ObjectId,
-      //   ref: "user"
-      // },
+      bankID: {
+        type: Schema.Types.ObjectId,
+        ref: "user"
+      },
       deliveryType: {
         type: String
       },
@@ -59,7 +59,7 @@ const OrderSchema = new Schema({
         type: Date
       },
       trackingNumber: {
-        type: Date
+        type: String
       },
       createdAt: {
         type: Date,
