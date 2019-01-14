@@ -17,12 +17,30 @@ const styles = theme => ({
       flex: 1,
       overflow: "auto",
       background: "#f5f5f5",
-      padding: theme.spacing.unit * 2
+      padding: theme.spacing.unit * 2,
    },
    grow: {
       flexGrow: 1
    },
    selectAllPaper: {},
+   resultPaper: {
+      position: "absolute",
+      width: "100%",
+      display: "flex",
+      flex: "1 0 auto",
+      flexDirection: "column",
+      marginTop: theme.spacing.unit,
+   },
+   resultCard: {
+      width: "100%",
+      padding: theme.spacing.unit * 1.5,
+      marginBottom: theme.spacing.unit,
+   },
+   resultDetailLess: {
+      display: "flex",
+      justifyContent: "space-between",
+      paddingLeft: theme.spacing.unit,
+   },
    cardSection: {
       backgroundColor: "#999999",
       padding: theme.spacing.unit,
@@ -298,12 +316,7 @@ const styles = theme => ({
    },
    textField: {},
    menuItem: {
-      "&:focus": {
-         backgroundColor: theme.palette.secondary[300],
-         "& $primary, & $icon": {
-            color: theme.palette.common.white
-         }
-      }
+      minWidth: theme.spacing.unit * 14,
    },
    primary: {},
    icon: {},

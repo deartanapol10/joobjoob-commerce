@@ -1,4 +1,7 @@
+import _ from "lodash";
 import React, { Component } from "react";
+import moment from "moment";
+import "moment/locale/th";
 
 import classNames from "classnames";
 
@@ -22,6 +25,8 @@ import {
    Checkbox,
    FormControlLabel,
    ListItemText,
+   ListSubheader,
+   ListItemSecondaryAction,
    Modal,
    TextField,
    MenuList,
@@ -60,6 +65,8 @@ import styles from "./styles";
 
 const orderSteps = ["กรุณากรอกชื่อลูกค้า", "รถเข็น", "สรุปข้อมูล"];
 
+moment.locale("th");
+
 function TabContainer(props) {
    return <React.Fragment>{props.children}</React.Fragment>;
 }
@@ -87,9 +94,11 @@ class App extends Component {
       selectedProduct: {},
       newProduct: {},
       print: {},
+      term: "",
+      results: [],
    };
 
-   getOrderStepContent = step => {
+   /*getOrderStepContent = step => {
       switch (step) {
          case 0:
             return (
@@ -268,7 +277,7 @@ class App extends Component {
                </React.Fragment>
             );
       }
-   };
+   };*/
 
    handleStatusMenuOpen = event => {
       this.setState({ statusAnchorEl: event.currentTarget });
@@ -279,7 +288,7 @@ class App extends Component {
    };
 
    handleMenuClose = () => {
-      this.setState({statusAnchorEl: null });
+      this.setState({ statusAnchorEl: null });
       this.setState({ menuAnchorEl: null });
       this.handleMobileMenuClose();
    };
@@ -292,7 +301,7 @@ class App extends Component {
       this.setState({ mobileMoreAnchorEl: null });
    };
 
-   handleChange = (event, value) => {
+   handleTabChange = (event, value) => {
       this.setState({ filteredOrders: [] });
       this.setState({ value });
       this.filterOrders(value);
@@ -322,7 +331,7 @@ class App extends Component {
                }
             );
          }
-         this.handleChange(null, this.state.value);
+         this.handleTabChange(null, this.state.value);
       } else {
          this.handleMenuClose();
       }
@@ -355,6 +364,13 @@ class App extends Component {
       this.setState({ checked: [] });
    };
 
+   handleSelectAllCheckbox = () => {
+      this.setState(state => ({
+         checked: this.state.filteredOrders.map(o => o.orderID)
+      }));
+      this.handleMenuClose();
+   };
+
    filterOrders = statusIndex => {
       const { orders, filteredOrders } = this.state;
       const newOrder = orders.filter(
@@ -365,6 +381,7 @@ class App extends Component {
 
    handleOrderPopupOpen = () => {
       this.setState({ orderPopup: true });
+      this.handleMenuClose();
    };
 
    handleOrderPopupClose = () => {
@@ -454,6 +471,29 @@ class App extends Component {
       );
    };
 
+   resetSearchTerm = () => {
+      this.setState({
+         term: "",
+         results: [],
+      })
+   }
+
+   handleInputChange = event => {
+      this.setState({
+         term: event.target.value
+      }, () => {
+         setTimeout(() => {
+            if(this.state.term.length < 1) return this.resetSearchTerm();
+
+            const results = _.filter(this.state.orders, _.flow(_.identity, _.values, _.join, _.toLower, _.partialRight(_.includes, this.state.term)));
+
+            this.setState({
+               results
+            })
+         }, 300)
+      });
+   };
+
    resetState = () => {
       this.setState({
          newCustomerName: "",
@@ -504,7 +544,8 @@ class App extends Component {
          options,
          selectedProduct,
          cart,
-         newProduct
+         newProduct,
+         results,
       } = this.state;
       const isStatusMenuOpen = Boolean(statusAnchorEl);
       const isMenuOpen = Boolean(menuAnchorEl);
@@ -560,6 +601,11 @@ class App extends Component {
          }
       }
 
+      function calculateDate(startDate) {
+         const time = moment(startDate, "DDMMYYYYhhmm").fromNow();
+         return time;
+      }
+
       const renderStatusMenu = (
          <Menu
             anchorEl={statusAnchorEl}
@@ -572,6 +618,7 @@ class App extends Component {
                <MenuItem
                   onClick={this.handleStatusChange.bind(this, status.id)}
                   key={status.id}
+                  className={classes.menuItem}
                >
                   {status.name.th}
                </MenuItem>
@@ -587,9 +634,26 @@ class App extends Component {
             open={isMenuOpen}
             onClose={this.handleMenuClose}
          >
-            <MenuItem key="new_bill">เปิดบิลใหม่</MenuItem>
-            <MenuItem key="select_all">เลือกทั้งหมด</MenuItem>
-            <MenuItem key="print_selected">พิมพ์ที่เลือก</MenuItem>
+            <MenuItem 
+               key="new_bill"
+               onClick={this.handleOrderPopupOpen.bind(this)}
+               className={classes.menuItem}
+            >
+               เปิดบิลใหม่
+            </MenuItem>
+            <MenuItem 
+               key="select_all"
+               onClick={this.handleSelectAllCheckbox.bind(this)}
+               className={classes.menuItem}
+            >
+               เลือกทั้งหมด
+            </MenuItem>
+            <MenuItem 
+               key="print_selected"
+               className={classes.menuItem}
+            >
+               พิมพ์ที่เลือก
+            </MenuItem>
          </Menu>
       );
 
@@ -608,9 +672,44 @@ class App extends Component {
       // 	</Menu>
       // );
 
+      const searchResults = (
+         <React.Fragment>
+            <div className={classes.resultPaper}>
+               {results.map(result => (
+                   <Card key="result.orderID" className={classes.resultCard}>
+                     <div className={classes.receiptDetailLess2}>
+                        <Button
+                           variant="contained"
+                           color="primary"
+                           className={classNames(
+                              statusColor(result.status),
+                              classes.statusButton,
+                              classes.textLeft
+                           )}
+                        >
+                        <Typography variant="body2" className={classes.orderNumber}>{`#${result.orderID}`}</Typography>
+                        </Button>
+                     </div>
+                     <div className={classes.resultDetailLess}>
+                        <Typography variant="body2" className={classes.orderClientName}>{result.name}</Typography>
+                        <Typography
+                           variant="body1"
+                           className={classNames(classes.textRight, classes.orderPrice)}
+                        >
+                           {result.price} บาท
+                        </Typography>
+                     </div>
+                  </Card>
+               ))}
+            </div>
+         </React.Fragment>
+      );
+
       const table = (
          <React.Fragment>
-            {filteredOrders.map(order => (
+            {filteredOrders
+               .sort((a, b) => moment(b.updatedTime, "DDMMYYYYhhmm").format("X") - moment(a.updatedTime, "DDMMYYYYhhmm").format("X"))
+               .map(order => (
                <Card
                   className={
                      checked.indexOf(order.orderID) === -1
@@ -648,28 +747,22 @@ class App extends Component {
                         >
                         <Typography variant="body2" className={classes.orderNumber}>{`#${order.orderID}`}</Typography>
                         </Button>
-                        <span><Typography variant="body1" className={classNames(
-                              statusColor(order.status), classes.statusText, classes.textLeft)}>{` ${statusText(order.status)}`}</Typography></span>
+                        <span>
+                           <Typography 
+                              variant="body1" 
+                              className={classNames(statusColor(order.status), classes.statusText, classes.textLeft)}
+                           >
+                                 {` ${statusText(order.status)}`}
+                           </Typography>
+                        </span>
                         <IconButton
                            aria-haspopup="true"
-                           onClick={this.handleMenuOpen}
                            color="inherit"
                            className={classNames(classes.printButton, classes.floatRight)}
                         >
                            <PrintIcon />
                         </IconButton>
                      </div>
-                     {/* <Button
-                        variant="contained"
-                        color="primary"
-                        className={classNames(
-                           paymentColor(order.status, order.paymentStatus),
-                           classes.statusButton,
-                           classes.paymentButton
-                        )}
-                     >
-                        <Typography variant="body2" className={classes.orderStatus}>{paymentText(order.paymentStatus)}</Typography>
-                     </Button> */}
                      <div className={classes.clearBoth}></div>
                      <div className={classes.receiptDetailLess}>
                         <Typography variant="body2" className={classes.orderClientName}>{order.name}</Typography>
@@ -682,7 +775,7 @@ class App extends Component {
                      </div>
                      <div className={classes.receiptDetailLess}>
                            <Typography variant="subheading" className={classes.orderTimeStamp}>
-                              {order.updatedTime}
+                              {calculateDate(order.updatedTime)}
                            </Typography>
                      </div>
                   </CardContent>
@@ -740,7 +833,7 @@ class App extends Component {
                         color="inherit"
                         noWrap
                      >
-                        Shippee Shop Name
+                        Something Apparel
                      </Typography>
                      <div className={classes.search}>
                         <div className={classes.searchIcon}>
@@ -752,7 +845,11 @@ class App extends Component {
                               root: classes.inputRoot,
                               input: classes.inputInput,
                            }}
+                           onChange={this.handleInputChange}
                         />
+                        <div className={classes.searchResult}>
+                           {searchResults}
+                        </div>
                      </div>
                      <div className={classes.grow} />
                      <div className={classes.sectionDesktop}>
@@ -817,7 +914,7 @@ class App extends Component {
                   )}
                >
                   <div className={classes.tabBar}>
-                     <Tabs value={value} onChange={this.handleChange} fullWidth>
+                     <Tabs value={value} onChange={this.handleTabChange} fullWidth>
                         {orderStatus.map(status => (
                            <Tab key={status.id} label={status.name.th} />
                         ))}
@@ -897,7 +994,7 @@ class App extends Component {
                      {value === 3 && <TabContainer>{table}</TabContainer>}
                   </div>
 
-                  <div
+                  {/*<div
                      className={classNames(
                         classes.sectionMobile,
                         classes.newOrder
@@ -922,6 +1019,7 @@ class App extends Component {
                         </Paper>
                      </Modal>
                   </div>
+                  */}
 
                   <div
                      className={classNames(

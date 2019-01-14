@@ -68,13 +68,13 @@ export const originalOrders = [
       },
       additionalNote: "",
       phone: "",
-      price: 1000,
+      price: 2888,
       bankAccount: "SCB",
       shipping: "ALPHA",
       trackingNo: "",
       receipt: "",
       createdTime: "271020181325",
-      updatedTime: "271020181325",
+      updatedTime: "120120191325",
       submitTime: "",
       expiredAt: "031120181325",
       items: [
@@ -88,8 +88,8 @@ export const originalOrders = [
          {
             id: 2,
             name: "Something",
-            price: 450,
-            amount: 1,
+            price: 1444,
+            amount: 2,
             image: Item2
          }
       ]
@@ -118,7 +118,7 @@ export const originalOrders = [
       trackingNo: "",
       receipt: Item1,
       createdTime: "291020181105",
-      updatedTime: "291020181545",
+      updatedTime: "140120191545",
       submitTime: "291020181545",
       expiredAt: "061120181105",
       items: [
@@ -257,7 +257,7 @@ export const originalOrders = [
       trackingNo: "",
       receipt: Item1,
       createdTime: "291020181105",
-      updatedTime: "291020181545",
+      updatedTime: "140120191545",
       submitTime: "291020181545",
       expiredAt: "061120181105",
       items: [
@@ -359,7 +359,7 @@ export const originalOrders = [
       trackingNo: "",
       receipt: Item1,
       createdTime: "291020181105",
-      updatedTime: "291020181545",
+      updatedTime: "140120191559",
       submitTime: "291020181545",
       expiredAt: "061120181105",
       items: [
@@ -410,7 +410,7 @@ export const originalOrders = [
       trackingNo: "",
       receipt: Item1,
       createdTime: "291020181105",
-      updatedTime: "291020181545",
+      updatedTime: "140120191608",
       submitTime: "291020181545",
       expiredAt: "061120181105",
       items: [
