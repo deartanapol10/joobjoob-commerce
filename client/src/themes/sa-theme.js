@@ -1,6 +1,6 @@
-import { createMuiTheme } from '@material-ui/core/styles';
-import red from '@material-ui/core/colors/red';
-import pink from '@material-ui/core/colors/pink';
+import { createMuiTheme } from "@material-ui/core/styles";
+import red from "@material-ui/core/colors/red";
+import pink from "@material-ui/core/colors/pink";
 
 export default createMuiTheme({
 	palette: {
@@ -10,24 +10,31 @@ export default createMuiTheme({
 	typography: {
 		useNextVariants: true,
 		fontFamily: [
-			'Mitr',
-			'Roboto',
-		].join(','),
+			"Mitr",
+			"Roboto",
+		].join(","),
 	},
 	overrides: {
 		MuiButton: {
 			root: {
-				color: 'black',
-				backgroundColor: 'rgba(0,0,0,0)',
-				'&:hover': {
-					backgroundColor: 'rgba(0,0,0,0.2)',
+				color: "black",
+				backgroundColor: "rgba(0,0,0,0)",
+				"&:hover": {
+					backgroundColor: "rgba(0,0,0,0.2)",
 				},
-				padding: '12px 16px',
-				fontSize: '1rem',
-				'&$sizeSmall': {
-					fontWeight: '400',
-					color: '#888',
+				padding: "12px 16px",
+				fontSize: "1rem",
+				"&$sizeSmall": {
+					fontWeight: "400",
+					color: "#888",
 				}
+			},
+		},
+		MuiButtonBase: {
+			root: {
+				"&:focus": {
+					outline: "none",
+				},
 			},
 		},
 		MuiFormControlLabel: {
@@ -42,21 +49,21 @@ export default createMuiTheme({
 		},
 		MuiStepIcon: {
 			root: {
-				color: '#999',
-				'&$active': {
+				color: "#999",
+				"&$active": {
 					color: pink[100],
 				},
-				'&$completed': {
+				"&$completed": {
 					color: pink[500],
 				},
-				'&$error': {
+				"&$error": {
 					color: pink[100],
 				}
 			},
 		},
 		MuiIconButton: {
 			root: {
-				padding: '12px',
+				padding: "12px",
 			},
 		},
 	},
