@@ -15,6 +15,11 @@ export default createMuiTheme({
 		].join(","),
 	},
 	overrides: {
+		MuiToolbar: {
+			regular: {
+				minHeight: "72px",
+			},
+		},
 		MuiButton: {
 			root: {
 				color: "black",

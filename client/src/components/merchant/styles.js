@@ -85,6 +85,20 @@ const styles = theme => ({
             display: "block",
          }
       },
+      appBarOrderTitle: {
+         textAlign: "left",
+         marginTop: -0.5 * theme.spacing.unit,
+      },
+      appBarOrderNumber: {
+
+      },
+      appBarOrderCustomerName: {
+         fontSize: "0.875rem",
+         marginTop: -1 * theme.spacing.unit,
+      },
+      appBarOrderProcess: {
+         padding: theme.spacing.unit - 2,
+      },
 
    //// **** END APP BAR **** ////
 
@@ -121,7 +135,7 @@ const styles = theme => ({
          },
       },
       searchIcon: {
-         width: theme.spacing.unit * 4.5,
+         width: theme.spacing.unit * 5.25,
          height: "100%",
          right: 0,
          position: "absolute",
@@ -134,9 +148,9 @@ const styles = theme => ({
          width: "100%",
       },
       inputInput: {
-         paddingTop: theme.spacing.unit,
+         paddingTop: theme.spacing.unit * 1.5,
          paddingRight: theme.spacing.unit,
-         paddingBottom: theme.spacing.unit,
+         paddingBottom: theme.spacing.unit * 1.5,
          paddingLeft: theme.spacing.unit,
          transition: theme.transitions.create("width"),
          width: "100%",
@@ -144,6 +158,12 @@ const styles = theme => ({
          [theme.breakpoints.up("md")]: {
             width: 200,
          },
+      },
+      productSearch: {
+         border: "2px rgba(0,0,0,0.4) solid",
+         position: "relative", 
+         borderRadius: 4,
+         margin: theme.spacing.unit * 2,
       },
 
    //// **** END SEARCH INPUT **** ////
@@ -187,6 +207,12 @@ const styles = theme => ({
          display: "flex",
          justifyContent: "space-between",
          paddingLeft: theme.spacing.unit,
+      },
+      productResultCard: {
+         maxWidth: 345,
+      },
+      productResultMedia: {
+         height: 140,
       },
 
    //// **** END SEARCH RESULTS **** ////

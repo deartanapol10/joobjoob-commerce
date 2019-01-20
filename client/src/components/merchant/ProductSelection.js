@@ -17,6 +17,8 @@ import {
    Avatar,
    Button,
    Card,
+   CardActions,
+   CardActionArea,
    CardContent,
    CardMedia,
    Checkbox,
@@ -234,10 +236,10 @@ class Merchant extends Component {
    // Filter from all orders - Filter orders that match with selected tab status
    filterOrders = statusIndex => {
       const { orders } = this.state;
-      const newFilteredOrders = orders.filter(
+      const newOrder = orders.filter(
          order => order.status === orderStatus[statusIndex].name.en
       );
-      this.setState({ filteredOrders: newFilteredOrders });
+      this.setState({ filteredOrders: newOrder });
    };
 
    //// **** END FILTER ORDERS FUNCTIONS **** ////
@@ -266,7 +268,7 @@ class Merchant extends Component {
          setTimeout(() => {
             if(this.state.term.length < 1) return this.resetSearchTerm();
 
-            const results = _.filter(this.state.orders, _.flow(_.identity, _.values, _.join, _.toLower, _.partialRight(_.includes, this.state.term)));
+            const results = _.filter(this.state.products, _.flow(_.identity, _.values, _.join, _.toLower, _.partialRight(_.includes, this.state.term)));
 
             this.setState({
                results
@@ -313,6 +315,7 @@ class Merchant extends Component {
       const isStatusMenuOpen = Boolean(statusAnchorEl);
       const isMenuOpen = Boolean(menuAnchorEl);
 
+      const toOrders = props => <Link to="/merchant" {...props} />;
       const newOrder = props => <Link to="/products" {...props} />;
 
       // Translate status into color
@@ -372,34 +375,12 @@ class Merchant extends Component {
          }
       }
 
-
+      
       // Calculate time passes from latest updated time to current time
       function calculateDate(startDate) {
          const time = moment(startDate, "DDMMYYYYhhmm").fromNow();
          return time;
       }
-
-
-      // Render status change menu popup
-      const renderStatusMenu = (
-         <Menu
-            anchorEl={statusAnchorEl}
-            anchorOrigin={{ vertical: "top", horizontal: "right" }}
-            transformOrigin={{ vertical: "top", horizontal: "right" }}
-            open={isStatusMenuOpen}
-            onClose={this.handleMenuClose}
-         >
-            {orderStatus.map(status => (
-               <MenuItem
-                  onClick={this.handleStatusChange.bind(this, status.id)}
-                  key={status.id}
-                  className={classes.menuList}
-               >
-                  {status.name.th}
-               </MenuItem>
-            ))}
-         </Menu>
-      );
 
 
       // Render menu popup
@@ -412,145 +393,40 @@ class Merchant extends Component {
             onClose={this.handleMenuClose}
          >
             <MenuItem 
-               key="new_bill"
-               className={classes.menuList}
-               component={newOrder}
-            >
-               เปิดบิลใหม่
-            </MenuItem>
-            <MenuItem 
-               key="select_all"
-               onClick={this.handleSelectAllCheckbox.bind(this)}
-               className={classes.menuList}
-            >
-               เลือกทั้งหมด
-            </MenuItem>
-            <MenuItem 
                key="print_selected"
                className={classes.menuList}
+               component={toOrders}
             >
-               พิมพ์ที่เลือก
+               ยกเลิกบิล
             </MenuItem>
          </Menu>
       );
 
       // Render search results from this.state.results
-      const searchResults = (
+      const productSearchResults = (
          <React.Fragment>
                {results.map(result => (
                    <Card 
                      key="result.orderID" 
-                     className={classes.resultCard}
-                     onClick={e => {
-                        this.orderInfo(e, result);
-                     }}
+                     className={classes.productResultCard}
                   >
-                     <div>
-                        <Button
-                           variant="contained"
-                           color="primary"
-                           className={classNames(
-                              orderStatusColor(result.status),
-                              classes.orderStatusButton,
-                              classes.textLeft
-                           )}
-                        >
-                        <Typography variant="body2" className={classes.orderNumber}>{`#${result.orderID}`}</Typography>
-                        </Button>
-                     </div>
-                     <div className={classes.resultDetail}>
-                        <Typography variant="body2" className={classes.orderClientName}>{result.name}</Typography>
-                        <Typography
-                           variant="body1"
-                           className={classNames(classes.textRight, classes.orderPrice)}
-                        >
-                           {result.price} บาท
-                        </Typography>
-                     </div>
+                     <CardActionArea>
+                        <CardMedia
+                           className={classes.productResultMedia}
+                           image={result.image}
+                           title="Contemplative Reptile"
+                        />
+                        <CardContent>
+                           <Typography gutterBottom variant="h5" component="h2">
+                              {result.name}
+                           </Typography>
+                           <Typography component="p">
+                              {result.price}
+                           </Typography>
+                        </CardContent>
+                     </CardActionArea>
                   </Card>
                ))}
-         </React.Fragment>
-      );
-      
-      
-      // Render each order for current tab
-      const table = (
-         <React.Fragment>
-            {/* Sort orders before map, by compare updated time */}
-            {filteredOrders
-               .sort((a, b) => moment(b.updatedTime, "DDMMYYYYhhmm").format("X") - moment(a.updatedTime, "DDMMYYYYhhmm").format("X"))
-               .map(order => (
-               <Card
-                  className={
-                     checked.indexOf(order.orderID) === -1
-                     ?
-                     classes.orderCard
-                     :
-                     classNames(classes.orderCard, classes.orderCardActive)
-                  }
-                  key={order.orderID}
-                  onClick={e => {
-                     this.orderInfo(e, order);
-                  }}
-               >
-                  <Checkbox
-                     onChange={this.handleToggle(order.orderID)}
-                     checked={checked.indexOf(order.orderID) !== -1}
-                     value={order.orderID}
-                     className={checked.indexOf(order.orderID) === -1
-                        ?
-                        classes.orderCheckbox
-                        :
-                        classNames(classes.orderCheckbox, classes.orderCheckboxActive)
-                     }
-                  />
-                  <CardContent className={classes.orderCardContent}>
-                     <div>
-                        <Button
-                           variant="contained"
-                           color="primary"
-                           className={classNames(
-                              orderStatusColor(order.status),
-                              classes.orderStatusButton,
-                              classes.textLeft
-                           )}
-                        >
-                        <Typography variant="body2" className={classes.orderNumber}>{`#${order.orderID}`}</Typography>
-                        </Button>
-                        <span>
-                           <Typography 
-                              variant="body1" 
-                              className={classNames(orderStatusColor(order.status), classes.orderStatusText, classes.textLeft)}
-                           >
-                                 {` ${orderStatusText(order.status)}`}
-                           </Typography>
-                        </span>
-                        <IconButton
-                           aria-haspopup="true"
-                           color="inherit"
-                           className={classNames(classes.orderPrintButton, classes.floatRight)}
-                        >
-                           <PrintIcon />
-                        </IconButton>
-                     </div>
-                     <div className={classes.clearBoth}></div>
-                     <div className={classes.orderDetail}>
-                        <Typography variant="body2" className={classes.orderClientName}>{order.name}</Typography>
-                        <Typography
-                           variant="body1"
-                           className={classNames(classes.textRight, classes.orderPrice)}
-                        >
-                           {order.price} บาท
-                        </Typography>
-                     </div>
-                     <div className={classes.orderDetail}>
-                           <Typography variant="subheading" className={classes.orderTimeStamp}>
-                              {calculateDate(order.updatedTime)}
-                           </Typography>
-                     </div>
-                  </CardContent>
-               </Card>
-            ))}
          </React.Fragment>
       );
 
@@ -604,99 +480,33 @@ class Merchant extends Component {
                            className={classes.avatar}
                         />
                      </IconButton>
-                     <Typography
-                        className={classes.appBarShopTitle}
-                        variant="body2"
-                        color="inherit"
-                        noWrap
-                     >
-                        Something Apparel
-                     </Typography>
-
-                     {/* Search input */ }
-                     <div className={classes.search}>
-                        {/* If there's an input, display close button  */}
-                        {/* Else display search button with focus input function  */}
-                        {term !== "" ? (
-                           <IconButton
-                              aria-haspopup="true"
-                              disableRipple
-                              onClick={this.resetSearchTerm}
-                              color="inherit"
-                              className={classes.searchIcon}
-                           >
-                              <CloseIcon />
-                           </IconButton>
-                        ) : (
-                           <IconButton
-                              aria-haspopup="true"
-                              disableRipple
-                              color="inherit"
-                              onClick={this.focusSearchInput}
-                              className={classes.searchIcon}
-                           >
-                              <SearchIcon />
-                           </IconButton>
-                        )}
-                        <InputBase
-                           placeholder="ชื่อลูกค้า / เลขบิล"
-                           classes={{
-                              root: classes.inputRoot,
-                              input: classes.inputInput,
-                           }}
-                           autoFocus
-                           inputRef={(searchInput) => this.myRef = searchInput}
-                           onChange={this.handleInputChange}
-                           value={term}
-                        />
+                     <div className={classes.appBarOrderTitle}>
+                        <Typography
+                           className={classes.appBarOrderNumber}
+                           variant="h6"
+                           color="inherit"
+                           noWrap
+                        >
+                           #0001
+                        </Typography>
+                        <Typography
+                           className={classes.appBarOrderCustomerName}
+                           variant="body1"
+                           color="inherit"
+                           noWrap
+                        >
+                           คุณมิ
+                        </Typography>
                      </div>
-
                      <div className={classes.grow} />
-                     
-                     {/* Menu for desktop version */}
-                     <div className={classes.sectionDesktop}>
-                        <Button
-                           aria-owns={isMenuOpen ? "material-appbar" : null}
-                           aria-haspopup="true"
-                           onClick={this.handleStatusMenuOpen}
-                           color="inherit"
-                           className={classes.appBarMenuButton}
-                        >
-                           <CreateIcon className={classes.appBarMenuIcon} />
-                           <Typography
-                              variant="body1"
-                              color="inherit"
-                              noWrap
-                           >
-                              เปลี่ยนสถานะ
-                           </Typography>
-                        </Button>
-                        <Button
-                           aria-haspopup="true"
-                           color="inherit"
-                           className={classNames(
-                              classes.appBarMenuButton,
-                              classes.appBarMenuLastItem
-                           )}
-                        >
-                           <MenuIcon className={classes.appBarMenuIcon} />
-                           <Typography
-                              variant="body1"
-                              color="inherit"
-                              noWrap
-                           >
-                              เมนูเพิ่มเติม
-                           </Typography>
-                        </Button>
-                     </div>
                      <div className={classes.sectionMobile}>
-                        <IconButton
-                           aria-haspopup="true"
-                           onClick={this.handleStatusMenuOpen}
+                        <Typography
+                           className={classes.appBarOrderProcess}
+                           variant="h6"
                            color="inherit"
                         >
-                           <CreateIcon />
-                        </IconButton>
+                           เลือกสินค้า
+                        </Typography>
                         <IconButton
                            aria-haspopup="true"
                            onClick={this.handleMenuOpen}
@@ -715,121 +525,57 @@ class Merchant extends Component {
                      classes.flexColumn
                   )}
                >
-
-                  {/* Search results display */}
-                  {results.length > 0
-                  && (
-                     <div>
-                        <Paper className={classes.resultPaper}>
-                           <Typography
-                              className={classes.resultTitle}
-                              variant="h5"
-                              color="inherit"
-                              noWrap
-                           >
-                              ผลการค้นหา
-                           </Typography>
-                           {searchResults}
-                        </Paper>
-                     </div>
-                  )}
-
-                  {/* Status tab display */}
-                  <div className={classes.tabBar}>
-                     <Tabs value={value} onChange={this.handleTabChange} fullWidth>
-                        {orderStatus.map(status => (
-                           <Tab key={status.id} label={status.name.th} />
-                        ))}
-                     </Tabs>
+                  {/* Search input */ }
+                  <div className={classes.productSearch}>
+                     {/* If there's an input, display close button  */}
+                     {/* Else display search button with focus input function  */}
+                     {term !== "" ? (
+                        <IconButton
+                           aria-haspopup="true"
+                           disableRipple
+                           onClick={this.resetSearchTerm}
+                           color="inherit"
+                           className={classes.searchIcon}
+                        >
+                           <CloseIcon />
+                        </IconButton>
+                     ) : (
+                        <IconButton
+                           aria-haspopup="true"
+                           disableRipple
+                           color="inherit"
+                           onClick={this.focusSearchInput}
+                           className={classes.searchIcon}
+                        >
+                           <SearchIcon />
+                        </IconButton>
+                     )}
+                     <InputBase
+                        placeholder="ชื่อสินค้า / ราคา"
+                        classes={{
+                           root: classes.inputRoot,
+                           input: classes.inputInput,
+                        }}
+                        autoFocus
+                        inputRef={(searchInput) => this.myRef = searchInput}
+                        onChange={this.handleInputChange}
+                        value={term}
+                     />
                   </div>
                </div>
-               
-               {/* Order list display */}
-               <Paper
-                  className={classNames(
-                     classes.selectAllPaper,
-                     classes.sectionMobile,
-                     classes.flexColumn
-                  )}
-               >
-
-                  {/* If there's no orders in the tab, display "ไม่มีออเดอร์" text */}
-                  {filteredOrders.length === 0 ? (
-                     <div className={classes.orderBlank}>
-                        <CancelIcon className={classes.orderBlankIcon} />
-                        <Typography
-                           variant="body1"
-                           align="center"
-                           color="inherit"
-                        >
-                           ไม่มีออเดอร์
-                        </Typography>
-                     </div>
-                  )
-                  :
-                  ( 
-                     /* Else show select all checkbox with a condition */
-                     /* If there's order checked, display "เลือก " with selected orders amount */
-                     checked.length === 0
-                     ?
-                     <div className={classes.selectAll}>
-                        <FormControlLabel
-                           control={
-                              <Checkbox
-                                 checked={
-                                    checked.length ===
-                                    filteredOrders.length
-                                 }
-                                 onChange={this.handleSelectAll}
-                                 className={classes.selectAllCheckbox}
-                              />
-                           }
-                           label="เลือกทั้งหมด"
-                           className={classes.selectAllLabel}
-                        />
-                     </div>
-                     :
-                     <div className={classNames(classes.selectAll, classes.selectAllActive)}>
-                        <FormControlLabel
-                           control={
-                              <Checkbox
-                                 checked={
-                                    checked.length ===
-                                    filteredOrders.length
-                                 }
-                                 onChange={this.handleSelectAll}
-                                 className={classNames(classes.selectAllCheckbox,classes.selectAllCheckboxActive)}
-                              />
-                           }
-                           label={`เลือก ${checked.length}`}
-                           className={classNames(classes.selectAllLabel, classes.selectAllLabelActive)}
-                        />
-                     </div>
-                  )
-               }
-               </Paper>
 
                {/* Render menus */}
-               {renderStatusMenu}
                {renderMenu}
 
                {/* Display scrollable ontent */}
                <div className={classes.content}>
-                  <div
-                     className={classNames(
-                        classes.sectionMobile,
-                        classes.flexColumn
-                     )}
-                  >
-                     {/* Tab content separated by value */}
-                     {value === 0 && <TabContainer>{table}</TabContainer>}
-                     {value === 1 && <TabContainer>{table}</TabContainer>}
-                     {value === 2 && <TabContainer>{table}</TabContainer>}
-                     {value === 3 && <TabContainer>{table}</TabContainer>}
-
-                     {/* Additional space at the bottom of content */}
-                     <div className={classes.bottomSpace}></div>
-                  </div>
+                  {/* Search results display */}
+                  {results.length > 0
+                  && (
+                     <div>
+                        {productSearchResults}
+                     </div>
+                  )}     
                </div>
 
                {/* Display fixed footer */}

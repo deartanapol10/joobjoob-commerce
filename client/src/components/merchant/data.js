@@ -1,5 +1,5 @@
-import Item1 from "../../images/item-1.jpg";
-import Item2 from "../../images/item-2.jpg";
+import itemImage01 from "../../images/item-01.jpg";
+import itemImage02 from "../../images/item-02.jpg";
 
 export const orderStatus = [
    {
@@ -83,14 +83,14 @@ export const originalOrders = [
             name: "Lorem Ipsum",
             price: 250,
             amount: 2,
-            image: Item2
+            image: itemImage02
          },
          {
             id: 2,
             name: "Something",
             price: 1444,
             amount: 2,
-            image: Item2
+            image: itemImage02
          }
       ]
    },
@@ -116,7 +116,7 @@ export const originalOrders = [
       bankAccount: "KBANK",
       shipping: "EMS",
       trackingNo: "",
-      receipt: Item1,
+      receipt: itemImage01,
       createdTime: "291020181105",
       updatedTime: "140120191545",
       submitTime: "291020181545",
@@ -127,21 +127,21 @@ export const originalOrders = [
             name: "Trouser",
             price: 100,
             amount: 2,
-            image: Item2
+            image: itemImage02
          },
          {
             id: 2,
             name: "T-Shirt",
             price: 100,
             amount: 1,
-            image: Item2
+            image: itemImage02
          },
          {
             id: 3,
             name: "Skirt",
             price: 100,
             amount: 1,
-            image: Item2
+            image: itemImage02
          }
       ]
    },
@@ -167,7 +167,7 @@ export const originalOrders = [
       bankAccount: "SCB",
       shipping: "ALPHA",
       trackingNo: "1234567890",
-      receipt: Item1,
+      receipt: itemImage01,
       createdTime: "011120181533",
       updatedTime: "011120181833",
       submitTime: "011120181633",
@@ -178,7 +178,7 @@ export const originalOrders = [
             name: "Trouser",
             price: 100,
             amount: 2,
-            image: Item2
+            image: itemImage02
          }
       ]
    },
@@ -204,7 +204,7 @@ export const originalOrders = [
       bankAccount: "KBANK",
       shipping: "EMS",
       trackingNo: "",
-      receipt: Item1,
+      receipt: itemImage01,
       createdTime: "291020181105",
       updatedTime: "291020181545",
       submitTime: "291020181545",
@@ -215,21 +215,21 @@ export const originalOrders = [
             name: "Trouser",
             price: 100,
             amount: 2,
-            image: Item2
+            image: itemImage02
          },
          {
             id: 2,
             name: "T-Shirt",
             price: 100,
             amount: 1,
-            image: Item2
+            image: itemImage02
          },
          {
             id: 3,
             name: "Skirt",
             price: 100,
             amount: 1,
-            image: Item2
+            image: itemImage02
          }
       ]
    },
@@ -255,7 +255,7 @@ export const originalOrders = [
       bankAccount: "KBANK",
       shipping: "EMS",
       trackingNo: "",
-      receipt: Item1,
+      receipt: itemImage01,
       createdTime: "291020181105",
       updatedTime: "140120191545",
       submitTime: "291020181545",
@@ -266,21 +266,21 @@ export const originalOrders = [
             name: "Trouser",
             price: 100,
             amount: 2,
-            image: Item2
+            image: itemImage02
          },
          {
             id: 2,
             name: "T-Shirt",
             price: 100,
             amount: 1,
-            image: Item2
+            image: itemImage02
          },
          {
             id: 3,
             name: "Skirt",
             price: 100,
             amount: 1,
-            image: Item2
+            image: itemImage02
          }
       ]
    },
@@ -306,7 +306,7 @@ export const originalOrders = [
       bankAccount: "KBANK",
       shipping: "EMS",
       trackingNo: "",
-      receipt: Item1,
+      receipt: itemImage01,
       createdTime: "291020181105",
       updatedTime: "291020181545",
       submitTime: "291020181545",
@@ -317,21 +317,21 @@ export const originalOrders = [
             name: "Trouser",
             price: 100,
             amount: 2,
-            image: Item2
+            image: itemImage02
          },
          {
             id: 2,
             name: "T-Shirt",
             price: 100,
             amount: 1,
-            image: Item2
+            image: itemImage02
          },
          {
             id: 3,
             name: "Skirt",
             price: 100,
             amount: 1,
-            image: Item2
+            image: itemImage02
          }
       ]
    },
@@ -357,7 +357,7 @@ export const originalOrders = [
       bankAccount: "KBANK",
       shipping: "EMS",
       trackingNo: "",
-      receipt: Item1,
+      receipt: itemImage01,
       createdTime: "291020181105",
       updatedTime: "140120191559",
       submitTime: "291020181545",
@@ -368,21 +368,21 @@ export const originalOrders = [
             name: "Trouser",
             price: 100,
             amount: 2,
-            image: Item2
+            image: itemImage02
          },
          {
             id: 2,
             name: "T-Shirt",
             price: 100,
             amount: 1,
-            image: Item2
+            image: itemImage02
          },
          {
             id: 3,
             name: "Skirt",
             price: 100,
             amount: 1,
-            image: Item2
+            image: itemImage02
          }
       ]
    },
@@ -408,7 +408,7 @@ export const originalOrders = [
       bankAccount: "KBANK",
       shipping: "EMS",
       trackingNo: "",
-      receipt: Item1,
+      receipt: itemImage01,
       createdTime: "291020181105",
       updatedTime: "140120191608",
       submitTime: "291020181545",
@@ -419,21 +419,21 @@ export const originalOrders = [
             name: "Trouser",
             price: 100,
             amount: 2,
-            image: Item2
+            image: itemImage02
          },
          {
             id: 2,
             name: "T-Shirt",
             price: 100,
             amount: 1,
-            image: Item2
+            image: itemImage02
          },
          {
             id: 3,
             name: "Skirt",
             price: 100,
             amount: 1,
-            image: Item2
+            image: itemImage02
          }
       ]
    },
@@ -459,7 +459,7 @@ export const originalOrders = [
       bankAccount: "KBANK",
       shipping: "EMS",
       trackingNo: "",
-      receipt: Item1,
+      receipt: itemImage01,
       createdTime: "291020181105",
       updatedTime: "291020181545",
       submitTime: "291020181545",
@@ -470,21 +470,21 @@ export const originalOrders = [
             name: "Trouser",
             price: 100,
             amount: 2,
-            image: Item2
+            image: itemImage02
          },
          {
             id: 2,
             name: "T-Shirt",
             price: 100,
             amount: 1,
-            image: Item2
+            image: itemImage02
          },
          {
             id: 3,
             name: "Skirt",
             price: 100,
             amount: 1,
-            image: Item2
+            image: itemImage02
          }
       ]
    },
@@ -510,7 +510,7 @@ export const originalOrders = [
       bankAccount: "KBANK",
       shipping: "EMS",
       trackingNo: "",
-      receipt: Item1,
+      receipt: itemImage01,
       createdTime: "291020181105",
       updatedTime: "291020181545",
       submitTime: "291020181545",
@@ -521,21 +521,21 @@ export const originalOrders = [
             name: "Trouser",
             price: 100,
             amount: 2,
-            image: Item2
+            image: itemImage02
          },
          {
             id: 2,
             name: "T-Shirt",
             price: 100,
             amount: 1,
-            image: Item2
+            image: itemImage02
          },
          {
             id: 3,
             name: "Skirt",
             price: 100,
             amount: 1,
-            image: Item2
+            image: itemImage02
          }
       ]
    }
@@ -600,7 +600,7 @@ export const productsList = [
       name: "เสื้อผ้ามือสอง",
       price: 559,
       amount: 1,
-      image: Item1,
+      image: itemImage01,
       option: [
          {
             id: 1,
@@ -624,7 +624,7 @@ export const productsList = [
       name: "เสื้อผ้ามือหนึ่ง",
       price: 899,
       amount: 1,
-      image: Item2,
+      image: itemImage02,
       option: []
    },
    {
@@ -632,7 +632,7 @@ export const productsList = [
       name: "เสื้อผ้ามือสาม ชื่อยาวนิดหน่อย",
       price: 499,
       amount: 1,
-      image: Item2,
+      image: itemImage02,
       option: []
    },
    {
@@ -640,7 +640,7 @@ export const productsList = [
       name: "เสื้อผ้ามือสี่ ชื่อยาวขึ้นมาอีกนิด",
       price: 399,
       amount: 1,
-      image: Item2,
+      image: itemImage02,
       option: []
    },
    {
@@ -648,7 +648,7 @@ export const productsList = [
       name: "เสื้อผ้ามือห้า ชื่อยาวมากๆๆๆๆๆๆๆๆๆๆๆๆๆ",
       price: 299,
       amount: 1,
-      image: Item2,
+      image: itemImage02,
       option: []
    },
    {
@@ -656,7 +656,7 @@ export const productsList = [
       name: "เสื้อผ้ามือหก ชื่อยาวกว่านี้มีอีกไหม ขอให้ส่งมา",
       price: 199,
       amount: 1,
-      image: Item2,
+      image: itemImage02,
       option: []
    },
    {
@@ -664,7 +664,7 @@ export const productsList = [
       name: "เสื้อผ้ามือเจ็ด ชื่อสินค้าถ้าจะยาวขนาดนี้ ไปแต่งนิยายขายเถอะ",
       price: 99,
       amount: 1,
-      image: Item2,
+      image: itemImage02,
       option: []
    }
 ];

@@ -7,6 +7,7 @@ import store from "./store";
 import Login from "./components/auth/Login";
 import Customer from "./components/customer/Customer";
 import Merchant from "./components/merchant/Merchant";
+import ProductSelection from "./components/merchant/ProductSelection";
 import Receipt from "./receipt/SellerReceipt";
 
 class App extends Component {
@@ -19,6 +20,7 @@ class App extends Component {
                   <Route path="/:userid/:orderid" component={Customer} />
                   <Route path="/merchant" component={Merchant} />
                   <Route path="/receipt" component={Receipt} />
+                  <Route path="/products" component={ProductSelection} />
                </div>
             </Router>
          </Provider>
