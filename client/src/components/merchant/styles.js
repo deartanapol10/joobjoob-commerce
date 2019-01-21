@@ -23,6 +23,37 @@ const styles = theme => ({
       textRight: {
          textAlign: "right"
       },
+      iconLeft: {
+         marginRight: theme.spacing.unit,
+      },
+      iconRight: {
+         marginLeft: theme.spacing.unit,
+      },
+      iconSmall: {
+         fontSize: 20,
+      },
+      buttonBadgeRight: {
+         marginLeft: theme.spacing.unit,
+         marginRight: theme.spacing.unit,
+      },
+      buttonWithBadge: {
+         position: "relative",
+         top: 0,
+         left: 0,
+         marginLeft: theme.spacing.unit,
+      },
+      buttonWithBadgeColor: {
+			color: "#fff",
+			backgroundColor: "#009577",
+      },
+      textButton: {
+         backgroundColor: "transparent",
+         color: fade("#fff", 0.5),
+         "&:hover": {
+            color: "#fff",
+            backgroundColor: "transparent",
+         },
+      },
 
    //// **** END COMMON CLASSES **** ////
 
@@ -38,8 +69,6 @@ const styles = theme => ({
          backgroundColor: theme.palette.primary[200],
       },
       footer: {
-         backgroundColor: "#bf5f82",
-         height: 56,
       },
       content: {
          flex: 1,
@@ -209,10 +238,82 @@ const styles = theme => ({
          paddingLeft: theme.spacing.unit,
       },
       productResultCard: {
-         maxWidth: 345,
+         minWidth: theme.spacing.unit * 20,
+         minHeight: theme.spacing.unit * 30,
       },
       productResultMedia: {
-         height: 140,
+         width: "100%",
+         "&::before": {
+            content: "''",
+            display: "inline-block",
+            width: 1,
+            height: 0,
+            paddingBottom: "calc(100% / 1/1)",
+         },
+      },
+      productResultTitleTruncate: {
+         maxHeight: theme.spacing.unit * 3,
+         overflow: "hidden",
+         position: "relative",
+         display: "block",
+         lineHeight: "1rem",
+         "&::before": {
+            background: "linear-gradient(to right, rgba(255, 255, 255, 0) 0%, white 50%)",
+            content: "'\\200C'",
+            display: "block",
+            position: "absolute",
+            right: 0,
+            top: 0,
+            width: "25%",
+            textAlign: "center",
+         },
+      },
+      productResultTitle: {
+         fontSize: "1rem",
+      },
+      productResultPrice: {
+         fontSize: "0.75rem",
+         color: fade("#000", 0.6),
+      },
+      productResultActions: {
+         height: theme.spacing.unit * 5,
+         borderTop: "1px #eee solid",
+         justifyContent: "center",
+         padding: 0,
+      },
+      productResultEditButton: {
+         width: "100%",
+         height: "100%",
+         margin: 0,
+         borderRadius: "0 0 4px 4px",
+         color: "inherit",
+         backgroundColor: "inherit",
+         "&:hover": {
+            backgroundColor: fade("#000", 0.08),
+         },
+      },
+      productResultCheck: {
+         position: "absolute",
+         top: 0,
+         width: "100%",
+         height: "100%",
+         backgroundColor: "transparent",
+      },
+      productResultCheckActive: {
+         backgroundColor: fade("#03DAC6", 0.3),
+      },
+      productResultRoot: {
+         float: "right",
+         color: fade("#999", 0.5),
+         "&$productResultChecked": {
+            color: "#009577",
+         },
+      },
+      productResultChecked: {
+
+      },
+      productResultGrid: {
+         marginBottom: theme.spacing.unit * 5,
       },
 
    //// **** END SEARCH RESULTS **** ////

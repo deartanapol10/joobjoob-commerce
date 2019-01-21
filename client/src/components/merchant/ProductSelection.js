@@ -15,6 +15,7 @@ import classNames from "classnames";
 import {
    AppBar,
    Avatar,
+   Badge,
    Button,
    Card,
    CardActions,
@@ -26,6 +27,7 @@ import {
    Divider,
    Fab,
    FormControlLabel,
+   Grid,
    IconButton,
    InputBase,
    List,
@@ -58,6 +60,8 @@ import MenuIcon from "@material-ui/icons/Menu";
 import MailIcon from "@material-ui/icons/Mail";
 import PrintIcon from "@material-ui/icons/Print";
 import SearchIcon from "@material-ui/icons/Search";
+import CheckIcon from "@material-ui/icons/CheckCircle";
+import CheckIconOutline from "@material-ui/icons/CheckCircleOutline";
 
 // Import Logo 
 import SALogo from "../../images/sa-logo.png";
@@ -108,7 +112,7 @@ class Merchant extends Component {
          createProductPopup: false,
          productOptionPopup: false,
          cart: [],
-         cartTotal: 0,
+         badge: false,
          products: productsList,
          options: optionsList,
          selectedProduct: {},
@@ -117,7 +121,7 @@ class Merchant extends Component {
          term: "",
          results: [],
       };
-   }
+   };
 
 
    //// ---- MENU POPUP FUNCTIONS ---- ////
@@ -181,31 +185,12 @@ class Merchant extends Component {
       } else {
          this.handleMenuClose();
       }
-   }
+   };
 
    //// **** END TABS FUNCTIONS **** ////
 
 
    //// ---- CHECKBOX FUNCTIONS ---- ///
-
-   // Toggle individual checkbox - Check if there's orderID in checked orders >
-   // if none, push new order into checked orders > if yes, remove it.
-   handleToggle = value => () => {
-      const { checked } = this.state;
-      const currentIndex = checked.indexOf(value);
-      const newChecked = [...checked];
-
-      if (currentIndex === -1) {
-         newChecked.push(value);
-      } else {
-         newChecked.splice(currentIndex, 1);
-      }
-
-      this.setState({
-         checked: newChecked
-      });
-   };
-
 
    // Select all checkboxes in current tab - Copy all orderId from filteredOrders into checked orders >
    // else clear checked orders
@@ -229,21 +214,6 @@ class Merchant extends Component {
    };
 
    //// **** END CHECKBOX FUNCTIONS **** ///
-
-
-   //// ---- FILTER ORDERS FUNCTIONS ---- ////
-
-   // Filter from all orders - Filter orders that match with selected tab status
-   filterOrders = statusIndex => {
-      const { orders } = this.state;
-      const newOrder = orders.filter(
-         order => order.status === orderStatus[statusIndex].name.en
-      );
-      this.setState({ filteredOrders: newOrder });
-   };
-
-   //// **** END FILTER ORDERS FUNCTIONS **** ////
-
 
    //// ---- SEARCH FUNCTIONS ---- ///
 
@@ -279,13 +249,33 @@ class Merchant extends Component {
 
    //// **** END SEARCH FUNCTIONS **** ////
 
+
+   handleProductSelect = value => () => {
+      const { cart, badge } = this.state;
+      const currentIndex = cart.indexOf(value);
+      const newCart = [...cart];
+
+      if (currentIndex === -1) {
+         newCart.push(value);
+      } else {
+         newCart.splice(currentIndex, 1);
+      };
+
+      this.setState({
+         cart: newCart
+      });
+   };
+
    componentDidMount() {
-      this.filterOrders(this.state.value);
-   }
+      const newArray = Object.values(this.state.products);
+      this.setState({
+         products: newArray,
+      });
+   };
 
    orderInfo(e, order) {
       console.log(order);
-   }
+   };
 
    toggleMenuDrawer = open => {
       this.setState({
@@ -309,6 +299,9 @@ class Merchant extends Component {
          checked,
          value,
          filteredOrders,
+         cart,
+         badge,
+         products,
          term,
          results,
       } = this.state;
@@ -382,7 +375,6 @@ class Merchant extends Component {
          return time;
       }
 
-
       // Render menu popup
       const renderMenu = (
          <Menu
@@ -402,31 +394,124 @@ class Merchant extends Component {
          </Menu>
       );
 
+      const productDisplay = (
+         <React.Fragment>
+            {products.map(product => (
+               <Grid item xs={6} sm={4} md={3} lg={2} xl={1}>
+                  <Card 
+                     key={product.id}
+                     className={classes.productResultCard}
+                  >
+                     <CardActionArea
+                        onClick={this.handleProductSelect(product.id)}
+                     >
+                        <CardMedia
+                           className={classes.productResultMedia}
+                           image={product.image}
+                           title={product.name}
+                        />
+                        <CardContent>
+                           <div className={classes.productResultTitleTruncate}>
+                              <Typography variant="h5" component="h2" className={classes.productResultTitle}>
+                                 {product.name}
+                              </Typography>
+                           </div>
+                           <Typography component="p" className={classes.productResultPrice}>
+                              {product.price} บาท
+                           </Typography>
+                        </CardContent>
+                        <div
+                           className={cart.indexOf(product.id) === -1
+                              ?
+                              classes.productResultCheck
+                              :
+                              classNames(classes.productResultCheck, classes.productResultCheckActive)
+                           }
+                        >
+                           <Checkbox
+                              checked={cart.indexOf(product.id) !== -1}
+                              value={product.id}
+                              classes={{
+                                 root: classes.productResultRoot,
+                                 checked: classes.productResultChecked
+                              }}
+                              icon={<CheckIconOutline />}
+                              checkedIcon={<CheckIcon />}
+                           />
+                        </div>
+                     </CardActionArea>
+                     <CardActions className={classes.productResultActions}>
+                        <Button
+                           size="small"
+                           className={classes.productResultEditButton}
+                        >
+                           <CreateIcon className={classNames(classes.iconLeft, classes.iconSmall)} />
+                           แก้ไขสินค้า
+                        </Button>
+                     </CardActions>
+                  </Card>
+               </Grid>  
+            ))}
+         </React.Fragment>
+      );
+
       // Render search results from this.state.results
       const productSearchResults = (
          <React.Fragment>
-               {results.map(result => (
+            {results.map(result => (
+               <Grid item xs={6} sm={4} md={3} lg={2} xl={1}>
                    <Card 
-                     key="result.orderID" 
+                     key={result.id}
                      className={classes.productResultCard}
                   >
-                     <CardActionArea>
+                     <CardActionArea
+                        onClick={this.handleProductSelect(result.id)}
+                     >
                         <CardMedia
                            className={classes.productResultMedia}
                            image={result.image}
-                           title="Contemplative Reptile"
+                           title={result.name}
                         />
                         <CardContent>
-                           <Typography gutterBottom variant="h5" component="h2">
+                           <Typography variant="h5" component="h2" className={classes.productResultTitle}>
                               {result.name}
                            </Typography>
-                           <Typography component="p">
-                              {result.price}
+                           <Typography component="p" className={classes.productResultPrice}>
+                              {result.price} บาท
                            </Typography>
                         </CardContent>
+                        <div
+                           className={cart.indexOf(result.id) === -1
+                              ?
+                              classes.productResultCheck
+                              :
+                              classNames(classes.productResultCheck, classes.productResultCheckActive)
+                           }
+                        >
+                           <Checkbox
+                              checked={cart.indexOf(result.id) !== -1}
+                              value={result.id}
+                              classes={{
+                                 root: classes.productResultRoot,
+                                 checked: classes.productResultChecked
+                              }}
+                              icon={<CheckIconOutline />}
+                              checkedIcon={<CheckIcon />}
+                           />
+                        </div>
                      </CardActionArea>
+                     <CardActions className={classes.productResultActions}>
+                        <Button
+                           size="small"
+                           className={classes.productResultEditButton}
+                        >
+                           <CreateIcon className={classNames(classes.iconLeft, classes.iconSmall)} />
+                           แก้ไขสินค้า
+                        </Button>
+                     </CardActions>
                   </Card>
-               ))}
+               </Grid>
+            ))}
          </React.Fragment>
       );
 
@@ -570,25 +655,51 @@ class Merchant extends Component {
                {/* Display scrollable ontent */}
                <div className={classes.content}>
                   {/* Search results display */}
-                  {results.length > 0
-                  && (
-                     <div>
-                        {productSearchResults}
-                     </div>
-                  )}     
+                     {results.length > 0
+                     ? (
+                        <Grid container spacing={16} className={classes.productResultGrid}>
+                           {productSearchResults}
+                        </Grid>
+                     ) : (
+                        <Grid container spacing={16} className={classes.productResultGrid}>
+                           {productDisplay}
+                        </Grid>
+                     )}
                </div>
 
                {/* Display fixed footer */}
                <div className={classes.footer}>
                   <AppBar position="fixed" className={classes.footerAppBar}>
                      <Toolbar className={classes.footerToolbar}>
-                        <Fab 
+                        <Button
+                           className={classes.textButton}
+                           component={toOrders}
+                        >
+                           {`< กลับ `}
+                        </Button>
+                        <Fab
                            aria-label="Add" 
                            className={classes.footerFabButton}
                            component={newOrder}
                         >
                            <AddIcon />
                         </Fab>
+                        <div className={classes.grow} />
+                           <Button
+                              disabled={cart.length === 0}
+                              className={classes.regularButton}
+                           >
+                              เพิ่มสินค้า
+                              <Badge 
+                                 color="primary"
+                                 badgeContent={cart.length}
+                                 classes={{
+                                    badge: classes.buttonWithBadge,
+                                    colorPrimary: classes.buttonWithBadgeColor,
+                                 }}
+                                 invisible={cart.length === 0}
+                              ></Badge>
+                           </Button>
                      </Toolbar>
                   </AppBar>
                </div>

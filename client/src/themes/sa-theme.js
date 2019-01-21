@@ -1,6 +1,7 @@
 import { createMuiTheme } from "@material-ui/core/styles";
 import red from "@material-ui/core/colors/red";
 import pink from "@material-ui/core/colors/pink";
+import { fade } from "@material-ui/core/styles/colorManipulator";
 
 export default createMuiTheme({
 	palette: {
@@ -17,21 +18,20 @@ export default createMuiTheme({
 	overrides: {
 		MuiToolbar: {
 			regular: {
-				minHeight: "72px",
+				minHeight: 72,
 			},
 		},
 		MuiButton: {
 			root: {
-				color: "black",
-				backgroundColor: "rgba(0,0,0,0)",
+				fontSize: "0.875rem",
+				color: "#fff",
+				backgroundColor: "#03DAC6",
 				"&:hover": {
-					backgroundColor: "rgba(0,0,0,0.2)",
+					backgroundColor: fade("#03DAC6", 0.5),
 				},
-				padding: "12px 16px",
-				fontSize: "1rem",
-				"&$sizeSmall": {
-					fontWeight: "400",
-					color: "#888",
+				"&:disabled": {
+					color: fade("#fff", 0.5),
+					backgroundColor: fade("#000", 0.08),
 				}
 			},
 		},
@@ -40,6 +40,14 @@ export default createMuiTheme({
 				"&:focus": {
 					outline: "none",
 				},
+			},
+		},
+		MuiBadge: {
+			badge: {
+				fontSize: 14,
+			},
+			invisible: {
+				display: "none",
 			},
 		},
 		MuiFormControlLabel: {
@@ -68,7 +76,7 @@ export default createMuiTheme({
 		},
 		MuiIconButton: {
 			root: {
-				padding: "12px",
+				padding: 12,
 			},
 		},
 	},
