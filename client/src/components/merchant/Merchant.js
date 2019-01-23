@@ -26,13 +26,6 @@ import {
    Drawer
 } from "@material-ui/core";
 
-import List from "@material-ui/core/List";
-import Divider from "@material-ui/core/Divider";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import InboxIcon from "@material-ui/icons/MoveToInbox";
-import MailIcon from "@material-ui/icons/Mail";
-
 import CreateIcon from "@material-ui/icons/Create";
 
 import { withStyles } from "@material-ui/core/styles";
@@ -52,6 +45,8 @@ import {
 } from "./data";
 
 import styles from "./styles";
+import MenuDrawer from "./MenuDrawer";
+import BottomDrawer from "./BottomDrawer";
 
 const orderSteps = ["กรุณากรอกชื่อลูกค้า", "รถเข็น", "สรุปข้อมูล"];
 
@@ -81,7 +76,8 @@ class App extends Component {
       selectedProduct: {},
       newProduct: {},
       isMenuDrawerOpened: false,
-      isBottomDrawerOpened: false
+      isBottomDrawerOpened: false,
+      bottomDrawerMode: null
    };
 
    getOrderStepContent = step => {
@@ -467,13 +463,13 @@ class App extends Component {
       this.setState({
          isMenuDrawerOpened: open
       });
-      console.log(this.state.isMenuDrawerOpened);
    };
 
-   toggleBottomDrawer = open => {
+   toggleBottomDrawer = (open, mode) => {
       this.toggleMenuDrawer(false);
       this.setState({
-         isBottomDrawerOpened: open
+         isBottomDrawerOpened: open,
+         bottomDrawerMode: mode
       });
    };
 
@@ -608,10 +604,18 @@ class App extends Component {
                               classes.textLeft
                            )}
                         >
-                        {`#${order.orderID}`}
+                           {`#${order.orderID}`}
                         </Button>
-                        <span><Typography variant="body1" className={classNames(
-                              statusColor(order.status), classes.statusText, classes.textLeft)}>{` ${statusText(order.status)}`}</Typography></span>
+                        <span>
+                           <Typography
+                              variant="body1"
+                              className={classNames(
+                                 statusColor(order.status),
+                                 classes.statusText,
+                                 classes.textLeft
+                              )}
+                           >{` ${statusText(order.status)}`}</Typography>
+                        </span>
                      </div>
                      <Button
                         variant="contained"
@@ -637,29 +641,6 @@ class App extends Component {
                </Card>
             ))}
          </React.Fragment>
-      );
-
-      const sideList = (
-         <div className={classes.list}>
-            <List>
-               {["เปิดบิลใหม่", "เพิ่มสินค้าใหม่", "เพิ่ม/แก้ไขการส่งใหม่"].map(
-                  (text, index) => (
-                     <ListItem button key={text}>
-                        <ListItemIcon>
-                           {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                        </ListItemIcon>
-                        <ListItemText primary={text} />
-                     </ListItem>
-                  )
-               )}
-            </List>
-         </div>
-      );
-
-      const fullList = (
-         <div className={classes.fullList}>
-            <Typography>heeeeeeeeeeeeey</Typography>
-         </div>
       );
 
       return (
@@ -970,40 +951,19 @@ class App extends Component {
                   </div>
                </div>
 
-<<<<<<< HEAD
-               <Drawer
-                  open={this.state.isMenuDrawerOpened}
-                  onClose={this.toggleMenuDrawer.bind(this, false)}
-               >
-                  <div
-                     tabIndex={0}
-                     role="button"
-                     onClick={this.toggleBottomDrawer.bind(this, true)}
-                     onKeyDown={this.toggleMenuDrawer.bind(this, false)}
-                  >
-                     {sideList}
-                  </div>
-               </Drawer>
+               <MenuDrawer
+                  isMenuDrawerOpened={this.state.isMenuDrawerOpened}
+                  toggleMenuDrawer={this.toggleMenuDrawer}
+                  toggleBottomDrawer={this.toggleBottomDrawer}
+               />
 
-               <Drawer
-                  anchor="bottom"
-                  open={this.state.isBottomDrawerOpened}
-                  onClose={this.toggleBottomDrawer.bind(this, false)}
-               >
-                  <div
-                     tabIndex={0}
-                     role="button"
-                     onClick={this.toggleBottomDrawer.bind(this, false)}
-                     onKeyDown={this.toggleBottomDrawer.bind(this, false)}
-                  >
-                     {fullList}
-                  </div>
-               </Drawer>
+               <BottomDrawer
+                  isBottomDrawerOpened={this.state.isBottomDrawerOpened}
+                  toggleBottomDrawer={this.toggleBottomDrawer}
+                  bottomDrawerMode={this.state.bottomDrawerMode}
+               />
 
                <div className={classes.footer}>Footer</div>
-=======
-               <div className={classes.footer}></div>
->>>>>>> 9a3620d3b6a4396afe9283c6f91c3ee990fffce5
             </main>
          </React.Fragment>
       );
