@@ -26,11 +26,15 @@ import {
    Drawer
 } from "@material-ui/core";
 
+import Fab from "@material-ui/core/Fab";
+
 import CreateIcon from "@material-ui/icons/Create";
 
+import { fade } from "@material-ui/core/styles/colorManipulator";
 import { withStyles } from "@material-ui/core/styles";
 
 import AddIcon from "@material-ui/icons/Add";
+import CloseIcon from "@material-ui/icons/Close";
 import AddCircleIcon from "@material-ui/icons/AddCircle";
 
 import SALogo from "../../images/sa-logo.png";
@@ -44,9 +48,310 @@ import {
    optionsList
 } from "./data";
 
-import styles from "./styles";
-import MenuDrawer from "./MenuDrawer";
-import BottomDrawer from "./BottomDrawer";
+const styles = theme => ({
+   layout: {
+      height: "100vh",
+      display: "flex",
+      flexDirection: "column"
+   },
+   header: {
+      backgroundColor: theme.palette.primary[100]
+   },
+   footer: {
+      backgroundColor: theme.palette.primary[200]
+   },
+   content: {
+      flex: 1,
+      overflow: "auto",
+      background: "#f5f5f5",
+      padding: theme.spacing.unit * 2
+   },
+   grow: {
+      flexGrow: 1
+   },
+   selectAllPaper: {},
+   cardSection: {
+      backgroundColor: "#999999",
+      padding: theme.spacing.unit,
+      height: "100%"
+   },
+   card: {
+      minWidth: 275,
+      marginBottom: theme.spacing.unit,
+      display: "flex",
+      alignItems: "flex-start"
+   },
+   cardContent: {
+      width: "100%"
+   },
+   rowCheckbox: {
+      paddingTop: 0,
+      paddingLeft: 0
+   },
+   menuButton: {
+      marginLeft: -12,
+      marginRight: theme.spacing.unit * 2
+   },
+   avatar: {
+      backgroundColor: fade(theme.palette.common.white, 0.85)
+   },
+   menuIcon: {
+      paddingLeft: 0,
+      paddingRight: 8
+   },
+   appBarButton: {
+      padding: "0 12px",
+      marginRight: theme.spacing.unit * 2
+   },
+   statusButton: {
+      fontSize: "0.675rem",
+      fontWeight: "300",
+      padding: "0 5px",
+      minWidth: 24,
+      minHeight: 24
+   },
+   checkbox: {
+      paddingRight: 0
+   },
+   formLabel: {
+      paddingLeft: theme.spacing.unit * 2
+   },
+   lastItem: {
+      marginRight: 0
+   },
+   title: {
+      display: "none",
+      [theme.breakpoints.up("sm")]: {
+         display: "block"
+      }
+   },
+   titleMarginBottom: {
+      marginBottom: theme.spacing.unit
+   },
+   titleMarginTop: {
+      marginTop: theme.spacing.unit * 2
+   },
+   search: {
+      position: "relative",
+      borderRadius: theme.shape.borderRadius,
+      backgroundColor: fade(theme.palette.common.white, 0.35),
+      "&:hover": {
+         backgroundColor: fade(theme.palette.common.white, 0.55)
+      },
+      marginRight: theme.spacing.unit * 2,
+      marginLeft: 0,
+      width: "100%",
+      [theme.breakpoints.up("sm")]: {
+         marginLeft: theme.spacing.unit * 3,
+         width: "auto"
+      }
+   },
+   searchIcon: {
+      width: 40,
+      height: "100%",
+      position: "absolute",
+      pointerEvents: "none",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center"
+   },
+   inputRoot: {
+      color: "inherit",
+      width: "100%"
+   },
+   inputInput: {
+      paddingTop: theme.spacing.unit,
+      paddingRight: theme.spacing.unit,
+      paddingBottom: theme.spacing.unit,
+      paddingLeft: theme.spacing.unit * 5,
+      transition: theme.transitions.create("width"),
+      fontWeight: 300,
+      fontSize: "0.875rem",
+      width: "100%",
+      [theme.breakpoints.up("md")]: {
+         width: 200
+      }
+   },
+   sectionDesktop: {
+      display: "none",
+      [theme.breakpoints.up("md")]: {
+         display: "flex"
+      }
+   },
+   sectionMobile: {
+      display: "flex",
+      [theme.breakpoints.up("md")]: {
+         display: "none"
+      }
+   },
+   flexColumn: {
+      flexDirection: "column"
+   },
+   created: {
+      backgroundColor: "#555",
+      "&:hover": {
+         backgroundColor: fade("#555555", 0.55)
+      }
+   },
+   submitted: {
+      backgroundColor: "red",
+      "&:hover": {
+         backgroundColor: fade("#ff0000", 0.55)
+      }
+   },
+   shipped: {
+      backgroundColor: "green",
+      "&:hover": {
+         backgroundColor: fade("#00ff00", 0.55)
+      }
+   },
+   success: {
+      backgroundColor: "grey",
+      "&:hover": {
+         backgroundColor: fade("#999999", 0.55)
+      }
+   },
+   pending: {
+      display: "none"
+   },
+   wait: {
+      backgroundColor: "blue",
+      "&:hover": {
+         backgroundColor: fade("#0000ff", 0.55)
+      }
+   },
+   confirmed: {
+      backgroundColor: "green",
+      "&:hover": {
+         backgroundColor: fade("#00ff00", 0.55)
+      }
+   },
+   paymentButton: {
+      marginLeft: theme.spacing.unit
+   },
+   receiptDetailLess: {
+      marginTop: theme.spacing.unit,
+      display: "flex",
+      justifyContent: "space-between"
+   },
+   textLeft: {
+      textAlign: "left"
+   },
+   textRight: {
+      textAlign: "right"
+   },
+   marginLeft: {
+      marginLeft: theme.spacing.unit * 2
+   },
+   marginRight: {
+      marginRight: theme.spacing.unit * 2
+   },
+   selectAll: {
+      display: "flex",
+      alignItems: "center"
+   },
+   orderPopup: {
+      position: "absolute",
+      width: "80%",
+      boxShadow: theme.shadows[5],
+      padding: theme.spacing.unit * 2,
+      top: "50%",
+      left: "50%",
+      transform: "translate(-50%, -50%)",
+      "&:focus": {
+         outline: "none"
+      },
+      textAlign: "center"
+   },
+   orderPopupButton: {
+      padding: "0 12px",
+      marginTop: theme.spacing.unit * 3
+   },
+   textField: {},
+   menuItem: {
+      "&:focus": {
+         backgroundColor: theme.palette.secondary[300],
+         "& $primary, & $icon": {
+            color: theme.palette.common.white
+         }
+      }
+   },
+   primary: {},
+   icon: {},
+   prevCustomerPaper: {
+      height: "30vh",
+      overflow: "scroll"
+   },
+   blankOrder: {
+      marginTop: theme.spacing.unit * 2,
+      marginBottom: theme.spacing.unit * 2
+   },
+   newOrderButton: {
+      marginTop: theme.spacing.unit * 2
+   },
+   cardButton: {
+      backgroundColor: "white",
+      color: "inherit",
+      padding: 0,
+      marginBottom: theme.spacing.unit
+   },
+   popupCard: {
+      display: "flex",
+      width: "100%",
+      boxShadow: theme.shadows[2]
+   },
+   itemCard: {
+      marginBottom: theme.spacing.unit
+   },
+   popupCardContent: {
+      flex: "1 0 auto",
+      textAlign: "left",
+      width: 160
+   },
+   popupCardDetails: {
+      display: "flex",
+      flexDirection: "column"
+   },
+   popupCardImage: {
+      width: 85
+   },
+   productsPaper: {
+      boxShadow: "none",
+      maxHeight: "40vh",
+      overflow: "scroll",
+      padding: 2,
+      marginTop: theme.spacing.unit * 2
+   },
+
+   footerAppBar: {
+      top: "auto",
+      bottom: 0,
+      backgroundColor: "#BF5F82"
+   },
+   footerToolBar: {
+      alignItems: "center",
+      justifyContent: "space-between"
+   },
+   footerFabButton: {
+      position: "absolute",
+      zIndex: 1,
+      top: -30,
+      left: "45%",
+      margin: "0 auto",
+      color: "white",
+      backgroundColor: theme.palette.primary[200],
+      "&:hover": {
+         backgroundColor: theme.palette.primary[300]
+      }
+   },
+   container: {
+      display: "flex",
+      flexDirection: "column",
+      textAlign: "center",
+      justifyContent: "center",
+      padding: "20px"
+   }
+});
 
 const orderSteps = ["กรุณากรอกชื่อลูกค้า", "รถเข็น", "สรุปข้อมูล"];
 
@@ -75,9 +380,7 @@ class App extends Component {
       options: optionsList,
       selectedProduct: {},
       newProduct: {},
-      isMenuDrawerOpened: false,
-      isBottomDrawerOpened: false,
-      bottomDrawerMode: null
+      isBottomDrawerOpened: false
    };
 
    getOrderStepContent = step => {
@@ -455,21 +758,10 @@ class App extends Component {
       this.filterOrders(this.state.value);
    }
 
-   orderInfo(e, order) {
-      console.log(order);
-   }
-
-   toggleMenuDrawer = open => {
+   toggleBottomDrawer = open => {
+      // this.toggleMenuDrawer(false);
       this.setState({
-         isMenuDrawerOpened: open
-      });
-   };
-
-   toggleBottomDrawer = (open, mode) => {
-      this.toggleMenuDrawer(false);
-      this.setState({
-         isBottomDrawerOpened: open,
-         bottomDrawerMode: mode
+         isBottomDrawerOpened: open
       });
    };
 
@@ -562,6 +854,67 @@ class App extends Component {
          </Menu>
       );
 
+      const bottomDrawer = (
+         <Drawer
+            anchor="bottom"
+            open={this.state.isBottomDrawerOpened}
+            onClose={this.toggleBottomDrawer.bind(this, false)}
+         >
+            <div
+               tabIndex={0}
+               role="button"
+               onClick={this.toggleBottomDrawer.bind(this, false)}
+               onKeyDown={this.toggleBottomDrawer.bind(this, false)}
+            />
+            {
+               <React.Fragment>
+                  <div className={classes.container}>
+                     <CloseIcon
+                        className={classes.icon}
+                        onClick={this.toggleBottomDrawer.bind(this, false)}
+                     />
+                     <Typography variant="h5">เปิดบิลใหม่</Typography>
+                     <TextField
+                        id="outlined-name"
+                        label="ชื่อลูกค้า"
+                        // value={this.state.customerName}
+                        className={classes.textField}
+                        // onChange={this.handleChange("customerName")}
+                        margin="normal"
+                        variant="outlined"
+                     />
+                     <Typography variant="h6">ลูกค้าล่าสุด</Typography>
+                     <Card className={classes.card}>
+                        <CardContent
+                           style={{
+                              display: "flex",
+                              flexDirection: "row",
+                              marginLeft: "6px"
+                           }}
+                        >
+                           <Avatar className={classes.avatar}>D</Avatar>
+                           <div style={{ marginLeft: "6px" }}>
+                              <Typography variant="h4">คุณขาว</Typography>
+                              <Typography variant="subtitle1">
+                                 facebook
+                              </Typography>
+                           </div>
+                        </CardContent>
+                     </Card>
+
+                     <Button
+                        variant="contained"
+                        color="primary"
+                        className={classes.button}
+                     >
+                        ต่อไป
+                     </Button>
+                  </div>
+               </React.Fragment>
+            }
+         </Drawer>
+      );
+
       // const renderMobileMenu = (
       // 	<Menu
       // 		anchorEl={mobileMoreAnchorEl}
@@ -580,13 +933,7 @@ class App extends Component {
       const table = (
          <React.Fragment>
             {filteredOrders.map(order => (
-               <Card
-                  className={classes.card}
-                  key={order.orderID}
-                  onClick={e => {
-                     this.orderInfo(e, order);
-                  }}
-               >
+               <Card className={classes.card} key={order.orderID}>
                   <Checkbox
                      onChange={this.handleToggle(order.orderID)}
                      checked={this.state.checked.indexOf(order.orderID) !== -1}
@@ -594,29 +941,16 @@ class App extends Component {
                      className={classes.checkbox}
                   />
                   <CardContent className={classes.cardContent}>
-                     <div className={classes.receiptDetailLess2}>
-                        <Button
-                           variant="contained"
-                           color="primary"
-                           className={classNames(
-                              statusColor(order.status),
-                              classes.statusButton,
-                              classes.textLeft
-                           )}
-                        >
-                           {`#${order.orderID}`}
-                        </Button>
-                        <span>
-                           <Typography
-                              variant="body1"
-                              className={classNames(
-                                 statusColor(order.status),
-                                 classes.statusText,
-                                 classes.textLeft
-                              )}
-                           >{` ${statusText(order.status)}`}</Typography>
-                        </span>
-                     </div>
+                     <Button
+                        variant="contained"
+                        color="primary"
+                        className={classNames(
+                           statusColor(order.status),
+                           classes.statusButton
+                        )}
+                     >
+                        {statusText(order.status)}
+                     </Button>
                      <Button
                         variant="contained"
                         color="primary"
@@ -655,7 +989,7 @@ class App extends Component {
                      <IconButton
                         className={classes.menuButton}
                         color="inherit"
-                        onClick={this.toggleMenuDrawer.bind(this, true)}
+                        aria-label="Open drawer"
                      >
                         <Avatar
                            alt="Something Apparel"
@@ -671,7 +1005,20 @@ class App extends Component {
                      >
                         Shippee Shop Name
                      </Typography>
-
+                     {/*
+								<div className={classes.search}>
+								<div className={classes.searchIcon}>
+								<SearchIcon />
+								</div>
+								<InputBase
+								placeholder="ค้นหาบิล..."
+								classes={{
+								root: classes.inputRoot,
+								input: classes.inputInput,
+								}}
+								/>
+								</div>
+								*/}
                      <div className={classes.grow} />
                      <div className={classes.sectionDesktop}>
                         <Button
@@ -951,19 +1298,21 @@ class App extends Component {
                   </div>
                </div>
 
-               <MenuDrawer
-                  isMenuDrawerOpened={this.state.isMenuDrawerOpened}
-                  toggleMenuDrawer={this.toggleMenuDrawer}
-                  toggleBottomDrawer={this.toggleBottomDrawer}
-               />
+               <div className={classes.footer}>
+                  <AppBar position="fixed" className={classes.footerAppBar}>
+                     <Toolbar className={classes.footerToolbar}>
+                        <Fab
+                           aria-label="Add"
+                           className={classes.footerFabButton}
+                           onClick={this.toggleBottomDrawer.bind(this, true)}
+                        >
+                           <AddIcon />
+                        </Fab>
+                     </Toolbar>
+                  </AppBar>
+               </div>
 
-               <BottomDrawer
-                  isBottomDrawerOpened={this.state.isBottomDrawerOpened}
-                  toggleBottomDrawer={this.toggleBottomDrawer}
-                  bottomDrawerMode={this.state.bottomDrawerMode}
-               />
-
-               <div className={classes.footer}>Footer</div>
+               {bottomDrawer}
             </main>
          </React.Fragment>
       );
