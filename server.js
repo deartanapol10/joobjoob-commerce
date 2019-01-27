@@ -5,13 +5,13 @@ const bodyParser = require("body-parser");
 const expressValidator = require("express-validator");
 const session = require("express-session");
 const passport = require("passport");
-
+// const multer = require('multer');
 // Import router file
-var orders = require("./routes/api/orders");
-var users = require("./routes/api/users");
-var product = require("./routes/api/product");
-var category = require("./routes/api/category");
-var store = require("./routes/api/store");
+const orders = require("./routes/api/orders");
+const users = require("./routes/api/users");
+const product = require("./routes/api/product");
+const category = require("./routes/api/category");
+const store = require("./routes/api/store");
 
 // DB config
 const db = require("./config/keys").mongoURI;
@@ -51,6 +51,10 @@ require("./config/passport")(passport);
 
 //Express-Validator Middleware
 app.use(expressValidator());
+
+//[Upload] show picture 
+//localhost:8000/uploads/1548591284172result-clipboard.png
+app.use('/uploads', express.static('uploads'));
 
 app.use("/api/users", users);
 app.use("/api/orders", orders);

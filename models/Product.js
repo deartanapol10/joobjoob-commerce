@@ -20,10 +20,9 @@ const ProductSchema = new Schema({
     type: Number,
     required: true
   },
-  image: {
-    type: String
-    // type: Schema.Types.Mixed
-  },
+
+  productImage: { type: String, required: true },
+
   createdAt: {
     type: Date
   },
