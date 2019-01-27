@@ -289,15 +289,7 @@ class Merchant extends Component {
       console.log(order);
    }
 
-   toggleMenuDrawer = open => {
-      this.setState({
-         isMenuDrawerOpened: open
-      });
-      console.log(this.state.isMenuDrawerOpened);
-   };
-
    toggleBottomDrawer = open => {
-      this.toggleMenuDrawer(false);
       this.setState({
          isBottomDrawerOpened: open
       });
@@ -640,6 +632,7 @@ class Merchant extends Component {
                         variant="contained"
                         color="primary"
                         className={classes.button}
+                        component={newOrder}
                      >
                         ต่อไป
                      </Button>
@@ -664,7 +657,6 @@ class Merchant extends Component {
                      <IconButton
                         className={classes.avatarMenuButton}
                         color="inherit"
-                        onClick={this.toggleMenuDrawer.bind(this, true)}
                      >
                         <Avatar
                            alt="Something Apparel"
@@ -904,42 +896,14 @@ class Merchant extends Component {
                         <Fab
                            aria-label="Add"
                            className={classes.footerFabButton}
-                           component={newOrder}
+                           // component={newOrder}
+                           onClick={this.toggleBottomDrawer.bind(this, true)}
                         >
                            <AddIcon />
                         </Fab>
                      </Toolbar>
                   </AppBar>
                </div>
-
-               {/* <Drawer
-                  open={this.state.isMenuDrawerOpened}
-                  onClose={this.toggleMenuDrawer.bind(this, false)}
-               >
-                  <div
-                     tabIndex={0}
-                     role="button"
-                     onClick={this.toggleBottomDrawer.bind(this, true)}
-                     onKeyDown={this.toggleMenuDrawer.bind(this, false)}
-                  >
-                     {sideList}
-                  </div>
-               </Drawer>
-
-               <Drawer
-                  anchor="bottom"
-                  open={this.state.isBottomDrawerOpened}
-                  onClose={this.toggleBottomDrawer.bind(this, false)}
-               >
-                  <div
-                     tabIndex={0}
-                     role="button"
-                     onClick={this.toggleBottomDrawer.bind(this, false)}
-                     onKeyDown={this.toggleBottomDrawer.bind(this, false)}
-                  >
-                     {fullList}
-                  </div>
-               </Drawer> */}
 
                {addNewBillPopup}
             </main>
