@@ -476,6 +476,24 @@ const styles = theme => ({
 
    //// **** END ORDER LIST **** ////
 
+
+   //// ---- ORDER DETAILS ---- ////
+   
+   orderDetailsTabBar: {
+      height: "auto",
+      width: "100%",
+      boxShadow: "none",
+      marginBottom: theme.spacing.unit * 9,
+   },
+
+   orderDetailsPaper: {
+      padding: theme.spacing.unit * 2,
+      paddingBottom: theme.spacing.unit * 6,
+   },
+
+   //// **** END ORDER DETAILS **** ////
+
+
    //// ---- FOOTER ---- ////
 
    bottomSpace: {

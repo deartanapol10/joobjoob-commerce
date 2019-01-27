@@ -831,13 +831,26 @@ class Merchant extends Component {
                         {productSearchResults}
                      </Grid>
                   ) : (
-                     <Grid
-                        container
-                        spacing={16}
-                        className={classes.productResultGrid}
-                     >
-                        {productDisplay}
-                     </Grid>
+                     term !== "" ? (
+                        <div className={classes.orderBlank}>
+                        <CancelIcon className={classes.orderBlankIcon} />
+                           <Typography
+                              variant="body1"
+                              align="center"
+                              color="inherit"
+                           >
+                              ไม่พบสินค้า
+                           </Typography>
+                        </div>
+                     ) : (
+                        <Grid
+                           container
+                           spacing={16}
+                           className={classes.productResultGrid}
+                        >
+                           {productDisplay}
+                        </Grid>
+                     )
                   )}
                </div>
 
