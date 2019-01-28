@@ -55,6 +55,9 @@ const styles = theme => ({
    menu: {
       width: 200,
    },
+   alertBadge: {
+
+   },
 
    //// **** END COMMON CLASSES **** ////
 
@@ -514,7 +517,7 @@ const styles = theme => ({
       }
    },
    orderShippingSelect: {
-      "&>div>div>div>div": {
+      "&>span>div>div>div>div": {
          width: theme.spacing.unit * 18,
          padding: 10,
          color: fade("#000", 0.6),
@@ -522,6 +525,12 @@ const styles = theme => ({
    },
    orderAddShipping: {
       borderTop: "1px #eee solid",
+      paddingLeft: 0,
+      paddingRight: 0,
+   },
+   orderAddShippingButton: {
+      width: "100%",
+      padding: "11px 16px 11px 16px",
    },
 
    //// **** END ORDER DETAILS **** ////

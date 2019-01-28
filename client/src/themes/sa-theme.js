@@ -55,6 +55,26 @@ export default createMuiTheme({
 				marginBottom: 0,
 			}
 		},
+		MuiInputBase: {
+			input: {
+				"&$disabled": {
+					opacity: 0.6,
+				},
+			},
+		},
+		MuiOutlinedInput: {
+			root: {
+				"& $notchedOutline": {
+					borderColor: fade("#000", 0.5),
+					border: "1px solid",
+				},
+				"&$disabled": {
+					"& $notchedOutline": {
+						borderColor: fade("#000", 0.3),
+					}
+				}
+			}
+		},
 		MuiStepLabel: {
 			iconContainer: {
 				paddingRight: 0,

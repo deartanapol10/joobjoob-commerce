@@ -296,6 +296,10 @@ class Merchant extends Component {
       }
    };
 
+   AddShipping = event => {
+      console.log("please add shipping method");
+   };
+
    componentDidMount() {
       this.filterOrders(this.state.value);
    }
@@ -665,33 +669,47 @@ class Merchant extends Component {
                      <Paper className={classes.orderDetailsPaper}>
                         <div className={classes.orderSummaryGroup}>
                            <span className={classes.orderShippingSelect}>
-                              <TextField
-                                 id="order-shipping-select"
-                                 select
-                                 className={classes.textField}
-                                 onChange={this.handleShippingSelect('shipping')}
-                                 value={selectedShipping}
-                                 SelectProps={{
-                                    MenuProps: {
-                                       className: classes.menu,
-                                    },
-                                 }}
-                                 margin="none"
-                                 variant="outlined"
-                              >  
-                                 <MenuItem key={0} value="เลือกการส่ง" disabled>
-                                    เลือกการส่ง
-                                 </MenuItem>
-                                 {shippingMethods.map(shipping => (
-                                    <MenuItem key={shipping.id} value={shipping.id}>
-                                       {shipping.name}
+                              <Badge 
+                                 color="primary"
+                                 badgeContent={"!"}
+                                 invisible={shippings.length !== 0}
+                                 color="error"
+                                 className={classes.alertBadge}
+                              >
+                                 <TextField
+                                    id="order-shipping-select"
+                                    select
+                                    className={classes.textField}
+                                    onChange={this.handleShippingSelect('shipping')}
+                                    value={selectedShipping}
+                                    SelectProps={{
+                                       MenuProps: {
+                                          className: classes.menu,
+                                       },
+                                    }}
+                                    margin="none"
+                                    variant="outlined"
+                                 >  
+                                    <MenuItem key={0} value="เลือกการส่ง" disabled>
+                                       เลือกการส่ง
                                     </MenuItem>
-                                 ))}
-                                 <MenuItem key={9999} value="เพิ่มการส่ง" className={classes.orderAddShipping}>
-                                    <AddIcon />
-                                    เพิ่มการส่ง
-                                 </MenuItem>
-                              </TextField>
+                                    {shippings.map(shipping => (
+                                       <MenuItem key={shipping.id} value={shipping.id}>
+                                          {shipping.name}
+                                       </MenuItem>
+                                    ))}
+                                    <MenuItem 
+                                       key={9999}
+                                       value="เพิ่มการส่ง"
+                                       className={classes.orderAddShipping}
+                                    >
+                                       <span className={classes.orderAddShippingButton} onClick={this.AddShipping}>
+                                          <AddIcon />
+                                          เพิ่มการส่ง
+                                       </span>
+                                    </MenuItem>
+                                 </TextField>
+                              </Badge>
                            </span>
                            <div className={classes.grow} />
                            <span className={classes.orderPriceInput}>
@@ -734,6 +752,7 @@ class Merchant extends Component {
                                  className={classNames(classes.margin, classes.textField)}
                                  variant="outlined"
                                  defaultValue="0.00"
+                                 disabled
                                  InputProps={{
                                     endAdornment: <InputAdornment position="end">บาท</InputAdornment>,
                                  }}
