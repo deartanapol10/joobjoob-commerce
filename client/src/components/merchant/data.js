@@ -713,3 +713,21 @@ export const optionsList = [
       ]
    }
 ];
+
+export const shippingMethods = [
+   {
+      id: 1,
+      name: "EMS",
+      cost: 50,
+   },
+   {
+      id: 2,
+      name: "Alpha",
+      cost: 40,
+   },
+   {
+      id: 3,
+      name: "รับด้วยตัวเอง",
+      cost: 0,
+   }
+]

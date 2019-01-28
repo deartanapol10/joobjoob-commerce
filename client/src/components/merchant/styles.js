@@ -52,6 +52,9 @@ const styles = theme => ({
          backgroundColor: "transparent"
       }
    },
+   menu: {
+      width: 200,
+   },
 
    //// **** END COMMON CLASSES **** ////
 
@@ -485,10 +488,40 @@ const styles = theme => ({
       boxShadow: "none",
       marginBottom: theme.spacing.unit * 9,
    },
-
    orderDetailsPaper: {
       padding: theme.spacing.unit * 2,
       paddingBottom: theme.spacing.unit * 6,
+   },
+   orderSummaryGroup: {
+      display: "flex",
+      alignItems: "center",
+      marginTop: theme.spacing.unit,
+   },
+   orderLabel: {
+      fontSize: "1rem",
+      color: fade("#000", 0.6),
+   },
+   orderPriceInput: {
+      width: theme.spacing.unit * 18,
+      "&>div>div": {
+         fontSize: "0.875rem",
+      },
+      "&>div>div>input": {
+         textAlign: "right",
+         padding: 10,
+         paddingRight: 0,
+         color: fade("#000", 0.6),
+      }
+   },
+   orderShippingSelect: {
+      "&>div>div>div>div": {
+         width: theme.spacing.unit * 18,
+         padding: 10,
+         color: fade("#000", 0.6),
+      }
+   },
+   orderAddShipping: {
+      borderTop: "1px #eee solid",
    },
 
    //// **** END ORDER DETAILS **** ////
