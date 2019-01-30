@@ -287,6 +287,12 @@ class Merchant extends Component {
 
    orderInfo(e, order) {
       console.log(order);
+      this.props.history.push({
+         pathname: "/order",
+         state: {
+            order,
+         },
+      });
    }
 
    toggleBottomDrawer = open => {
@@ -472,7 +478,7 @@ class Merchant extends Component {
       );
 
       // Render each order for current tab
-      const table = (
+      const orderCard = (
          <React.Fragment>
             {/* Sort orders before map, by compare updated time */}
             {filteredOrders
@@ -879,10 +885,10 @@ class Merchant extends Component {
                      )}
                   >
                      {/* Tab content separated by value */}
-                     {value === 0 && <TabContainer>{table}</TabContainer>}
-                     {value === 1 && <TabContainer>{table}</TabContainer>}
-                     {value === 2 && <TabContainer>{table}</TabContainer>}
-                     {value === 3 && <TabContainer>{table}</TabContainer>}
+                     {value === 0 && <TabContainer>{orderCard}</TabContainer>}
+                     {value === 1 && <TabContainer>{orderCard}</TabContainer>}
+                     {value === 2 && <TabContainer>{orderCard}</TabContainer>}
+                     {value === 3 && <TabContainer>{orderCard}</TabContainer>}
 
                      {/* Additional space at the bottom of content */}
                      <div className={classes.bottomSpace} />

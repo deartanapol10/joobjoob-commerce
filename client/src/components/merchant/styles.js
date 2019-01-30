@@ -353,28 +353,28 @@ const styles = theme => ({
       backgroundColor: fade("#FF1400", 0.7),
       "&:hover": {
          backgroundColor: fade("#FF1400", 0.9)
-      }
+      },
    },
    submitted: {
       color: fade("#FB8C00", 0.7),
       backgroundColor: fade("#FB8C00", 0.7),
       "&:hover": {
          backgroundColor: fade("#FB8C00", 0.55)
-      }
+      },
    },
    shipped: {
       color: fade("#00BFA5", 0.7),
       backgroundColor: fade("#00BFA5", 0.7),
       "&:hover": {
-         backgroundColor: fade("#00BFA5", 0.55)
-      }
+         backgroundColor: fade("#FB8C00", 0.55)
+      },
    },
    success: {
       color: fade("#90A4AE", 0.7),
       backgroundColor: fade("#90A4AE", 0.7),
       "&:hover": {
          backgroundColor: fade("#90A4AE", 0.55)
-      }
+      },
    },
    pending: {
       display: "none"
@@ -532,9 +532,134 @@ const styles = theme => ({
       width: "100%",
       padding: "11px 16px 11px 16px",
    },
+   orderStatusBar: {
+      position: "relative",
+      width: "100%",
+      height: theme.spacing.unit * 7,
+      display: "flex",
+      top: 0,
+      alignItems: "center",
+      color: "white",
+      paddingLeft: theme.spacing.unit * 2,
+      paddingRight: theme.spacing.unit * 2,
+      "& p": {
+         fontSize: "1rem",
+         fontWeight: 400
+      }
+   },
 
    //// **** END ORDER DETAILS **** ////
 
+   //// ---- ITEM CARD ---- ////
+
+   itemCard: {
+      width: "100%",
+      marginBottom: theme.spacing.unit * 2,
+   },
+   itemCardContent: {
+      display: "flex",
+      flexDirection: "row",
+      paddingBottom: theme.spacing.unit * 2,
+   },
+   itemCardMedia: {
+      width: "20%",
+      "&::before": {
+         content: "''",
+         display: "inline-block",
+         width: 1,
+         height: 0,
+         paddingBottom: "calc(100% / 1/1)"
+      },
+      borderRadius: "4px",
+      boxShadow: theme.shadows[2],
+      display: "flex",
+      flex: "1 0 auto",
+   },
+   itemCardDetailsWrapper: {
+      display: "flex",
+      flexDirection: "column",
+      width: "100%",
+      justifyContent: "center",
+   },
+   itemCardDetails: {
+      display: "flex",
+      flexDirection: "row",
+      alignItems: "center",
+      marginLeft: theme.spacing.unit * 2,
+      "&:last-child": {
+         marginTop: theme.spacing.unit,
+      },
+   },
+   itemCardTitle: {
+      fontSize: "1.1rem",
+   },
+   itemPriceInput: {
+      marginLeft: theme.spacing.unit,
+      maxWidth: theme.spacing.unit * 18,
+      "&>div>div": {
+         fontSize: "0.875rem",
+      },
+      "&>div>div>input": {
+         textAlign: "right",
+         padding: 10,
+         paddingRight: 0,
+         color: fade("#000", 0.6),
+      }
+   },
+   itemAmountInput: {
+      textAlign: "center",
+      "&>div>div>input": {
+         textAlign: "center",
+         padding: 10,
+         paddingLeft: 0,
+         paddingRight: 0,
+         color: fade("#000", 0.6),
+      },
+      "&>div>div": {
+         padding: 0,
+      },
+   },
+   itemAmountButton: {
+      cursor: "pointer",
+      display: "flex",
+      alignItems: "center",
+      width: theme.spacing.unit * 4.5,
+      height: "100%",
+      backgroundColor: "transparent",
+      padding: 0,
+   },
+   itemAmountRemove: {
+      color: "#FF1400",
+      "&:hover": {
+         color: fade("#FF1400", 0.6),
+      },
+   },
+   itemAmountAdd: {
+      color: "#00BFA5",
+      "&:hover": {
+         color: fade("#00BFA5", 0.6),
+      },
+   },
+   itemCardComment: {
+      width: "100%",
+      padding: "0 16px 16px",
+      "&>div": {
+         width: "100%",
+      },
+      "&>div>div>input": {
+         padding: 10,
+      }
+   },
+   itemOptionSelect: {
+      "&>div>div": {
+         fontSize: "0.875rem",
+      },
+      "&>div>div>div>div": {
+         width: theme.spacing.unit * 18,
+         padding: 10,
+         color: fade("#000", 0.6),
+      }
+   },
 
    //// ---- FOOTER ---- ////
 

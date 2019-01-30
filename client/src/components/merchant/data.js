@@ -79,11 +79,11 @@ export const originalOrders = [
       expiredAt: "031120181325",
       items: [
          {
-            id: "1",
+            id: 1,
             name: "Lorem Ipsum",
             price: 250,
             amount: 2,
-            image: itemImage02
+            image: itemImage01
          },
          {
             id: 2,
@@ -123,7 +123,7 @@ export const originalOrders = [
       expiredAt: "061120181105",
       items: [
          {
-            id: "1",
+            id: 1,
             name: "Trouser",
             price: 100,
             amount: 2,
@@ -134,7 +134,7 @@ export const originalOrders = [
             name: "T-Shirt",
             price: 100,
             amount: 1,
-            image: itemImage02
+            image: itemImage01
          },
          {
             id: 3,
@@ -174,7 +174,7 @@ export const originalOrders = [
       expiredAt: "081120181533",
       items: [
          {
-            id: "1",
+            id: 1,
             name: "Trouser",
             price: 100,
             amount: 2,
@@ -211,7 +211,7 @@ export const originalOrders = [
       expiredAt: "061120181105",
       items: [
          {
-            id: "1",
+            id: 1,
             name: "Trouser",
             price: 100,
             amount: 2,
@@ -222,7 +222,7 @@ export const originalOrders = [
             name: "T-Shirt",
             price: 100,
             amount: 1,
-            image: itemImage02
+            image: itemImage01
          },
          {
             id: 3,
@@ -262,7 +262,7 @@ export const originalOrders = [
       expiredAt: "061120181105",
       items: [
          {
-            id: "1",
+            id: 1,
             name: "Trouser",
             price: 100,
             amount: 2,
@@ -273,7 +273,7 @@ export const originalOrders = [
             name: "T-Shirt",
             price: 100,
             amount: 1,
-            image: itemImage02
+            image: itemImage01
          },
          {
             id: 3,
@@ -313,7 +313,7 @@ export const originalOrders = [
       expiredAt: "061120181105",
       items: [
          {
-            id: "1",
+            id: 1,
             name: "Trouser",
             price: 100,
             amount: 2,
@@ -324,7 +324,7 @@ export const originalOrders = [
             name: "T-Shirt",
             price: 100,
             amount: 1,
-            image: itemImage02
+            image: itemImage01
          },
          {
             id: 3,
@@ -364,7 +364,7 @@ export const originalOrders = [
       expiredAt: "061120181105",
       items: [
          {
-            id: "1",
+            id: 1,
             name: "Trouser",
             price: 100,
             amount: 2,
@@ -375,7 +375,7 @@ export const originalOrders = [
             name: "T-Shirt",
             price: 100,
             amount: 1,
-            image: itemImage02
+            image: itemImage01
          },
          {
             id: 3,
@@ -415,7 +415,7 @@ export const originalOrders = [
       expiredAt: "061120181105",
       items: [
          {
-            id: "1",
+            id: 1,
             name: "Trouser",
             price: 100,
             amount: 2,
@@ -426,7 +426,7 @@ export const originalOrders = [
             name: "T-Shirt",
             price: 100,
             amount: 1,
-            image: itemImage02
+            image: itemImage01
          },
          {
             id: 3,
@@ -466,7 +466,7 @@ export const originalOrders = [
       expiredAt: "061120181105",
       items: [
          {
-            id: "1",
+            id: 1,
             name: "Trouser",
             price: 100,
             amount: 2,
@@ -477,7 +477,7 @@ export const originalOrders = [
             name: "T-Shirt",
             price: 100,
             amount: 1,
-            image: itemImage02
+            image: itemImage01
          },
          {
             id: 3,
@@ -517,7 +517,7 @@ export const originalOrders = [
       expiredAt: "061120181105",
       items: [
          {
-            id: "1",
+            id: 1,
             name: "Trouser",
             price: 100,
             amount: 2,
@@ -528,7 +528,7 @@ export const originalOrders = [
             name: "T-Shirt",
             price: 100,
             amount: 1,
-            image: itemImage02
+            image: itemImage01
          },
          {
             id: 3,

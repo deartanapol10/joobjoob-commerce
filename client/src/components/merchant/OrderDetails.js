@@ -18,6 +18,7 @@ import {
    Badge,
    Button,
    Card,
+   CardActions,
    CardContent,
    CardMedia,
    Checkbox,
@@ -58,6 +59,7 @@ import MenuIcon from "@material-ui/icons/Menu";
 import MailIcon from "@material-ui/icons/Mail";
 import PrintIcon from "@material-ui/icons/Print";
 import SearchIcon from "@material-ui/icons/Search";
+import RemoveIcon from "@material-ui/icons/Remove";
 
 // Import Logo 
 import SALogo from "../../images/sa-logo.png";
@@ -300,7 +302,13 @@ class Merchant extends Component {
       console.log("please add shipping method");
    };
 
+   handleItemAmount = (add, id) => {
+      const { order } = this.props.location.state;
+   }
+
    componentDidMount() {
+      const { order } = this.props.location.state;
+      console.log(order),
       this.filterOrders(this.state.value);
    }
 
@@ -324,6 +332,7 @@ class Merchant extends Component {
 
    render() {
       const { classes } = this.props;
+      const { order } = this.props.location.state;
       const {
          statusAnchorEl,
          menuAnchorEl,
@@ -427,123 +436,122 @@ class Merchant extends Component {
             </MenuItem>
          </Menu>
       );
-
-      // Render search results from this.state.results
-      const searchResults = (
-         <React.Fragment>
-               {results.map(result => (
-                   <Card 
-                     key="result.orderID" 
-                     className={classes.resultCard}
-                     onClick={e => {
-                        this.orderInfo(e, result);
-                     }}
-                  >
-                     <div>
-                        <Button
-                           variant="contained"
-                           color="primary"
-                           className={classNames(
-                              orderStatusColor(result.status),
-                              classes.orderStatusButton,
-                              classes.textLeft
-                           )}
-                        >
-                        <Typography variant="body2" className={classes.orderNumber}>{`#${result.orderID}`}</Typography>
-                        </Button>
-                     </div>
-                     <div className={classes.resultDetail}>
-                        <Typography variant="body2" className={classes.orderClientName}>{result.name}</Typography>
-                        <Typography
-                           variant="body1"
-                           className={classNames(classes.textRight, classes.orderPrice)}
-                        >
-                           {result.price} บาท
-                        </Typography>
-                     </div>
-                  </Card>
-               ))}
-         </React.Fragment>
-      );
-      
       
       // Render each order for current tab
-      const table = (
+      const itemList = (
          <React.Fragment>
             {/* Sort orders before map, by compare updated time */}
-            {filteredOrders
-               .sort((a, b) => moment(b.updatedTime, "DDMMYYYYhhmm").format("X") - moment(a.updatedTime, "DDMMYYYYhhmm").format("X"))
-               .map(order => (
-               <Card
-                  className={
-                     checked.indexOf(order.orderID) === -1
-                     ?
-                     classes.orderCard
-                     :
-                     classNames(classes.orderCard, classes.orderCardActive)
-                  }
-                  key={order.orderID}
-                  onClick={e => {
-                     this.orderInfo(e, order);
-                  }}
-               >
-                  <Checkbox
-                     onChange={this.handleToggle(order.orderID)}
-                     checked={checked.indexOf(order.orderID) !== -1}
-                     value={order.orderID}
-                     className={checked.indexOf(order.orderID) === -1
-                        ?
-                        classes.orderCheckbox
-                        :
-                        classNames(classes.orderCheckbox, classes.orderCheckboxActive)
-                     }
-                  />
-                  <CardContent className={classes.orderCardContent}>
-                     <div>
-                        <Button
-                           variant="contained"
-                           color="primary"
-                           className={classNames(
-                              orderStatusColor(order.status),
-                              classes.orderStatusButton,
-                              classes.textLeft
-                           )}
-                        >
-                        <Typography variant="body2" className={classes.orderNumber}>{`#${order.orderID}`}</Typography>
-                        </Button>
-                        <span>
-                           <Typography 
-                              variant="body1" 
-                              className={classNames(orderStatusColor(order.status), classes.orderStatusText, classes.textLeft)}
-                           >
-                                 {` ${orderStatusText(order.status)}`}
-                           </Typography>
+            {order.items
+               .map(item => (
+                  <Card
+                     className={classes.itemCard}
+                     key={item.id}
+                  >
+                     <CardContent className={classes.itemCardContent}>
+                        <CardMedia
+                           className={classes.itemCardMedia}
+                           image={item.image}
+                           title={item.name}
+                        />
+                        <span className={classes.itemCardDetailsWrapper}>
+                           <div className={classes.itemCardDetails}>
+                              <Typography
+                                 variant="body2"
+                                 className={classes.itemCardTitle}
+                              >
+                                 {item.name}
+                              </Typography>
+                              <div className={classes.grow} />
+                              <span className={classes.itemPriceInput}>
+                                 <TextField
+                                    id="item-price"
+                                    className={classNames(classes.margin, classes.textField)}
+                                    variant="outlined"
+                                    defaultValue={`${item.price}.00`}
+                                    InputProps={{
+                                       endAdornment: <InputAdornment position="end">บาท</InputAdornment>,
+                                    }}
+                                 />
+                              </span>
+                           </div>
+                           <div className={classes.itemCardDetails}>
+                              <span className={classes.itemOptionSelect}>
+                                 <TextField
+                                    id="order-shipping-select"
+                                    select
+                                    className={classes.textField}
+                                    onChange={this.handleShippingSelect('shipping')}
+                                    value={selectedShipping}
+                                    SelectProps={{
+                                       MenuProps: {
+                                          className: classes.menu,
+                                       },
+                                    }}
+                                    margin="none"
+                                    variant="outlined"
+                                 >  
+                                    <MenuItem key={0} value="เลือกการส่ง" disabled>
+                                       ไม่ระบุรูปแบบสินค้า
+                                    </MenuItem>
+                                    {shippings.map(shipping => (
+                                       <MenuItem key={shipping.id} value={shipping.id}>
+                                          {shipping.name}
+                                       </MenuItem>
+                                    ))}
+                                    <MenuItem 
+                                       key={9999}
+                                       value="เพิ่มการส่ง"
+                                       className={classes.orderAddShipping}
+                                    >
+                                       <span className={classes.orderAddShippingButton} onClick={this.AddShipping}>
+                                          <AddIcon />
+                                          เพิ่มการส่ง
+                                       </span>
+                                    </MenuItem>
+                                 </TextField>
+                              </span>
+                              <div className={classes.grow} />
+                              <span className={classNames(classes.itemPriceInput, classes.itemAmountInput)}>
+                                 <TextField
+                                    id="order-total"
+                                    className={classNames(classes.margin, classes.textField)}
+                                    variant="outlined"
+                                    defaultValue="1"
+                                    InputProps={{
+                                       startAdornment: 
+                                          <IconButton
+                                             onClick={this.handleItemAmount(false, item.id)}
+                                             className={
+                                                classNames(
+                                                   classes.itemAmountButton,
+                                                   classes.itemAmountRemove)}
+                                          >
+                                             <RemoveIcon />
+                                          </IconButton>,
+                                       endAdornment: 
+                                          <IconButton
+                                             onClick={this.handleItemAmount(true, item.id)}
+                                             className={
+                                                classNames(
+                                                   classes.itemAmountButton,
+                                                   classes.itemAmountAdd)}>
+                                             <AddIcon />
+                                          </IconButton>,
+                                    }}
+                                 />
+                              </span>
+                           </div>
                         </span>
-                        <IconButton
-                           aria-haspopup="true"
-                           color="inherit"
-                           className={classNames(classes.orderPrintButton, classes.floatRight)}
-                        >
-                           <PrintIcon />
-                        </IconButton>
-                     </div>
-                     <div className={classes.clearBoth}></div>
-                     <div className={classes.orderDetail}>
-                        <Typography variant="body2" className={classes.orderClientName}>{order.name}</Typography>
-                        <Typography
-                           variant="body1"
-                           className={classNames(classes.textRight, classes.orderPrice)}
-                        >
-                           {order.price} บาท
-                        </Typography>
-                     </div>
-                     <div className={classes.orderDetail}>
-                           <Typography variant="subheading" className={classes.orderTimeStamp}>
-                              {calculateDate(order.updatedTime)}
-                           </Typography>
-                     </div>
-                  </CardContent>
-               </Card>
+                     </CardContent>
+                     <CardActions className={classes.itemCardComment}>
+                        <TextField
+                           id="item-comment"
+                           className={classNames(classes.margin, classes.textField)}
+                           variant="outlined"
+                           placeholder="รายละเอียดเพิ่มเติม"
+                        />
+                     </CardActions>
+                  </Card>
             ))}
          </React.Fragment>
       );
@@ -604,7 +612,7 @@ class Merchant extends Component {
                            color="inherit"
                            noWrap
                         >
-                           #0001
+                           #{order.orderID}
                         </Typography>
                         <Typography
                            className={classes.appBarOrderCustomerName}
@@ -612,7 +620,7 @@ class Merchant extends Component {
                            color="inherit"
                            noWrap
                         >
-                           คุณมิ
+                           {order.name}
                         </Typography>
                      </div>
                      <div className={classes.grow} />
@@ -635,6 +643,29 @@ class Merchant extends Component {
                   </Toolbar>
                </AppBar>
 
+
+               <div className={
+                  classNames(
+                     classes.orderStatusBar,
+                     orderStatusColor(order.status),
+                  )}
+               >
+                  <Typography
+                     variant="body2"
+                     color="inherit"
+                     className={classes.orderStatus}
+                  >
+                     {orderStatusText(order.status)}
+                  </Typography>
+                  <div className={classes.grow} />
+                  <IconButton
+                     aria-haspopup="true"
+                     color="inherit"
+                  >
+                     <CreateIcon />
+                  </IconButton>
+               </div>
+
                {/* Render menus */}
                {renderMenu}
 
@@ -647,10 +678,7 @@ class Merchant extends Component {
                      )}
                   >
                      {/* Tab content separated by value */}
-                     {value === 0 && <TabContainer>{table}</TabContainer>}
-                     {value === 1 && <TabContainer>{table}</TabContainer>}
-                     {value === 2 && <TabContainer>{table}</TabContainer>}
-                     {value === 3 && <TabContainer>{table}</TabContainer>}
+                     {value === 0 && <TabContainer>{itemList}</TabContainer>}
 
                      {/* Additional space at the bottom of content */}
                      <div className={classes.bottomSpace}></div>
