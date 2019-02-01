@@ -111,7 +111,9 @@ class Merchant extends Component {
          newProduct: {},
          print: {},
          term: "",
-         results: []
+         results: [],
+         //newBill
+         customerNameField: ""
       };
    }
 
@@ -290,8 +292,8 @@ class Merchant extends Component {
       this.props.history.push({
          pathname: "/order",
          state: {
-            order,
-         },
+            order
+         }
       });
    }
 
@@ -299,6 +301,10 @@ class Merchant extends Component {
       this.setState({
          isBottomDrawerOpened: open
       });
+   };
+
+   handleTextFieldChange = name => event => {
+      this.setState({ customerNameField: event.target.value });
    };
 
    render() {
@@ -609,9 +615,9 @@ class Merchant extends Component {
                      <TextField
                         id="outlined-name"
                         label="ชื่อลูกค้า"
-                        // value={this.state.customerName}
+                        value={this.state.customerNameField}
                         className={classes.textField}
-                        // onChange={this.handleChange("customerName")}
+                        onChange={this.handleTextFieldChange("customerName")}
                         margin="normal"
                         variant="outlined"
                      />
@@ -620,17 +626,90 @@ class Merchant extends Component {
                         <CardContent
                            style={{
                               display: "flex",
-                              flexDirection: "row",
+                              flexDirection: "column",
                               marginLeft: "6px"
                            }}
                         >
-                           <Avatar className={classes.avatar}>D</Avatar>
-                           <div style={{ marginLeft: "6px" }}>
-                              <Typography variant="h4">คุณขาว</Typography>
-                              <Typography variant="subtitle1">
-                                 facebook
-                              </Typography>
-                           </div>
+                           {
+                              // From const orderCard
+                              <div>
+                                 {filteredOrders
+                                    .sort(
+                                       (a, b) =>
+                                          moment(
+                                             b.updatedTime,
+                                             "DDMMYYYYhhmm"
+                                          ).format("X") -
+                                          moment(
+                                             a.updatedTime,
+                                             "DDMMYYYYhhmm"
+                                          ).format("X")
+                                    )
+                                    .map(order => (
+                                       <Card
+                                          className={
+                                             checked.indexOf(order.orderID) ===
+                                             -1
+                                                ? classes.orderCard
+                                                : classNames(
+                                                     classes.orderCard,
+                                                     classes.orderCardActive
+                                                  )
+                                          }
+                                          key={order.orderID}
+                                          onClick={e => {
+                                             this.setState({
+                                                customerNameField: order.name
+                                             });
+                                          }}
+                                       >
+                                          <CardContent
+                                             className={
+                                                classes.orderCardContent
+                                             }
+                                          >
+                                             <div>
+                                                <Button
+                                                   variant="contained"
+                                                   color="primary"
+                                                   className={classNames(
+                                                      orderStatusColor(
+                                                         order.status
+                                                      ),
+                                                      classes.orderStatusButton,
+                                                      classes.textLeft
+                                                   )}
+                                                >
+                                                   <Typography
+                                                      variant="body2"
+                                                      className={
+                                                         classes.orderNumber
+                                                      }
+                                                   >{`#${
+                                                      order.orderID
+                                                   }`}</Typography>
+                                                </Button>
+                                             </div>
+                                             <div
+                                                className={classes.clearBoth}
+                                             />
+                                             <div
+                                                className={classes.orderDetail}
+                                             >
+                                                <Typography
+                                                   variant="body2"
+                                                   className={
+                                                      classes.orderClientName
+                                                   }
+                                                >
+                                                   {order.name}
+                                                </Typography>
+                                             </div>
+                                          </CardContent>
+                                       </Card>
+                                    ))}
+                              </div>
+                           }
                         </CardContent>
                      </Card>
 

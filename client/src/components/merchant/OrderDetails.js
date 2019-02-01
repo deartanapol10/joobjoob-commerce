@@ -24,7 +24,6 @@ import {
    Checkbox,
    Drawer,
    Divider,
-   Fab,
    FormControlLabel,
    IconButton,
    InputBase,
@@ -45,8 +44,10 @@ import {
    TextField,
    Toolbar,
    Typography,
-   withStyles,
+   withStyles
 } from "@material-ui/core";
+
+import Fab from "@material-ui/core/Fab";
 
 // Import Icons
 import AddIcon from "@material-ui/icons/Add";
@@ -61,7 +62,7 @@ import PrintIcon from "@material-ui/icons/Print";
 import SearchIcon from "@material-ui/icons/Search";
 import RemoveIcon from "@material-ui/icons/Remove";
 
-// Import Logo 
+// Import Logo
 import SALogo from "../../images/sa-logo.png";
 
 // Import Mockup Data
@@ -72,27 +73,24 @@ import {
    customerNamesList,
    productsList,
    optionsList,
-   shippingMethods,
+   shippingMethods
 } from "./data";
 
 // Import JSS styles
 import styles from "./styles";
 
-
 // Init moment to local time format
 moment.locale("th");
-
 
 // Function to return a component for Tab
 function TabContainer(props) {
    return <React.Fragment>{props.children}</React.Fragment>;
 }
 
-
 class Merchant extends Component {
    constructor(props) {
       super(props);
-      
+
       // Ref for inputs
       this.myRef = React.createRef();
 
@@ -122,10 +120,9 @@ class Merchant extends Component {
          shippings: shippingMethods,
          selectedShipping: "เลือกการส่ง",
          shippingName: "เลือกการส่ง",
-         shippingCost: 0,
+         shippingCost: 0
       };
    }
-
 
    //// ---- MENU POPUP FUNCTIONS ---- ////
 
@@ -133,7 +130,7 @@ class Merchant extends Component {
    handleStatusMenuOpen = event => {
       this.setState({ statusAnchorEl: event.currentTarget });
    };
-   
+
    // Open menu
    handleMenuOpen = event => {
       this.setState({ menuAnchorEl: event.currentTarget });
@@ -147,11 +144,10 @@ class Merchant extends Component {
 
    //// **** END MENU POPUP FUNCTIONS **** ////
 
-
    //// ---- TABS FUNCTIONS ---- ////
 
-   // Change tab - Clear previous filteredOrders > set new tab value > 
-   // filter orders > clear checked orders > close all menus 
+   // Change tab - Clear previous filteredOrders > set new tab value >
+   // filter orders > clear checked orders > close all menus
    handleTabChange = (event, value) => {
       this.setState({ filteredOrders: [] });
       this.setState({ value });
@@ -192,7 +188,6 @@ class Merchant extends Component {
 
    //// **** END TABS FUNCTIONS **** ////
 
-
    //// ---- CHECKBOX FUNCTIONS ---- ///
 
    // Toggle individual checkbox - Check if there's orderID in checked orders >
@@ -212,7 +207,6 @@ class Merchant extends Component {
          checked: newChecked
       });
    };
-
 
    // Select all checkboxes in current tab - Copy all orderId from filteredOrders into checked orders >
    // else clear checked orders
@@ -237,7 +231,6 @@ class Merchant extends Component {
 
    //// **** END CHECKBOX FUNCTIONS **** ///
 
-
    //// ---- FILTER ORDERS FUNCTIONS ---- ////
 
    // Filter from all orders - Filter orders that match with selected tab status
@@ -251,15 +244,14 @@ class Merchant extends Component {
 
    //// **** END FILTER ORDERS FUNCTIONS **** ////
 
-
    //// ---- SEARCH FUNCTIONS ---- ///
 
    // Reset search term and results
    resetSearchTerm = () => {
       this.setState({
          term: "",
-         results: [],
-      })
+         results: []
+      });
    };
 
    // Focus on search input
@@ -269,31 +261,45 @@ class Merchant extends Component {
 
    // Search - set term > filter results from orders in 300ms delay
    handleInputChange = event => {
-      this.setState({
-         term: event.target.value
-      }, () => {
-         setTimeout(() => {
-            if(this.state.term.length < 1) return this.resetSearchTerm();
+      this.setState(
+         {
+            term: event.target.value
+         },
+         () => {
+            setTimeout(() => {
+               if (this.state.term.length < 1) return this.resetSearchTerm();
 
-            const results = _.filter(this.state.orders, _.flow(_.identity, _.values, _.join, _.toLower, _.partialRight(_.includes, this.state.term)));
+               const results = _.filter(
+                  this.state.orders,
+                  _.flow(
+                     _.identity,
+                     _.values,
+                     _.join,
+                     _.toLower,
+                     _.partialRight(_.includes, this.state.term)
+                  )
+               );
 
-            this.setState({
-               results
-            })
-         }, 300)
-      });
+               this.setState({
+                  results
+               });
+            }, 300);
+         }
+      );
    };
 
    //// **** END SEARCH FUNCTIONS **** ////
 
    handleShippingSelect = name => event => {
       const { shippings } = this.state;
-      if(isNaN(event.target.value) === false) {
-         const selectedShipping = shippings.find(s => s.id === event.target.value);
+      if (isNaN(event.target.value) === false) {
+         const selectedShipping = shippings.find(
+            s => s.id === event.target.value
+         );
          this.setState({
             selectedShipping: event.target.value,
             shippingName: selectedShipping.name,
-            shippingCost: selectedShipping.cost,
+            shippingCost: selectedShipping.cost
          });
       }
    };
@@ -304,12 +310,11 @@ class Merchant extends Component {
 
    handleItemAmount = (add, id) => {
       const { order } = this.props.location.state;
-   }
+   };
 
    componentDidMount() {
       const { order } = this.props.location.state;
-      console.log(order),
-      this.filterOrders(this.state.value);
+      console.log(order), this.filterOrders(this.state.value);
    }
 
    orderInfo(e, order) {
@@ -345,11 +350,11 @@ class Merchant extends Component {
          shippings,
          selectedShipping,
          shippingName,
-         shippingCost,
+         shippingCost
       } = this.state;
       const isStatusMenuOpen = Boolean(statusAnchorEl);
       const isMenuOpen = Boolean(menuAnchorEl);
-      
+
       const toOrders = props => <Link to="/merchant" {...props} />;
       const newOrder = props => <Link to="/products" {...props} />;
 
@@ -369,7 +374,6 @@ class Merchant extends Component {
          }
       }
 
-
       // Translate status into Thai
       function orderStatusText(status) {
          const alternateStatus = orderStatus.filter(
@@ -377,7 +381,6 @@ class Merchant extends Component {
          );
          return alternateStatus[0].name.th;
       }
-
 
       // Translate payment status into color
       function paymentColor(status, payment) {
@@ -397,7 +400,6 @@ class Merchant extends Component {
          }
       }
 
-
       // Translate payment status into Thai
       function paymentText(payment) {
          const alternatePayment = paymentStatus.filter(
@@ -410,13 +412,11 @@ class Merchant extends Component {
          }
       }
 
-
       // Calculate time passes from latest updated time to current time
       function calculateDate(startDate) {
          const time = moment(startDate, "DDMMYYYYhhmm").fromNow();
          return time;
       }
-
 
       // Render menu popup
       const renderMenu = (
@@ -436,152 +436,158 @@ class Merchant extends Component {
             </MenuItem>
          </Menu>
       );
-      
+
       // Render each order for current tab
       const itemList = (
          <React.Fragment>
             {/* Sort orders before map, by compare updated time */}
-            {order.items
-               .map(item => (
-                  <Card
-                     className={classes.itemCard}
-                     key={item.id}
-                  >
-                     <CardContent className={classes.itemCardContent}>
-                        <CardMedia
-                           className={classes.itemCardMedia}
-                           image={item.image}
-                           title={item.name}
-                        />
-                        <span className={classes.itemCardDetailsWrapper}>
-                           <div className={classes.itemCardDetails}>
-                              <Typography
-                                 variant="body2"
-                                 className={classes.itemCardTitle}
+            {order.items.map(item => (
+               <Card className={classes.itemCard} key={item.id}>
+                  <CardContent className={classes.itemCardContent}>
+                     <CardMedia
+                        className={classes.itemCardMedia}
+                        image={item.image}
+                        title={item.name}
+                     />
+                     <span className={classes.itemCardDetailsWrapper}>
+                        <div className={classes.itemCardDetails}>
+                           <Typography
+                              variant="body2"
+                              className={classes.itemCardTitle}
+                           >
+                              {item.name}
+                           </Typography>
+                           <div className={classes.grow} />
+                           <span className={classes.itemPriceInput}>
+                              <TextField
+                                 id="item-price"
+                                 className={classNames(
+                                    classes.margin,
+                                    classes.textField
+                                 )}
+                                 variant="outlined"
+                                 defaultValue={`${item.price}.00`}
+                                 InputProps={{
+                                    endAdornment: (
+                                       <InputAdornment position="end">
+                                          บาท
+                                       </InputAdornment>
+                                    )
+                                 }}
+                              />
+                           </span>
+                        </div>
+                        <div className={classes.itemCardDetails}>
+                           <span className={classes.itemOptionSelect}>
+                              <TextField
+                                 id="order-shipping-select"
+                                 select
+                                 className={classes.textField}
+                                 onChange={this.handleShippingSelect(
+                                    "shipping"
+                                 )}
+                                 value={selectedShipping}
+                                 SelectProps={{
+                                    MenuProps: {
+                                       className: classes.menu
+                                    }
+                                 }}
+                                 margin="none"
+                                 variant="outlined"
                               >
-                                 {item.name}
-                              </Typography>
-                              <div className={classes.grow} />
-                              <span className={classes.itemPriceInput}>
-                                 <TextField
-                                    id="item-price"
-                                    className={classNames(classes.margin, classes.textField)}
-                                    variant="outlined"
-                                    defaultValue={`${item.price}.00`}
-                                    InputProps={{
-                                       endAdornment: <InputAdornment position="end">บาท</InputAdornment>,
-                                    }}
-                                 />
-                              </span>
-                           </div>
-                           <div className={classes.itemCardDetails}>
-                              <span className={classes.itemOptionSelect}>
-                                 <TextField
-                                    id="order-shipping-select"
-                                    select
-                                    className={classes.textField}
-                                    onChange={this.handleShippingSelect('shipping')}
-                                    value={selectedShipping}
-                                    SelectProps={{
-                                       MenuProps: {
-                                          className: classes.menu,
-                                       },
-                                    }}
-                                    margin="none"
-                                    variant="outlined"
-                                 >  
-                                    <MenuItem key={0} value="เลือกการส่ง" disabled>
-                                       ไม่ระบุรูปแบบสินค้า
-                                    </MenuItem>
-                                    {shippings.map(shipping => (
-                                       <MenuItem key={shipping.id} value={shipping.id}>
-                                          {shipping.name}
-                                       </MenuItem>
-                                    ))}
-                                    <MenuItem 
-                                       key={9999}
-                                       value="เพิ่มการส่ง"
-                                       className={classes.orderAddShipping}
+                                 <MenuItem key={0} value="เลือกการส่ง" disabled>
+                                    ไม่ระบุรูปแบบสินค้า
+                                 </MenuItem>
+                                 {shippings.map(shipping => (
+                                    <MenuItem
+                                       key={shipping.id}
+                                       value={shipping.id}
                                     >
-                                       <span className={classes.orderAddShippingButton} onClick={this.AddShipping}>
-                                          <AddIcon />
-                                          เพิ่มการส่ง
-                                       </span>
+                                       {shipping.name}
                                     </MenuItem>
-                                 </TextField>
-                              </span>
-                              <div className={classes.grow} />
-                              <span className={classNames(classes.itemPriceInput, classes.itemAmountInput)}>
-                                 <TextField
-                                    id="order-total"
-                                    className={classNames(classes.margin, classes.textField)}
-                                    variant="outlined"
-                                    defaultValue="1"
-                                    InputProps={{
-                                       startAdornment: 
-                                          <IconButton
-                                             onClick={this.handleItemAmount(false, item.id)}
-                                             className={
-                                                classNames(
-                                                   classes.itemAmountButton,
-                                                   classes.itemAmountRemove)}
-                                          >
-                                             <RemoveIcon />
-                                          </IconButton>,
-                                       endAdornment: 
-                                          <IconButton
-                                             onClick={this.handleItemAmount(true, item.id)}
-                                             className={
-                                                classNames(
-                                                   classes.itemAmountButton,
-                                                   classes.itemAmountAdd)}>
-                                             <AddIcon />
-                                          </IconButton>,
-                                    }}
-                                 />
-                              </span>
-                           </div>
-                        </span>
-                     </CardContent>
-                     <CardActions className={classes.itemCardComment}>
-                        <TextField
-                           id="item-comment"
-                           className={classNames(classes.margin, classes.textField)}
-                           variant="outlined"
-                           placeholder="รายละเอียดเพิ่มเติม"
-                        />
-                     </CardActions>
-                  </Card>
+                                 ))}
+                                 <MenuItem
+                                    key={9999}
+                                    value="เพิ่มการส่ง"
+                                    className={classes.orderAddShipping}
+                                 >
+                                    <span
+                                       className={
+                                          classes.orderAddShippingButton
+                                       }
+                                       onClick={this.AddShipping}
+                                    >
+                                       <AddIcon />
+                                       เพิ่มการส่ง
+                                    </span>
+                                 </MenuItem>
+                              </TextField>
+                           </span>
+                           <div className={classes.grow} />
+                           <span
+                              className={classNames(
+                                 classes.itemPriceInput,
+                                 classes.itemAmountInput
+                              )}
+                           >
+                              <TextField
+                                 id="order-total"
+                                 className={classNames(
+                                    classes.margin,
+                                    classes.textField
+                                 )}
+                                 variant="outlined"
+                                 defaultValue="1"
+                                 InputProps={{
+                                    startAdornment: (
+                                       <IconButton
+                                          onClick={this.handleItemAmount(
+                                             false,
+                                             item.id
+                                          )}
+                                          className={classNames(
+                                             classes.itemAmountButton,
+                                             classes.itemAmountRemove
+                                          )}
+                                       >
+                                          <RemoveIcon />
+                                       </IconButton>
+                                    ),
+                                    endAdornment: (
+                                       <IconButton
+                                          onClick={this.handleItemAmount(
+                                             true,
+                                             item.id
+                                          )}
+                                          className={classNames(
+                                             classes.itemAmountButton,
+                                             classes.itemAmountAdd
+                                          )}
+                                       >
+                                          <AddIcon />
+                                       </IconButton>
+                                    )
+                                 }}
+                              />
+                           </span>
+                        </div>
+                     </span>
+                  </CardContent>
+                  <CardActions className={classes.itemCardComment}>
+                     <TextField
+                        id="item-comment"
+                        className={classNames(
+                           classes.margin,
+                           classes.textField
+                        )}
+                        variant="outlined"
+                        placeholder="รายละเอียดเพิ่มเติม"
+                     />
+                  </CardActions>
+               </Card>
             ))}
          </React.Fragment>
       );
-
-      
-      // Render left drawer menu
-      const sideList = (
-         <div className={classes.list}>
-            <List>
-               {["เปิดบิลใหม่", "เพิ่มสินค้าใหม่", "เพิ่ม/แก้ไขการส่งใหม่"].map(
-                  (text, index) => (
-                     <ListItem button key={text}>
-                        <ListItemIcon>
-                           {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                        </ListItemIcon>
-                        <ListItemText primary={text} />
-                     </ListItem>
-                  )
-               )}
-            </List>
-         </div>
-      );
-
-
-      const fullList = (
-         <div className={classes.fullList}>
-            <Typography>heeeeeeeeeeeeey</Typography>
-         </div>
-      );
-
 
       return (
          <React.Fragment>
@@ -643,11 +649,10 @@ class Merchant extends Component {
                   </Toolbar>
                </AppBar>
 
-
-               <div className={
-                  classNames(
+               <div
+                  className={classNames(
                      classes.orderStatusBar,
-                     orderStatusColor(order.status),
+                     orderStatusColor(order.status)
                   )}
                >
                   <Typography
@@ -658,10 +663,7 @@ class Merchant extends Component {
                      {orderStatusText(order.status)}
                   </Typography>
                   <div className={classes.grow} />
-                  <IconButton
-                     aria-haspopup="true"
-                     color="inherit"
-                  >
+                  <IconButton aria-haspopup="true" color="inherit">
                      <CreateIcon />
                   </IconButton>
                </div>
@@ -681,7 +683,7 @@ class Merchant extends Component {
                      {value === 0 && <TabContainer>{itemList}</TabContainer>}
 
                      {/* Additional space at the bottom of content */}
-                     <div className={classes.bottomSpace}></div>
+                     <div className={classes.bottomSpace} />
                   </div>
                </div>
 
@@ -689,7 +691,11 @@ class Merchant extends Component {
                <div className={classes.footer}>
                   {/* Status tab display */}
                   <div className={classes.orderDetailsTabBar}>
-                     <Tabs value={value} onChange={this.handleTabChange} fullWidth>
+                     <Tabs
+                        value={value}
+                        onChange={this.handleTabChange}
+                        fullWidth
+                     >
                         <Tab key={0} label="รายการสินค้า" />
                         <Tab key={1} label="การชำระเงิน" />
                         <Tab key={2} label="การขนส่ง" />
@@ -697,7 +703,7 @@ class Merchant extends Component {
                      <Paper className={classes.orderDetailsPaper}>
                         <div className={classes.orderSummaryGroup}>
                            <span className={classes.orderShippingSelect}>
-                              <Badge 
+                              <Badge
                                  color="primary"
                                  badgeContent={"!"}
                                  invisible={shippings.length !== 0}
@@ -708,30 +714,44 @@ class Merchant extends Component {
                                     id="order-shipping-select"
                                     select
                                     className={classes.textField}
-                                    onChange={this.handleShippingSelect('shipping')}
+                                    onChange={this.handleShippingSelect(
+                                       "shipping"
+                                    )}
                                     value={selectedShipping}
                                     SelectProps={{
                                        MenuProps: {
-                                          className: classes.menu,
-                                       },
+                                          className: classes.menu
+                                       }
                                     }}
                                     margin="none"
                                     variant="outlined"
-                                 >  
-                                    <MenuItem key={0} value="เลือกการส่ง" disabled>
+                                 >
+                                    <MenuItem
+                                       key={0}
+                                       value="เลือกการส่ง"
+                                       disabled
+                                    >
                                        เลือกการส่ง
                                     </MenuItem>
                                     {shippings.map(shipping => (
-                                       <MenuItem key={shipping.id} value={shipping.id}>
+                                       <MenuItem
+                                          key={shipping.id}
+                                          value={shipping.id}
+                                       >
                                           {shipping.name}
                                        </MenuItem>
                                     ))}
-                                    <MenuItem 
+                                    <MenuItem
                                        key={9999}
                                        value="เพิ่มการส่ง"
                                        className={classes.orderAddShipping}
                                     >
-                                       <span className={classes.orderAddShippingButton} onClick={this.AddShipping}>
+                                       <span
+                                          className={
+                                             classes.orderAddShippingButton
+                                          }
+                                          onClick={this.AddShipping}
+                                       >
                                           <AddIcon />
                                           เพิ่มการส่ง
                                        </span>
@@ -743,46 +763,77 @@ class Merchant extends Component {
                            <span className={classes.orderPriceInput}>
                               <TextField
                                  id="order-shipping-price"
-                                 className={classNames(classes.margin, classes.textField)}
+                                 className={classNames(
+                                    classes.margin,
+                                    classes.textField
+                                 )}
                                  variant="outlined"
                                  value={shippingCost}
                                  InputProps={{
-                                    endAdornment: <InputAdornment position="end">บาท</InputAdornment>,
+                                    endAdornment: (
+                                       <InputAdornment position="end">
+                                          บาท
+                                       </InputAdornment>
+                                    )
                                  }}
                               />
                            </span>
                         </div>
                         <div className={classes.orderSummaryGroup}>
                            <span>
-                              <Typography variant="h6" className={classes.orderLabel}>ส่วนลด</Typography>
+                              <Typography
+                                 variant="h6"
+                                 className={classes.orderLabel}
+                              >
+                                 ส่วนลด
+                              </Typography>
                            </span>
                            <div className={classes.grow} />
                            <span className={classes.orderPriceInput}>
                               <TextField
                                  id="order-discount"
-                                 className={classNames(classes.margin, classes.textField)}
+                                 className={classNames(
+                                    classes.margin,
+                                    classes.textField
+                                 )}
                                  variant="outlined"
                                  defaultValue="0.00"
                                  InputProps={{
-                                    endAdornment: <InputAdornment position="end">บาท</InputAdornment>,
+                                    endAdornment: (
+                                       <InputAdornment position="end">
+                                          บาท
+                                       </InputAdornment>
+                                    )
                                  }}
                               />
-                           </span>          
+                           </span>
                         </div>
                         <div className={classes.orderSummaryGroup}>
                            <span>
-                              <Typography variant="h6" className={classes.orderLabel}>ยอดสุทธิ</Typography>
+                              <Typography
+                                 variant="h6"
+                                 className={classes.orderLabel}
+                              >
+                                 ยอดสุทธิ
+                              </Typography>
                            </span>
                            <div className={classes.grow} />
                            <span className={classes.orderPriceInput}>
                               <TextField
                                  id="order-total"
-                                 className={classNames(classes.margin, classes.textField)}
+                                 className={classNames(
+                                    classes.margin,
+                                    classes.textField
+                                 )}
                                  variant="outlined"
                                  defaultValue="0.00"
                                  disabled
                                  InputProps={{
-                                    endAdornment: <InputAdornment position="end">บาท</InputAdornment>,
+                                    endAdornment: (
+                                       <InputAdornment position="end">
+                                          บาท
+                                       </InputAdornment>
+                                    )
                                  }}
                               />
                            </span>
@@ -797,8 +848,8 @@ class Merchant extends Component {
                         >
                            {`< กลับ `}
                         </Button>
-                        <Fab 
-                           aria-label="Add" 
+                        <Fab
+                           aria-label="Add"
                            className={classes.footerFabButton}
                            component={newOrder}
                         >
