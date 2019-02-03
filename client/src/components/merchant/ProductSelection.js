@@ -124,7 +124,9 @@ class Merchant extends Component {
          productInfo: null,
          //editProductPopup
          productName: "",
-         productPrice: ""
+         productPrice: "",
+         //newProductPopup
+         n: 1
       };
    }
 
@@ -554,7 +556,69 @@ class Merchant extends Component {
          </React.Fragment>
       );
 
-      const newProductPopup = (
+      function NewProductField(props) {
+         let steps = [];
+
+         for (let i = 0; i < props.n; i++) {
+            steps.push(
+               <React.Fragment key={i}>
+                  <div style={{ display: "flex" }}>
+                     <img
+                        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTdovB83ce6JNsKorhNyALxRBI8jG07JOxqld-Hb5D0BiJnlVwu"
+                        width="150"
+                        height="150"
+                        alt=""
+                     />
+                     <div
+                        style={{
+                           display: "flex",
+                           flexDirection: "column",
+                           flexGrow: "2"
+                        }}
+                     >
+                        <TextField
+                           id="outlined-name"
+                           label="ชื่อสินค้า"
+                           // value={this.state.productName}
+                           className={classes.textField}
+                           // onChange={this.handleChange("productName")}
+                           margin="normal"
+                           variant="outlined"
+                        />
+                        <div
+                           style={{
+                              display: "flex"
+                           }}
+                        >
+                           <TextField
+                              id="outlined-name"
+                              label="ราคา"
+                              // value={this.state.productInfo.price}
+                              className={classes.textField}
+                              // onChange={this.handleTextFieldChange(
+                              //    "productPrice"
+                              // )}
+                              margin="normal"
+                              variant="outlined"
+                              InputProps={{
+                                 endAdornment: (
+                                    <InputAdornment position="end">
+                                       บาท
+                                    </InputAdornment>
+                                 )
+                              }}
+                           />
+                        </div>
+                     </div>
+                  </div>
+                  <Divider />
+               </React.Fragment>
+            );
+         }
+         return <React.Fragment>{steps}</React.Fragment>;
+      }
+
+      var newProductPopup = (
          <React.Fragment>
             <Drawer
                anchor="bottom"
@@ -580,67 +644,15 @@ class Merchant extends Component {
                      </div>
 
                      <Typography variant="h5">เพิ่มสินค้าใหม่</Typography>
+                     <NewProductField n={this.state.n} />
 
-                     <div style={{ display: "flex", flexDirection: "row" }}>
-                        <div>
-                           <img
-                              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTdovB83ce6JNsKorhNyALxRBI8jG07JOxqld-Hb5D0BiJnlVwu"
-                              width="150"
-                              alt=""
-                           />
-                        </div>
-
-                        <div
-                           style={{
-                              display: "flex",
-                              flexDirection: "column",
-                              flexGrow: "2"
-                           }}
-                        >
-                           <TextField
-                              id="outlined-name"
-                              label="ชื่อสินค้า"
-                              // value={this.state.productName}
-                              className={classes.textField}
-                              // onChange={this.handleChange("productName")}
-                              margin="normal"
-                              variant="outlined"
-                           />
-                           <div
-                              style={{
-                                 display: "flex",
-                                 flexDirection: "row",
-                                 alignItems: "center"
-                              }}
-                           >
-                              <TextField
-                                 id="outlined-name"
-                                 label="ราคา"
-                                 // value={this.state.productInfo.price}
-                                 className={classes.textField}
-                                 // onChange={this.handleTextFieldChange(
-                                 //    "productPrice"
-                                 // )}
-                                 margin="normal"
-                                 variant="outlined"
-                                 InputProps={{
-                                    endAdornment: (
-                                       <InputAdornment position="end">
-                                          บาท
-                                       </InputAdornment>
-                                    )
-                                 }}
-                              />
-                           </div>
-                        </div>
-                     </div>
-                     <Divider />
                      <Fab
-                        style={{ margin: "15px auto" }}
+                        style={{ margin: "50px auto" }}
                         aria-label="Add"
-                        className={classes.drawerFabButton}
-                        // component={newOrder}
-                        // onClick={this.newProductPopupDrawer.bind(this, true)}
+                        className={classes.footerFabButton}
+                        onClick={() => {
+                           this.setState(prevState => ({ n: prevState.n + 1 }));
+                        }}
                      >
                         <AddIcon />
                      </Fab>
@@ -650,7 +662,7 @@ class Merchant extends Component {
                         className={classes.button}
                         fullWidth
                      >
-                        เพิ่มสินค้า
+                        {`เพิ่มสินค้า (${this.state.n})`}
                      </Button>
                   </div>
                }
@@ -725,9 +737,7 @@ class Merchant extends Component {
                            />
                            <div
                               style={{
-                                 display: "flex",
-                                 flexDirection: "row",
-                                 alignItems: "center"
+                                 display: "flex"
                               }}
                            >
                               <TextField
