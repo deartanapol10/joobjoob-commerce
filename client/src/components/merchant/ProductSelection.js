@@ -29,6 +29,7 @@ import {
    Grid,
    IconButton,
    InputBase,
+   InputAdornment,
    List,
    ListItem,
    ListItemIcon,
@@ -120,7 +121,10 @@ class Merchant extends Component {
          results: [],
          isNewProductPopup: false,
          isEditProductPopup: false,
-         productInfo: null
+         productInfo: null,
+         //editProductPopup
+         productName: "",
+         productPrice: ""
       };
    }
 
@@ -293,6 +297,14 @@ class Merchant extends Component {
          isEditProductPopup: open,
          productInfo: product
       });
+   };
+
+   handleTextFieldChange = name => event => {
+      this.setState({ [name]: event.target.value });
+   };
+
+   fileSelectedHandler = e => {
+      console.log(e.target.files[0]);
    };
 
    render() {
@@ -556,11 +568,16 @@ class Merchant extends Component {
                   onKeyDown={this.newProductPopupDrawer.bind(this, false)}
                />
                {
-                  <div className={classes.container}>
-                     <CloseIcon
-                        style={{ cursor: "pointer" }}
-                        onClick={this.newProductPopupDrawer.bind(this, false)}
-                     />
+                  <div className={classes.drawerContainer}>
+                     <div style={{ textAlign: "right" }}>
+                        <CloseIcon
+                           style={{ cursor: "pointer" }}
+                           onClick={this.newProductPopupDrawer.bind(
+                              this,
+                              false
+                           )}
+                        />
+                     </div>
 
                      <Typography variant="h5">เพิ่มสินค้าใหม่</Typography>
 
@@ -599,13 +616,21 @@ class Merchant extends Component {
                               <TextField
                                  id="outlined-name"
                                  label="ราคา"
-                                 // value={this.state.price}
+                                 // value={this.state.productInfo.price}
                                  className={classes.textField}
-                                 // onChange={this.handleChange("price")}
+                                 // onChange={this.handleTextFieldChange(
+                                 //    "productPrice"
+                                 // )}
                                  margin="normal"
                                  variant="outlined"
+                                 InputProps={{
+                                    endAdornment: (
+                                       <InputAdornment position="end">
+                                          บาท
+                                       </InputAdornment>
+                                    )
+                                 }}
                               />
-                              <Typography variant="h6"> บาท</Typography>
                            </div>
                         </div>
                      </div>
@@ -619,6 +644,14 @@ class Merchant extends Component {
                      >
                         <AddIcon />
                      </Fab>
+                     <Button
+                        variant="contained"
+                        color="primary"
+                        className={classes.button}
+                        fullWidth
+                     >
+                        เพิ่มสินค้า
+                     </Button>
                   </div>
                }
             </Drawer>
@@ -639,28 +672,39 @@ class Merchant extends Component {
                   onKeyDown={this.editProductPopupDrawer.bind(this, false)}
                />
                {
-                  <div className={classes.container}>
-                     <CloseIcon
-                        style={{ cursor: "pointer" }}
-                        onClick={this.editProductPopupDrawer.bind(this, false)}
-                     />
-
-                     <Typography variant="h5">แก้ไขสินค้า</Typography>
-
-                     <div
-                        style={{
-                           display: "flex",
-                           flexDirection: "column",
-                           justifyContent: "center"
-                        }}
-                     >
-                        <div>
-                           <img
-                              src={this.state.productInfo.image}
-                              width="150"
-                              alt=""
+                  <React.Fragment>
+                     <div className={classes.drawerContainer}>
+                        <div style={{ textAlign: "right" }}>
+                           <CloseIcon
+                              style={{ cursor: "pointer" }}
+                              onClick={this.editProductPopupDrawer.bind(
+                                 this,
+                                 false
+                              )}
                            />
                         </div>
+                        <Typography variant="h5">แก้ไขสินค้า</Typography>
+
+                        <input
+                           accept="image/*"
+                           className={classes.input}
+                           type="file"
+                           ref={fileInput => (this.fileInput = fileInput)}
+                           onChange={this.fileSelectedHandler}
+                        />
+
+                        <CardMedia
+                           className={classes.productResultMedia}
+                           image={this.state.productInfo.image}
+                           title={this.state.productInfo.name}
+                           style={{
+                              width: "40%",
+                              margin: "auto",
+                              cursor: "pointer"
+                           }}
+                           onClick={() => this.fileInput.click()}
+                        />
+
                         <div
                            style={{
                               display: "flex",
@@ -673,7 +717,9 @@ class Merchant extends Component {
                               label="ชื่อสินค้า"
                               value={this.state.productInfo.name}
                               className={classes.textField}
-                              // onChange={this.handleChange("name")}
+                              onChange={this.handleTextFieldChange(
+                                 "productName"
+                              )}
                               margin="normal"
                               variant="outlined"
                            />
@@ -689,22 +735,31 @@ class Merchant extends Component {
                                  label="ราคา"
                                  value={this.state.productInfo.price}
                                  className={classes.textField}
-                                 // onChange={this.handleChange("price")}
+                                 onChange={this.handleTextFieldChange(
+                                    "productPrice"
+                                 )}
                                  margin="normal"
                                  variant="outlined"
+                                 InputProps={{
+                                    endAdornment: (
+                                       <InputAdornment position="end">
+                                          บาท
+                                       </InputAdornment>
+                                    )
+                                 }}
                               />
-                              <Typography variant="h6"> บาท</Typography>
                            </div>
                         </div>
                         <Button
                            variant="contained"
                            color="primary"
                            className={classes.button}
+                           fullWidth
                         >
                            เสร็จสิ้น
                         </Button>
                      </div>
-                  </div>
+                  </React.Fragment>
                }
             </Drawer>
          </React.Fragment>
@@ -830,27 +885,25 @@ class Merchant extends Component {
                      >
                         {productSearchResults}
                      </Grid>
-                  ) : (
-                     term !== "" ? (
-                        <div className={classes.orderBlank}>
+                  ) : term !== "" ? (
+                     <div className={classes.orderBlank}>
                         <CancelIcon className={classes.orderBlankIcon} />
-                           <Typography
-                              variant="body1"
-                              align="center"
-                              color="inherit"
-                           >
-                              ไม่พบสินค้า
-                           </Typography>
-                        </div>
-                     ) : (
-                        <Grid
-                           container
-                           spacing={16}
-                           className={classes.productResultGrid}
+                        <Typography
+                           variant="body1"
+                           align="center"
+                           color="inherit"
                         >
-                           {productDisplay}
-                        </Grid>
-                     )
+                           ไม่พบสินค้า
+                        </Typography>
+                     </div>
+                  ) : (
+                     <Grid
+                        container
+                        spacing={16}
+                        className={classes.productResultGrid}
+                     >
+                        {productDisplay}
+                     </Grid>
                   )}
                </div>
 

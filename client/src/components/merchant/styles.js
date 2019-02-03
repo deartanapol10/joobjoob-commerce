@@ -53,11 +53,9 @@ const styles = theme => ({
       }
    },
    menu: {
-      width: 200,
+      width: 200
    },
-   alertBadge: {
-
-   },
+   alertBadge: {},
 
    //// **** END COMMON CLASSES **** ////
 
@@ -353,28 +351,28 @@ const styles = theme => ({
       backgroundColor: fade("#FF1400", 0.7),
       "&:hover": {
          backgroundColor: fade("#FF1400", 0.9)
-      },
+      }
    },
    submitted: {
       color: fade("#FB8C00", 0.7),
       backgroundColor: fade("#FB8C00", 0.7),
       "&:hover": {
          backgroundColor: fade("#FB8C00", 0.55)
-      },
+      }
    },
    shipped: {
       color: fade("#00BFA5", 0.7),
       backgroundColor: fade("#00BFA5", 0.7),
       "&:hover": {
          backgroundColor: fade("#FB8C00", 0.55)
-      },
+      }
    },
    success: {
       color: fade("#90A4AE", 0.7),
       backgroundColor: fade("#90A4AE", 0.7),
       "&:hover": {
          backgroundColor: fade("#90A4AE", 0.55)
-      },
+      }
    },
    pending: {
       display: "none"
@@ -482,55 +480,54 @@ const styles = theme => ({
 
    //// **** END ORDER LIST **** ////
 
-
    //// ---- ORDER DETAILS ---- ////
-   
+
    orderDetailsTabBar: {
       height: "auto",
       width: "100%",
       boxShadow: "none",
-      marginBottom: theme.spacing.unit * 9,
+      marginBottom: theme.spacing.unit * 9
    },
    orderDetailsPaper: {
       padding: theme.spacing.unit * 2,
-      paddingBottom: theme.spacing.unit * 6,
+      paddingBottom: theme.spacing.unit * 6
    },
    orderSummaryGroup: {
       display: "flex",
       alignItems: "center",
-      marginTop: theme.spacing.unit,
+      marginTop: theme.spacing.unit
    },
    orderLabel: {
       fontSize: "1rem",
-      color: fade("#000", 0.6),
+      color: fade("#000", 0.6)
    },
    orderPriceInput: {
       width: theme.spacing.unit * 18,
       "&>div>div": {
-         fontSize: "0.875rem",
+         fontSize: "0.875rem"
       },
       "&>div>div>input": {
          textAlign: "right",
          padding: 10,
          paddingRight: 0,
-         color: fade("#000", 0.6),
+         color: fade("#000", 0.6)
       }
    },
    orderShippingSelect: {
       "&>span>div>div>div>div": {
          width: theme.spacing.unit * 18,
          padding: 10,
-         color: fade("#000", 0.6),
+         color: fade("#000", 0.6)
       }
    },
    orderAddShipping: {
       borderTop: "1px #eee solid",
       paddingLeft: 0,
-      paddingRight: 0,
+      paddingRight: 0
    },
    orderAddShippingButton: {
       width: "100%",
-      padding: "11px 16px 11px 16px",
+      padding: "11px 16px 11px 16px"
    },
    orderStatusBar: {
       position: "relative",
@@ -554,12 +551,12 @@ const styles = theme => ({
 
    itemCard: {
       width: "100%",
-      marginBottom: theme.spacing.unit * 2,
+      marginBottom: theme.spacing.unit * 2
    },
    itemCardContent: {
       display: "flex",
       flexDirection: "row",
-      paddingBottom: theme.spacing.unit * 2,
+      paddingBottom: theme.spacing.unit * 2
    },
    itemCardMedia: {
       width: "20%",
@@ -573,13 +570,13 @@ const styles = theme => ({
       borderRadius: "4px",
       boxShadow: theme.shadows[2],
       display: "flex",
-      flex: "1 0 auto",
+      flex: "1 0 auto"
    },
    itemCardDetailsWrapper: {
       display: "flex",
       flexDirection: "column",
       width: "100%",
-      justifyContent: "center",
+      justifyContent: "center"
    },
    itemCardDetails: {
       display: "flex",
@@ -587,23 +584,23 @@ const styles = theme => ({
       alignItems: "center",
       marginLeft: theme.spacing.unit * 2,
       "&:last-child": {
-         marginTop: theme.spacing.unit,
-      },
+         marginTop: theme.spacing.unit
+      }
    },
    itemCardTitle: {
-      fontSize: "1.1rem",
+      fontSize: "1.1rem"
    },
    itemPriceInput: {
       marginLeft: theme.spacing.unit,
       maxWidth: theme.spacing.unit * 18,
       "&>div>div": {
-         fontSize: "0.875rem",
+         fontSize: "0.875rem"
       },
       "&>div>div>input": {
          textAlign: "right",
          padding: 10,
          paddingRight: 0,
-         color: fade("#000", 0.6),
+         color: fade("#000", 0.6)
       }
    },
    itemAmountInput: {
@@ -613,11 +610,11 @@ const styles = theme => ({
          padding: 10,
          paddingLeft: 0,
          paddingRight: 0,
-         color: fade("#000", 0.6),
+         color: fade("#000", 0.6)
       },
       "&>div>div": {
-         padding: 0,
-      },
+         padding: 0
+      }
    },
    itemAmountButton: {
       cursor: "pointer",
@@ -626,38 +623,38 @@ const styles = theme => ({
       width: theme.spacing.unit * 4.5,
       height: "100%",
       backgroundColor: "transparent",
-      padding: 0,
+      padding: 0
    },
    itemAmountRemove: {
       color: "#FF1400",
       "&:hover": {
-         color: fade("#FF1400", 0.6),
-      },
+         color: fade("#FF1400", 0.6)
+      }
    },
    itemAmountAdd: {
       color: "#00BFA5",
       "&:hover": {
-         color: fade("#00BFA5", 0.6),
-      },
+         color: fade("#00BFA5", 0.6)
+      }
    },
    itemCardComment: {
       width: "100%",
       padding: "0 16px 16px",
       "&>div": {
-         width: "100%",
+         width: "100%"
       },
       "&>div>div>input": {
-         padding: 10,
+         padding: 10
       }
    },
    itemOptionSelect: {
       "&>div>div": {
-         fontSize: "0.875rem",
+         fontSize: "0.875rem"
       },
       "&>div>div>div>div": {
          width: theme.spacing.unit * 18,
          padding: 10,
-         color: fade("#000", 0.6),
+         color: fade("#000", 0.6)
       }
    },
 
@@ -692,12 +689,13 @@ const styles = theme => ({
    //// **** FOOTER **** ////
 
    /// DRAWER ///
-   container: {
-      display: "flex",
-      flexDirection: "column",
+   drawerContainer: {
+      // display: "flex",
+      // flexDirection: "column",
       textAlign: "center",
       justifyContent: "center",
-      padding: "20px"
+      padding: "20px",
+      overflow: "scrollY"
    },
    drawerFabButton: {
       margin: "15px auto",
@@ -706,6 +704,11 @@ const styles = theme => ({
       "&:hover": {
          backgroundColor: theme.palette.primary[300]
       }
+   },
+
+   // / INPUT BUTTON //
+   input: {
+      display: "none"
    }
 });
 

@@ -112,7 +112,7 @@ class Merchant extends Component {
          print: {},
          term: "",
          results: [],
-         //newBill
+         //addNewBillPopup
          customerNameField: ""
       };
    }
@@ -606,11 +606,13 @@ class Merchant extends Component {
             />
             {
                <React.Fragment>
-                  <div className={classes.container}>
-                     <CloseIcon
-                        className={classes.icon}
-                        onClick={this.toggleBottomDrawer.bind(this, false)}
-                     />
+                  <div className={classes.drawerContainer}>
+                     <div style={{ textAlign: "right" }}>
+                        <CloseIcon
+                           onClick={this.toggleBottomDrawer.bind(this, false)}
+                           style={{ cursor: "pointer" }}
+                        />
+                     </div>
                      <Typography variant="h5">เปิดบิลใหม่</Typography>
                      <TextField
                         id="outlined-name"
@@ -620,6 +622,7 @@ class Merchant extends Component {
                         onChange={this.handleTextFieldChange("customerName")}
                         margin="normal"
                         variant="outlined"
+                        fullWidth
                      />
                      <Typography variant="h6">ลูกค้าล่าสุด</Typography>
                      <Card className={classes.card}>
@@ -632,7 +635,7 @@ class Merchant extends Component {
                         >
                            {
                               // From const orderCard
-                              <div>
+                              <React.Fragment>
                                  {filteredOrders
                                     .sort(
                                        (a, b) =>
@@ -645,6 +648,7 @@ class Merchant extends Component {
                                              "DDMMYYYYhhmm"
                                           ).format("X")
                                     )
+                                    .filter((order, index) => index < 3)
                                     .map(order => (
                                        <Card
                                           className={
@@ -708,7 +712,7 @@ class Merchant extends Component {
                                           </CardContent>
                                        </Card>
                                     ))}
-                              </div>
+                              </React.Fragment>
                            }
                         </CardContent>
                      </Card>
@@ -718,6 +722,7 @@ class Merchant extends Component {
                         color="primary"
                         className={classes.button}
                         component={newOrder}
+                        fullWidth
                      >
                         ต่อไป
                      </Button>
