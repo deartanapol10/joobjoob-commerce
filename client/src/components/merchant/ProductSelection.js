@@ -121,10 +121,12 @@ class Merchant extends Component {
          results: [],
          isNewProductPopup: false,
          isEditProductPopup: false,
+         isCustomizeProductPopup: false,
          productInfo: null,
          //editProductPopup
          productName: "",
          productPrice: "",
+         productOption: "",
          //newProductPopup
          n: 1
       };
@@ -289,9 +291,7 @@ class Merchant extends Component {
    }
 
    newProductPopupDrawer = open => {
-      this.setState({
-         isNewProductPopup: open
-      });
+      this.setState({ isNewProductPopup: open });
    };
 
    editProductPopupDrawer = (open, product) => {
@@ -301,8 +301,17 @@ class Merchant extends Component {
       });
    };
 
+   customizeProductPopupDrawer = open => {
+      this.setState({ isCustomizeProductPopup: open });
+   };
+
    handleTextFieldChange = name => event => {
-      this.setState({ [name]: event.target.value });
+      if (name == "productOption" && event.target.value === 0) {
+         this.editProductPopupDrawer(false);
+         this.customizeProductPopupDrawer(true);
+      } else {
+         this.setState({ [name]: event.target.value });
+      }
    };
 
    fileSelectedHandler = e => {
@@ -557,10 +566,10 @@ class Merchant extends Component {
       );
 
       function NewProductField(props) {
-         let steps = [];
+         let fields = [];
 
          for (let i = 0; i < props.n; i++) {
-            steps.push(
+            fields.push(
                <React.Fragment key={i}>
                   <div style={{ display: "flex" }}>
                      <img
@@ -615,7 +624,7 @@ class Merchant extends Component {
                </React.Fragment>
             );
          }
-         return <React.Fragment>{steps}</React.Fragment>;
+         return <React.Fragment>{fields}</React.Fragment>;
       }
 
       var newProductPopup = (
@@ -669,6 +678,21 @@ class Merchant extends Component {
             </Drawer>
          </React.Fragment>
       );
+
+      const tempOptions = [
+         { label: "ขนาด", type: "size", category: ["s", "m", "l", "xl"] },
+         {
+            label: "สี",
+            type: "color",
+            category: ["แดง", "ขาว", "เหลือง", "ส้ม"]
+         },
+         {
+            label: "iPhone",
+            type: "iphone",
+            category: ["iPhone 6", "iPhone 6S", "iPhone 7", "iPhone X"]
+         },
+         ,
+      ];
 
       const editProductPopup = this.state.productInfo && (
          <React.Fragment>
@@ -737,7 +761,8 @@ class Merchant extends Component {
                            />
                            <div
                               style={{
-                                 display: "flex"
+                                 display: "flex",
+                                 justifyContent: "space-between"
                               }}
                            >
                               <TextField
@@ -757,9 +782,147 @@ class Merchant extends Component {
                                        </InputAdornment>
                                     )
                                  }}
+                                 style={{ marginRight: "15px" }}
                               />
+                              <TextField
+                                 id="outlined-name"
+                                 select
+                                 label="ไม่ระบุแบบสินค้า"
+                                 value={this.state.productOption}
+                                 className={classes.textField}
+                                 onChange={this.handleTextFieldChange(
+                                    "productOption"
+                                 )}
+                                 SelectProps={{
+                                    MenuProps: {
+                                       className: classes.menu
+                                    }
+                                 }}
+                                 margin="normal"
+                                 variant="outlined"
+                                 fullWidth
+                              >
+                                 {tempOptions.map((option, index) => (
+                                    <MenuItem key={index} value={option.type}>
+                                       {option.label}
+                                    </MenuItem>
+                                 ))}
+                                 <Divider />
+                                 <MenuItem value={0}>
+                                    {"+ จัดการแบบสินค้า"}
+                                 </MenuItem>
+                              </TextField>
                            </div>
                         </div>
+                        <Button
+                           variant="contained"
+                           color="primary"
+                           className={classes.button}
+                           fullWidth
+                        >
+                           เสร็จสิ้น
+                        </Button>
+                     </div>
+                  </React.Fragment>
+               }
+            </Drawer>
+         </React.Fragment>
+      );
+
+      const customizeProductPopup = (
+         <React.Fragment>
+            <Drawer
+               anchor="bottom"
+               open={this.state.isCustomizeProductPopup}
+               onClose={this.customizeProductPopupDrawer.bind(this, false)}
+            >
+               <div
+                  tabIndex={0}
+                  role="button"
+                  onClick={this.customizeProductPopupDrawer.bind(this, false)}
+                  onKeyDown={this.customizeProductPopupDrawer.bind(this, false)}
+               />
+               {
+                  <React.Fragment>
+                     <div className={classes.drawerContainer}>
+                        <div style={{ textAlign: "right" }}>
+                           <CloseIcon
+                              style={{ cursor: "pointer" }}
+                              onClick={this.editProductPopupDrawer.bind(
+                                 this,
+                                 false
+                              )}
+                           />
+                        </div>
+
+                        <Typography variant="h5">จัดการแบบสินค้า</Typography>
+                        <Typography variant="p">
+                           กรุณาเลือกรูปแบบสินค้าที่ต้องการหรือสร้างใหม่
+                        </Typography>
+                        {tempOptions.map((option, index) => (
+                           <React.Fragment>
+                              <Card
+                                 style={{
+                                    display: "flex",
+                                    justifyContent: "space-between",
+                                    padding: "10px 30px"
+                                 }}
+                              >
+                                 <Typography variant="h5">
+                                    {option.type}
+                                 </Typography>
+                                 <Typography variant="p">
+                                    {" " + option.category + ","}
+                                 </Typography>
+                              </Card>
+                           </React.Fragment>
+                        ))}
+                        <Card style={{ margin: "20px 5px", padding: "20px" }}>
+                           <Typography variant="h5">
+                              ชื่อรูปแบบสินค้า
+                           </Typography>
+                           <Divider />
+                           <div
+                              style={{
+                                 display: "flex",
+                                 justifyContent: "space-between",
+                                 flexGrow: "2"
+                              }}
+                           >
+                              <TextField
+                                 id="outlined-name"
+                                 label="รูปแบบสินค้า"
+                                 // value={this.state.productInfo.price}
+                                 className={classes.textField}
+                                 // onChange={this.handleTextFieldChange(
+                                 //    "productPrice"
+                                 // )}
+                                 margin="normal"
+                                 variant="outlined"
+                                 style={{ marginRight: "15px" }}
+                              />
+                              <TextField
+                                 id="outlined-name"
+                                 label="ราคา"
+                                 // value={this.state.productOption}
+                                 className={classes.textField}
+                                 // onChange={this.handleTextFieldChange(
+                                 //    "productOption"
+                                 // )}
+                                 margin="normal"
+                                 variant="outlined"
+                                 fullWidth
+                              />
+                           </div>
+                           <Button
+                              variant="contained"
+                              color="primary"
+                              className={classes.button}
+                           >
+                              เพิ่มแบบสินค้าใหม่
+                           </Button>
+                        </Card>
+
                         <Button
                            variant="contained"
                            color="primary"
@@ -958,6 +1121,7 @@ class Merchant extends Component {
 
                {newProductPopup}
                {editProductPopup}
+               {customizeProductPopup}
             </main>
          </React.Fragment>
       );
