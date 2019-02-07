@@ -64,6 +64,7 @@ import PrintIcon from "@material-ui/icons/Print";
 import SearchIcon from "@material-ui/icons/Search";
 import CheckIcon from "@material-ui/icons/CheckCircle";
 import CheckIconOutline from "@material-ui/icons/CheckCircleOutline";
+import RemoveIcon from "@material-ui/icons/Remove";
 
 // Import Logo
 import SALogo from "../../images/sa-logo.png";
@@ -630,7 +631,7 @@ class Merchant extends Component {
          return <React.Fragment>{fields}</React.Fragment>;
       }
 
-      var newProductPopup = (
+      const newProductPopup = (
          <React.Fragment>
             <Drawer
                anchor="bottom"
@@ -699,7 +700,7 @@ class Merchant extends Component {
             category: [
                { cat: "แดง", price: 399.0 },
                { cat: "ขาว", price: 499.0 },
-               { cat: "เหลือง", price: 599.0 },
+               { cat: "เหลือง", price: 599.0 }
             ]
          },
          {
@@ -869,7 +870,7 @@ class Merchant extends Component {
                         <div style={{ textAlign: "right" }}>
                            <CloseIcon
                               style={{ cursor: "pointer" }}
-                              onClick={this.editProductPopupDrawer.bind(
+                              onClick={this.customizeProductPopupDrawer.bind(
                                  this,
                                  false
                               )}
@@ -911,18 +912,27 @@ class Merchant extends Component {
                            </React.Fragment>
                         ))}
                         <Card style={{ margin: "20px 5px", padding: "20px" }}>
-                           <Typography variant="h5">
-                              ชื่อรูปแบบสินค้า
-                           </Typography>
+                           <div
+                              style={{ textAlign: "left", marginLeft: "15px" }}
+                           >
+                              <TextField
+                                 id="standard-name"
+                                 label="ชื่อรูปแบบสินค้า"
+                                 className={classes.textField}
+                                 value={this.state.productType || null}
+                                 //   onChange={handleChange('name')}
+                                 margin="normal"
+                                 style={{ marginBottom: "-1px" }}
+                              />
+                           </div>
+
                            <Divider />
 
                            {this.state.productCategory ? (
                               this.state.productCategory.map(each => (
                                  <div
                                     style={{
-                                       display: "flex",
-                                       justifyContent: "space-between",
-                                       flexGrow: "2"
+                                       display: "flex"
                                     }}
                                  >
                                     <TextField
@@ -949,14 +959,22 @@ class Merchant extends Component {
                                        variant="outlined"
                                        fullWidth
                                     />
+                                    <Fab
+                                       aria-label="Add"
+                                       style={{
+                                          margin: "auto 10px",
+                                          height: "auto"
+                                       }}
+                                    >
+                                       {/* <AddIcon /> */}
+                                       {<RemoveIcon />}
+                                    </Fab>
                                  </div>
                               ))
                            ) : (
                               <div
                                  style={{
-                                    display: "flex",
-                                    justifyContent: "space-between",
-                                    flexGrow: "2"
+                                    display: "flex"
                                  }}
                               >
                                  <TextField
@@ -985,14 +1003,59 @@ class Merchant extends Component {
                                  />
                               </div>
                            )}
-
-                           <Button
-                              variant="contained"
-                              color="primary"
-                              className={classes.button}
+                           <div
+                              style={{
+                                 display: "flex"
+                              }}
                            >
-                              เพิ่มแบบสินค้าใหม่
-                           </Button>
+                              <TextField
+                                 id="outlined-name"
+                                 label="none"
+                                 className={classes.textField}
+                                 margin="normal"
+                                 variant="outlined"
+                                 style={{
+                                    marginRight: "15px",
+                                    visibility: "hidden"
+                                 }}
+                              />
+                              <TextField
+                                 id="outlined-name"
+                                 label="none"
+                                 className={classes.textField}
+                                 margin="normal"
+                                 variant="outlined"
+                                 fullWidth
+                                 style={{ visibility: "hidden" }}
+                              />
+                              <Fab
+                                 aria-label="Add"
+                                 style={{
+                                    margin: "auto 10px",
+                                    height: "auto"
+                                 }}
+                              >
+                                 <AddIcon />
+                              </Fab>
+                           </div>
+
+                           {this.state.productCategory ? (
+                              <Button
+                                 variant="contained"
+                                 color="primary"
+                                 className={classes.button}
+                              >
+                                 แก้ไขแบบสินค้า
+                              </Button>
+                           ) : (
+                              <Button
+                                 variant="contained"
+                                 color="primary"
+                                 className={classes.button}
+                              >
+                                 เพิ่มแบบสินค้าใหม่
+                              </Button>
+                           )}
                         </Card>
 
                         <Button
