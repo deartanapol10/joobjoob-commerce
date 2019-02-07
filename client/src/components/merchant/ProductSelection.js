@@ -128,7 +128,10 @@ class Merchant extends Component {
          productPrice: "",
          productOption: "",
          //newProductPopup
-         n: 1
+         n: 1,
+         //customizeProductPopup
+         productType: "",
+         productCategory: ""
       };
    }
 
@@ -680,16 +683,34 @@ class Merchant extends Component {
       );
 
       const tempOptions = [
-         { label: "ขนาด", type: "size", category: ["s", "m", "l", "xl"] },
+         {
+            label: "ขนาด",
+            type: "size",
+            category: [
+               { cat: "s", price: 100.0 },
+               { cat: "m", price: 200.0 },
+               { cat: "l", price: 300.0 },
+               { cat: "xl", price: 400.0 }
+            ]
+         },
          {
             label: "สี",
             type: "color",
-            category: ["แดง", "ขาว", "เหลือง", "ส้ม"]
+            category: [
+               { cat: "แดง", price: 399.0 },
+               { cat: "ขาว", price: 499.0 },
+               { cat: "เหลือง", price: 599.0 },
+            ]
          },
          {
             label: "iPhone",
             type: "iphone",
-            category: ["iPhone 6", "iPhone 6S", "iPhone 7", "iPhone X"]
+            category: [
+               { cat: "iPhone 6", price: 599.0 },
+               { cat: "iPhone 6s", price: 699.0 },
+               { cat: "iPhone 7", price: 799.0 },
+               { cat: "iPhone 8", price: 799.0 }
+            ]
          },
          ,
       ];
@@ -861,19 +882,31 @@ class Merchant extends Component {
                         </Typography>
                         {tempOptions.map((option, index) => (
                            <React.Fragment>
-                              <Card
-                                 style={{
-                                    display: "flex",
-                                    justifyContent: "space-between",
-                                    padding: "10px 30px"
-                                 }}
-                              >
-                                 <Typography variant="h5">
-                                    {option.type}
-                                 </Typography>
-                                 <Typography variant="p">
-                                    {" " + option.category + ","}
-                                 </Typography>
+                              <Card>
+                                 <CardActionArea
+                                    style={{
+                                       display: "flex",
+                                       justifyContent: "space-between",
+                                       padding: "10px 30px"
+                                    }}
+                                    onClick={e => {
+                                       this.setState({
+                                          productType: option.type,
+                                          productCategory: option.category
+                                       });
+                                    }}
+                                 >
+                                    <Typography variant="h5">
+                                       {option.type}
+                                    </Typography>
+                                    <div style={{ display: "flex" }}>
+                                       {option.category.map(each => (
+                                          <Typography variant="p">
+                                             {" " + each.cat + ","}
+                                          </Typography>
+                                       ))}
+                                    </div>
+                                 </CardActionArea>
                               </Card>
                            </React.Fragment>
                         ))}
@@ -882,38 +915,77 @@ class Merchant extends Component {
                               ชื่อรูปแบบสินค้า
                            </Typography>
                            <Divider />
-                           <div
-                              style={{
-                                 display: "flex",
-                                 justifyContent: "space-between",
-                                 flexGrow: "2"
-                              }}
-                           >
-                              <TextField
-                                 id="outlined-name"
-                                 label="รูปแบบสินค้า"
-                                 // value={this.state.productInfo.price}
-                                 className={classes.textField}
-                                 // onChange={this.handleTextFieldChange(
-                                 //    "productPrice"
-                                 // )}
-                                 margin="normal"
-                                 variant="outlined"
-                                 style={{ marginRight: "15px" }}
-                              />
-                              <TextField
-                                 id="outlined-name"
-                                 label="ราคา"
-                                 // value={this.state.productOption}
-                                 className={classes.textField}
-                                 // onChange={this.handleTextFieldChange(
-                                 //    "productOption"
-                                 // )}
-                                 margin="normal"
-                                 variant="outlined"
-                                 fullWidth
-                              />
-                           </div>
+
+                           {this.state.productCategory ? (
+                              this.state.productCategory.map(each => (
+                                 <div
+                                    style={{
+                                       display: "flex",
+                                       justifyContent: "space-between",
+                                       flexGrow: "2"
+                                    }}
+                                 >
+                                    <TextField
+                                       id="outlined-name"
+                                       label="รูปแบบสินค้า"
+                                       value={each.cat}
+                                       className={classes.textField}
+                                       // onChange={this.handleTextFieldChange(
+                                       //    "productPrice"
+                                       // )}
+                                       margin="normal"
+                                       variant="outlined"
+                                       style={{ marginRight: "15px" }}
+                                    />
+                                    <TextField
+                                       id="outlined-name"
+                                       label="ราคา"
+                                       value={each.price}
+                                       className={classes.textField}
+                                       // onChange={this.handleTextFieldChange(
+                                       //    "productOption"
+                                       // )}
+                                       margin="normal"
+                                       variant="outlined"
+                                       fullWidth
+                                    />
+                                 </div>
+                              ))
+                           ) : (
+                              <div
+                                 style={{
+                                    display: "flex",
+                                    justifyContent: "space-between",
+                                    flexGrow: "2"
+                                 }}
+                              >
+                                 <TextField
+                                    id="outlined-name"
+                                    label="รูปแบบสินค้า"
+                                    // value={each.cat}
+                                    className={classes.textField}
+                                    // onChange={this.handleTextFieldChange(
+                                    //    "productPrice"
+                                    // )}
+                                    margin="normal"
+                                    variant="outlined"
+                                    style={{ marginRight: "15px" }}
+                                 />
+                                 <TextField
+                                    id="outlined-name"
+                                    label="ราคา"
+                                    // value={each.price}
+                                    className={classes.textField}
+                                    // onChange={this.handleTextFieldChange(
+                                    //    "productOption"
+                                    // )}
+                                    margin="normal"
+                                    variant="outlined"
+                                    fullWidth
+                                 />
+                              </div>
+                           )}
+
                            <Button
                               variant="contained"
                               color="primary"
