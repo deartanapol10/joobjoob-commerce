@@ -120,7 +120,8 @@ class Merchant extends Component {
          shippings: shippingMethods,
          selectedShipping: "เลือกการส่ง",
          shippingName: "เลือกการส่ง",
-         shippingCost: 0
+         shippingCost: 0,
+         isAddShippingPopup: false
       };
    }
 
@@ -305,7 +306,11 @@ class Merchant extends Component {
    };
 
    AddShipping = event => {
-      console.log("please add shipping method");
+      this.setState({ isAddShippingPopup: true });
+   };
+
+   addShippingPopupDrawer = open => {
+      this.setState({ isAddShippingPopup: open });
    };
 
    handleItemAmount = (add, id) => {
@@ -586,6 +591,164 @@ class Merchant extends Component {
                   </CardActions>
                </Card>
             ))}
+         </React.Fragment>
+      );
+
+      const addShippingPopup = (
+         <React.Fragment>
+            <Drawer
+               anchor="bottom"
+               open={this.state.isAddShippingPopup}
+               onClose={this.addShippingPopupDrawer.bind(this, false)}
+            >
+               <div
+                  tabIndex={0}
+                  role="button"
+                  onClick={this.addShippingPopupDrawer.bind(this, false)}
+                  onKeyDown={this.addShippingPopupDrawer.bind(this, false)}
+               />
+               {
+                  <div className={classes.drawerContainer}>
+                     <div style={{ textAlign: "right" }}>
+                        <CloseIcon
+                           style={{ cursor: "pointer" }}
+                           onClick={this.addShippingPopupDrawer.bind(
+                              this,
+                              false
+                           )}
+                        />
+                     </div>
+
+                     <Typography variant="h5">เพิ่ม/แก้ไขการส่งใหม่</Typography>
+
+                     {!this.state.shippings && (
+                        <Typography variant="p">
+                           กรุณากรอกการส่งอย่างน้อย 1 แบบ
+                        </Typography>
+                     )}
+
+                     {this.state.shippings ? (
+                        this.state.shippings.map(each => (
+                           <div
+                              style={{
+                                 display: "flex"
+                              }}
+                           >
+                              <TextField
+                                 id="outlined-name"
+                                 label="การส่ง"
+                                 value={each.name}
+                                 className={classes.textField}
+                                 // onChange={this.handleTextFieldChange(
+                                 //    "productPrice"
+                                 // )}
+                                 margin="normal"
+                                 variant="outlined"
+                                 style={{ marginRight: "15px" }}
+                              />
+                              <TextField
+                                 id="outlined-name"
+                                 label="ราคา"
+                                 value={each.cost}
+                                 className={classes.textField}
+                                 // onChange={this.handleTextFieldChange(
+                                 //    "productOption"
+                                 // )}
+                                 margin="normal"
+                                 variant="outlined"
+                                 fullWidth
+                              />
+                              <Fab
+                                 aria-label="Add"
+                                 style={{
+                                    margin: "auto 10px",
+                                    height: "auto"
+                                 }}
+                              >
+                                 {/* <AddIcon /> */}
+                                 {<RemoveIcon />}
+                              </Fab>
+                           </div>
+                        ))
+                     ) : (
+                        <div
+                           style={{
+                              display: "flex"
+                           }}
+                        >
+                           <TextField
+                              id="outlined-name"
+                              label="การส่ง"
+                              // value={each.cat}
+                              className={classes.textField}
+                              // onChange={this.handleTextFieldChange(
+                              //    "productPrice"
+                              // )}
+                              margin="normal"
+                              variant="outlined"
+                              style={{ marginRight: "15px" }}
+                           />
+                           <TextField
+                              id="outlined-name"
+                              label="ราคา"
+                              // value={each.price}
+                              className={classes.textField}
+                              // onChange={this.handleTextFieldChange(
+                              //    "productOption"
+                              // )}
+                              margin="normal"
+                              variant="outlined"
+                              fullWidth
+                           />
+                        </div>
+                     )}
+                     <div
+                        style={{
+                           display: "flex"
+                        }}
+                     >
+                        <TextField
+                           id="outlined-name"
+                           label="none"
+                           className={classes.textField}
+                           margin="normal"
+                           variant="outlined"
+                           style={{
+                              marginRight: "15px",
+                              visibility: "hidden"
+                           }}
+                        />
+                        <TextField
+                           id="outlined-name"
+                           label="none"
+                           className={classes.textField}
+                           margin="normal"
+                           variant="outlined"
+                           fullWidth
+                           style={{ visibility: "hidden" }}
+                        />
+                        <Fab
+                           aria-label="Add"
+                           style={{
+                              margin: "auto 10px",
+                              height: "auto"
+                           }}
+                        >
+                           <AddIcon />
+                        </Fab>
+                     </div>
+
+                     <Button
+                        variant="contained"
+                        color="primary"
+                        className={classes.button}
+                        fullWidth
+                     >
+                        เสร็จสิ้น
+                     </Button>
+                  </div>
+               }
+            </Drawer>
          </React.Fragment>
       );
 
@@ -874,6 +1037,8 @@ class Merchant extends Component {
                      </Toolbar>
                   </AppBar>
                </div>
+
+               {addShippingPopup}
             </main>
          </React.Fragment>
       );
