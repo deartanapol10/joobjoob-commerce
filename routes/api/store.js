@@ -64,7 +64,7 @@ router.post(
 // @route   PUT api/store/
 // @desc    Update a store
 // @access  private
-router.put(
+router.patch(
   "/:storeId",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
@@ -96,31 +96,5 @@ router.delete(
     });
   }
 );
-
-// @route   GET api/product/
-// @desc    Get all products
-// @access  public
-router.get("/:id", (req, res) => {
-  User.findById(req.params.id).then(user => {
-    res.json(user.store);
-  });
-});
-
-// @route   POST api/product/
-// @desc    Post a product
-// @access  public
-router.post("/:id", (req, res) => {
-  User.findById(req.params.id).then(user => {
-    var storeField = {
-      name: req.body.name
-    };
-
-    user.store.push(storeField);
-
-    user.save().then(user => {
-      res.json(user.store);
-    });
-  });
-});
 
 module.exports = router;

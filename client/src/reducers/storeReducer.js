@@ -1,46 +1,46 @@
 import {
-  GET_ORDER,
-  LOADING,
-  CHANGE_ORDER_STATUS,
-  CREATE_ORDER,
-  GET_ALL_ORDERS
+  GET_STORE,
+  STORE_LOADING,
+  CREATE_STORE,
+  DELETE_STORE,
+  UPDATE_STORE
 } from "../actions/types";
 
 const initialState = {
-  order: [],
-  orders: [],
+  stores: [],
+  store: {},
   loading: false
 };
 
 export default function(state = initialState, action) {
   switch (action.type) {
-    case GET_ORDER:
-      return {
-        ...state,
-        order: action.payload,
-        loading: false
-      };
-    case LOADING:
+    case STORE_LOADING:
       return {
         ...state,
         loading: true
       };
-    case CHANGE_ORDER_STATUS:
+    case GET_STORE:
       return {
         ...state,
-        orders: action.payload,
+        stores: action.payload,
         loading: false
       };
-    case CREATE_ORDER:
+    case CREATE_STORE:
       return {
         ...state,
-        order: action.payload,
+        store: action.payload,
         loading: false
       };
-    case GET_ALL_ORDERS:
+    case DELETE_STORE:
       return {
         ...state,
-        opders: action.payload,
+        store: action.payload,
+        loading: false
+      };
+    case UPDATE_STORE:
+      return {
+        ...state,
+        store: action.payload,
         loading: false
       };
     default:

@@ -450,6 +450,35 @@ router.delete(
   }
 );
 
+router.patch(
+  "/category/:main",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    try {
+      User.findById(req.user.id).then(user => {
+        if (
+          user.category.filter(row => row.main === req.params.main).length === 0
+        ) {
+          return res
+            .status(400)
+            .json({ error: `${req.params.main} does not exist` });
+        }
+
+        // Get index
+        const index = user.category
+          .map(item => item.main)
+          .indexOf(req.params.main);
+
+        user.category[index] = req.body;
+
+        user.save().then(user => res.json(user.category));
+      });
+    } catch (err) {
+      res.json(err);
+    }
+  }
+);
+
 // //Login form
 // router.get("/login", (req, res) => {
 //    res.render("login");
