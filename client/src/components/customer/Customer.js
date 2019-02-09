@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-// import { Link } from "react-router-dom";
 import { getOrder } from "../../actions/orderAction";
 import { connect } from "react-redux";
 import Spinner from "../common/Spinner";
@@ -29,14 +28,14 @@ import {
 } from "@material-ui/core";
 
 import SALogo from "../../images/sa-logo.png";
-import Item1 from "../../images/item-1.jpg";
-import Item2 from "../../images/item-2.jpg";
+import itemImage01 from "../../images/item-01.jpg";
+import itemImage02 from "../../images/item-02.jpg";
 
 import PaymentForm from "../common/PaymentForm";
 import AddressForm from "../common/AddressForm";
 import Success from "../common/Success";
 
-import styles from "../style/styles";
+import styles from "./styles";
 
 const items = [
   {
@@ -45,14 +44,14 @@ const items = [
       "สินค้าที่ชื่อยาวที่สุดในโลกที่คุณไม่เคยเห็นมาก่อนแล้วคุณจะตกใจว่าทำไมมันยาวได้ขนาดนี้",
     price: 499.49,
     amount: 1,
-    image: Item1
+    image: itemImage01
   },
   {
     id: 2,
     name: "Lorem Ipsum",
     price: 299.5,
     amount: 2,
-    image: Item2
+    image: itemImage02
   }
 ];
 
@@ -192,7 +191,7 @@ class Customer extends Component {
 
   render() {
     const { classes } = this.props;
-    const { order, loading } = this.props;
+    const { order, loading } = this.props.order;
 
     if (order === null || loading) {
       return <CircularProgress className={classes.loading} />;
@@ -205,7 +204,7 @@ class Customer extends Component {
           name: order.products[i].product.productName,
           price: order.products[i].product.price,
           amount: order.products[i].quantity,
-          image: Item1
+          image: itemImage01
         });
       }
       return (

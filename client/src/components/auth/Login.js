@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
+import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
+import { login } from "../../actions/authAction";
 
 class Login extends Component {
   constructor() {
@@ -38,11 +40,11 @@ class Login extends Component {
     e.preventDefault();
 
     const userData = {
-      email: this.state.email,
-      password: this.state.password
+      username: "tarksb",
+      password: "123456"
     };
 
-    this.props.loginUser(userData);
+    this.props.login(userData);
   }
 
   render() {
@@ -68,4 +70,11 @@ class Login extends Component {
   }
 }
 
-export default connect()(Login);
+const mapStateToProps = state => ({
+  auth: state.auth
+});
+
+export default connect(
+  mapStateToProps,
+  { login }
+)(withRouter(Login));

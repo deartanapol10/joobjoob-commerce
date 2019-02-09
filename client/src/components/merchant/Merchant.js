@@ -1,40 +1,67 @@
-import React, { Component } from "react";
+// lodash for Array Management
+import _ from "lodash";
 
+import React, { Component } from "react";
+import { Link } from "react-router-dom";
+
+// moment for Time & Calendar Management
+import moment from "moment";
+import "moment/locale/th";
+
+// Combine className in function classNames(className1, className2)
 import classNames from "classnames";
 
+// Import Material UI core components
 import {
    AppBar,
-   Toolbar,
-   IconButton,
-   Typography,
-   MenuItem,
-   Menu,
-   Button,
    Avatar,
-   Tabs,
-   Tab,
-   Paper,
+   Button,
    Card,
    CardContent,
    CardMedia,
    Checkbox,
+   Drawer,
+   Divider,
    FormControlLabel,
+   IconButton,
+   InputBase,
+   List,
+   ListItem,
+   ListItemIcon,
    ListItemText,
+   ListItemSecondaryAction,
+   ListSubheader,
+   Menu,
+   MenuItem,
+   MenuList,
    Modal,
+   Paper,
+   Tab,
+   Tabs,
    TextField,
-   MenuList
+   Toolbar,
+   Typography,
+   withStyles
 } from "@material-ui/core";
 
-import CreateIcon from "@material-ui/icons/Create";
+import Fab from "@material-ui/core/Fab";
 
-import { fade } from "@material-ui/core/styles/colorManipulator";
-import { withStyles } from "@material-ui/core/styles";
-
+// Import Icons
 import AddIcon from "@material-ui/icons/Add";
 import AddCircleIcon from "@material-ui/icons/AddCircle";
+import CancelIcon from "@material-ui/icons/Cancel";
+import CreateIcon from "@material-ui/icons/Create";
+import CloseIcon from "@material-ui/icons/Close";
+import InboxIcon from "@material-ui/icons/MoveToInbox";
+import MenuIcon from "@material-ui/icons/Menu";
+import MailIcon from "@material-ui/icons/Mail";
+import PrintIcon from "@material-ui/icons/Print";
+import SearchIcon from "@material-ui/icons/Search";
 
+// Import Logo
 import SALogo from "../../images/sa-logo.png";
 
+// Import Mockup Data
 import {
    orderStatus,
    paymentStatus,
@@ -44,510 +71,77 @@ import {
    optionsList
 } from "./data";
 
-const styles = theme => ({
-   layout: {
-      height: "100vh",
-      display: "flex",
-      flexDirection: "column"
-   },
-   header: {
-      backgroundColor: theme.palette.primary[100]
-   },
-   footer: {
-      backgroundColor: theme.palette.primary[200]
-   },
-   content: {
-      flex: 1,
-      overflow: "auto",
-      background: "#f5f5f5",
-      padding: theme.spacing.unit * 2
-   },
-   grow: {
-      flexGrow: 1
-   },
-   selectAllPaper: {},
-   cardSection: {
-      backgroundColor: "#999999",
-      padding: theme.spacing.unit,
-      height: "100%"
-   },
-   card: {
-      minWidth: 275,
-      marginBottom: theme.spacing.unit,
-      display: "flex",
-      alignItems: "flex-start"
-   },
-   cardContent: {
-      width: "100%"
-   },
-   rowCheckbox: {
-      paddingTop: 0,
-      paddingLeft: 0
-   },
-   menuButton: {
-      marginLeft: -12,
-      marginRight: theme.spacing.unit * 2
-   },
-   avatar: {
-      backgroundColor: fade(theme.palette.common.white, 0.85)
-   },
-   menuIcon: {
-      paddingLeft: 0,
-      paddingRight: 8
-   },
-   appBarButton: {
-      padding: "0 12px",
-      marginRight: theme.spacing.unit * 2
-   },
-   statusButton: {
-      fontSize: "0.675rem",
-      fontWeight: "300",
-      padding: "0 5px",
-      minWidth: 24,
-      minHeight: 24
-   },
-   checkbox: {
-      paddingRight: 0
-   },
-   formLabel: {
-      paddingLeft: theme.spacing.unit * 2
-   },
-   lastItem: {
-      marginRight: 0
-   },
-   title: {
-      display: "none",
-      [theme.breakpoints.up("sm")]: {
-         display: "block"
-      }
-   },
-   titleMarginBottom: {
-      marginBottom: theme.spacing.unit
-   },
-   titleMarginTop: {
-      marginTop: theme.spacing.unit * 2
-   },
-   search: {
-      position: "relative",
-      borderRadius: theme.shape.borderRadius,
-      backgroundColor: fade(theme.palette.common.white, 0.35),
-      "&:hover": {
-         backgroundColor: fade(theme.palette.common.white, 0.55)
-      },
-      marginRight: theme.spacing.unit * 2,
-      marginLeft: 0,
-      width: "100%",
-      [theme.breakpoints.up("sm")]: {
-         marginLeft: theme.spacing.unit * 3,
-         width: "auto"
-      }
-   },
-   searchIcon: {
-      width: 40,
-      height: "100%",
-      position: "absolute",
-      pointerEvents: "none",
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center"
-   },
-   inputRoot: {
-      color: "inherit",
-      width: "100%"
-   },
-   inputInput: {
-      paddingTop: theme.spacing.unit,
-      paddingRight: theme.spacing.unit,
-      paddingBottom: theme.spacing.unit,
-      paddingLeft: theme.spacing.unit * 5,
-      transition: theme.transitions.create("width"),
-      fontWeight: 300,
-      fontSize: "0.875rem",
-      width: "100%",
-      [theme.breakpoints.up("md")]: {
-         width: 200
-      }
-   },
-   sectionDesktop: {
-      display: "none",
-      [theme.breakpoints.up("md")]: {
-         display: "flex"
-      }
-   },
-   sectionMobile: {
-      display: "flex",
-      [theme.breakpoints.up("md")]: {
-         display: "none"
-      }
-   },
-   flexColumn: {
-      flexDirection: "column"
-   },
-   created: {
-      backgroundColor: "#555",
-      "&:hover": {
-         backgroundColor: fade("#555555", 0.55)
-      }
-   },
-   submitted: {
-      backgroundColor: "red",
-      "&:hover": {
-         backgroundColor: fade("#ff0000", 0.55)
-      }
-   },
-   shipped: {
-      backgroundColor: "green",
-      "&:hover": {
-         backgroundColor: fade("#00ff00", 0.55)
-      }
-   },
-   success: {
-      backgroundColor: "grey",
-      "&:hover": {
-         backgroundColor: fade("#999999", 0.55)
-      }
-   },
-   pending: {
-      display: "none"
-   },
-   wait: {
-      backgroundColor: "blue",
-      "&:hover": {
-         backgroundColor: fade("#0000ff", 0.55)
-      }
-   },
-   confirmed: {
-      backgroundColor: "green",
-      "&:hover": {
-         backgroundColor: fade("#00ff00", 0.55)
-      }
-   },
-   paymentButton: {
-      marginLeft: theme.spacing.unit
-   },
-   receiptDetailLess: {
-      marginTop: theme.spacing.unit,
-      display: "flex",
-      justifyContent: "space-between"
-   },
-   textLeft: {
-      textAlign: "left"
-   },
-   textRight: {
-      textAlign: "right"
-   },
-   marginLeft: {
-      marginLeft: theme.spacing.unit * 2
-   },
-   marginRight: {
-      marginRight: theme.spacing.unit * 2
-   },
-   selectAll: {
-      display: "flex",
-      alignItems: "center"
-   },
-   orderPopup: {
-      position: "absolute",
-      width: "80%",
-      boxShadow: theme.shadows[5],
-      padding: theme.spacing.unit * 2,
-      top: "50%",
-      left: "50%",
-      transform: "translate(-50%, -50%)",
-      "&:focus": {
-         outline: "none"
-      },
-      textAlign: "center"
-   },
-   orderPopupButton: {
-      padding: "0 12px",
-      marginTop: theme.spacing.unit * 3
-   },
-   textField: {},
-   menuItem: {
-      "&:focus": {
-         backgroundColor: theme.palette.secondary[300],
-         "& $primary, & $icon": {
-            color: theme.palette.common.white
-         }
-      }
-   },
-   primary: {},
-   icon: {},
-   prevCustomerPaper: {
-      height: "30vh",
-      overflow: "scroll"
-   },
-   blankOrder: {
-      marginTop: theme.spacing.unit * 2,
-      marginBottom: theme.spacing.unit * 2
-   },
-   newOrderButton: {
-      marginTop: theme.spacing.unit * 2
-   },
-   cardButton: {
-      backgroundColor: "white",
-      color: "inherit",
-      padding: 0,
-      marginBottom: theme.spacing.unit
-   },
-   popupCard: {
-      display: "flex",
-      width: "100%",
-      boxShadow: theme.shadows[2]
-   },
-   itemCard: {
-      marginBottom: theme.spacing.unit
-   },
-   popupCardContent: {
-      flex: "1 0 auto",
-      textAlign: "left",
-      width: 160
-   },
-   popupCardDetails: {
-      display: "flex",
-      flexDirection: "column"
-   },
-   popupCardImage: {
-      width: 85
-   },
-   productsPaper: {
-      boxShadow: "none",
-      maxHeight: "40vh",
-      overflow: "scroll",
-      padding: 2,
-      marginTop: theme.spacing.unit * 2
-   }
-});
+// Import JSS styles
+import styles from "./styles";
 
-const orderSteps = ["กรุณากรอกชื่อลูกค้า", "รถเข็น", "สรุปข้อมูล"];
+// Init moment to local time format
+moment.locale("th");
 
+// Function to return a component for Tab
 function TabContainer(props) {
    return <React.Fragment>{props.children}</React.Fragment>;
 }
 
-class App extends Component {
-   state = {
-      anchorEl: null,
-      mobileMoreAnchorEl: null,
-      value: 0,
-      checked: [],
-      orders: originalOrders,
-      filteredOrders: [],
-      orderPopup: false,
-      customerNames: customerNamesList,
-      newCustomerName: "",
-      activeOrderStep: 0,
-      addProductPopup: false,
-      createProductPopup: false,
-      productOptionPopup: false,
-      cart: [],
-      cartTotal: 0,
-      products: productsList,
-      options: optionsList,
-      selectedProduct: {},
-      newProduct: {}
-   };
+class Merchant extends Component {
+   constructor(props) {
+      super(props);
 
-   getOrderStepContent = step => {
-      switch (step) {
-         case 0:
-            return (
-               <React.Fragment>
-                  <TextField
-                     required
-                     id="customer-name-field"
-                     label="ชื่อลูกค้า"
-                     value={this.state.newCustomerName}
-                     className={this.props.classes.textField}
-                     margin="normal"
-                     variant="outlined"
-                     onChange={this.handleNewName}
-                     fullWidth
-                  />
-                  <Typography
-                     variant="body2"
-                     className={classNames(
-                        this.props.classes.titleMarginBottom,
-                        this.props.classes.titleMarginTop
-                     )}
-                  >
-                     ลูกค้าเดิม
-                  </Typography>
-                  <Paper className={this.props.classes.prevCustomerPaper}>
-                     <MenuList>
-                        {this.state.customerNames.map(customer => (
-                           <MenuItem
-                              className={this.props.classes.menuItem}
-                              key={customer.id}
-                              onClick={this.handlePrevName.bind(
-                                 this,
-                                 customer.name
-                              )}
-                           >
-                              <ListItemText
-                                 classes={{
-                                    primary: this.props.classes.primary
-                                 }}
-                                 primary={customer.name}
-                              />
-                           </MenuItem>
-                        ))}
-                     </MenuList>
-                  </Paper>
-                  {this.state.newCustomerName === "" ? (
-                     <Button
-                        variant="contained"
-                        color="secondary"
-                        className={classNames(
-                           this.props.classes.orderPopupButton
-                        )}
-                        disabled
-                        fullWidth
-                     >
-                        ต่อไป
-                     </Button>
-                  ) : (
-                     <Button
-                        variant="contained"
-                        color="secondary"
-                        className={classNames(
-                           this.props.classes.orderPopupButton
-                        )}
-                        fullWidth
-                        onClick={this.handleNextStep}
-                     >
-                        ต่อไป
-                     </Button>
-                  )}
-               </React.Fragment>
-            );
-         case 1:
-            return (
-               <React.Fragment>
-                  <Paper className={this.props.classes.productsPaper}>
-                     {this.state.cart.length > 0 &&
-                        this.state.cart.map(item => (
-                           <Card
-                              key={item.id}
-                              className={classNames(
-                                 this.props.classes.popupCard,
-                                 this.props.classes.itemCard
-                              )}
-                           >
-                              <CardMedia
-                                 className={this.props.classes.popupCardImage}
-                                 image={item.image}
-                                 title={item.name}
-                              />
-                              <div
-                                 className={this.props.classes.popupCardDetails}
-                              >
-                                 <CardContent
-                                    className={
-                                       this.props.classes.popupCardContent
-                                    }
-                                 >
-                                    <Typography variant="body2" noWrap>
-                                       {item.name}
-                                    </Typography>
-                                    <Typography variant="body1">
-                                       {item.price} บาท
-                                    </Typography>
-                                 </CardContent>
-                              </div>
-                           </Card>
-                        ))}
-                  </Paper>
-                  <Button
-                     variant="fab"
-                     mini
-                     color="secondary"
-                     aria-label="Add"
-                     className={this.props.classes.newOrderButton}
-                     onClick={this.handleAddProductOpen}
-                  >
-                     <AddIcon />
-                  </Button>
-                  <Typography
-                     variant="body2"
-                     className={classNames(
-                        this.props.classes.titleMarginBottom
-                     )}
-                  >
-                     เพิ่มสินค้า
-                  </Typography>
-                  {this.state.cart.length === 0 ? (
-                     <Button
-                        variant="contained"
-                        color="secondary"
-                        className={classNames(
-                           this.props.classes.orderPopupButton
-                        )}
-                        disabled
-                        fullWidth
-                     >
-                        ต่อไป
-                     </Button>
-                  ) : (
-                     <Button
-                        variant="contained"
-                        color="secondary"
-                        className={classNames(
-                           this.props.classes.orderPopupButton
-                        )}
-                        fullWidth
-                        onClick={this.handleNextStep}
-                     >
-                        ต่อไป
-                     </Button>
-                  )}
-               </React.Fragment>
-            );
-         case 2:
-            return (
-               <React.Fragment>
-                  <div>step 3</div>
-                  <Button
-                     variant="contained"
-                     color="secondary"
-                     className={classNames(this.props.classes.orderPopupButton)}
-                     fullWidth
-                     onClick={this.handleOrderSubmit}
-                  >
-                     ต่อไป
-                  </Button>
-               </React.Fragment>
-            );
-         default:
-            return (
-               <React.Fragment>
-                  <Typography variant="body2">
-                     ระบบขัดข้อง กรุณาลองใหม่อีกครั้ง
-                  </Typography>
-               </React.Fragment>
-            );
-      }
-   };
+      // Ref for inputs
+      this.myRef = React.createRef();
 
+      this.state = {
+         statusAnchorEl: null,
+         menuAnchorEl: null,
+         mobileMoreAnchorEl: null,
+         value: 0,
+         checked: [],
+         orders: originalOrders,
+         filteredOrders: [],
+         customerNames: customerNamesList,
+         newCustomerName: "",
+         activeOrderStep: 0,
+         addProductPopup: false,
+         createProductPopup: false,
+         productOptionPopup: false,
+         cart: [],
+         cartTotal: 0,
+         products: productsList,
+         options: optionsList,
+         selectedProduct: {},
+         newProduct: {},
+         print: {},
+         term: "",
+         results: [],
+         //addNewBillPopup
+         customerNameField: ""
+      };
+   }
+
+   //// ---- MENU POPUP FUNCTIONS ---- ////
+
+   // Open status change menu
    handleStatusMenuOpen = event => {
-      this.setState({ anchorEl: event.currentTarget });
+      this.setState({ statusAnchorEl: event.currentTarget });
    };
 
+   // Open menu
+   handleMenuOpen = event => {
+      this.setState({ menuAnchorEl: event.currentTarget });
+   };
+
+   // Close all menus
    handleMenuClose = () => {
-      this.setState({ anchorEl: null });
-      this.handleMobileMenuClose();
+      this.setState({ statusAnchorEl: null });
+      this.setState({ menuAnchorEl: null });
    };
 
-   handleMobileMenuOpen = event => {
-      this.setState({ mobileMoreAnchorEl: event.currentTarget });
-   };
+   //// **** END MENU POPUP FUNCTIONS **** ////
 
-   handleMobileMenuClose = () => {
-      this.setState({ mobileMoreAnchorEl: null });
-   };
+   //// ---- TABS FUNCTIONS ---- ////
 
-   handleChange = (event, value) => {
+   // Change tab - Clear previous filteredOrders > set new tab value >
+   // filter orders > clear checked orders > close all menus
+   handleTabChange = (event, value) => {
       this.setState({ filteredOrders: [] });
       this.setState({ value });
       this.filterOrders(value);
@@ -555,6 +149,8 @@ class App extends Component {
       this.handleMenuClose();
    };
 
+   // Change status of order(s) - Get status to change > wait until all orders' status are change >
+   // change tab
    async handleStatusChange(id) {
       const { checked, orders, value } = this.state;
       if (checked.length !== 0) {
@@ -573,16 +169,22 @@ class App extends Component {
                   })
                },
                () => {
-                  //this.filterOrders(this.state.value);
+                  //this.filterOrders(value);
                }
             );
          }
-         this.handleChange(null, this.state.value);
+         this.handleTabChange(null, value);
       } else {
          this.handleMenuClose();
       }
    }
 
+   //// **** END TABS FUNCTIONS **** ////
+
+   //// ---- CHECKBOX FUNCTIONS ---- ///
+
+   // Toggle individual checkbox - Check if there's orderID in checked orders >
+   // if none, push new order into checked orders > if yes, remove it.
    handleToggle = value => () => {
       const { checked } = this.state;
       const currentIndex = checked.indexOf(value);
@@ -599,152 +201,130 @@ class App extends Component {
       });
    };
 
+   // Select all checkboxes in current tab - Copy all orderId from filteredOrders into checked orders >
+   // else clear checked orders
    handleSelectAll = event => {
-      const { checked } = this.state;
+      const { filteredOrders } = this.state;
       if (event.target.checked) {
          this.setState(state => ({
-            checked: this.state.filteredOrders.map(o => o.orderID)
+            checked: filteredOrders.map(o => o.orderID)
          }));
          return;
       }
       this.setState({ checked: [] });
    };
 
+   // Select all checkboxes function for non-checkbox button(s)
+   handleSelectAllCheckbox = () => {
+      this.setState(state => ({
+         checked: this.state.filteredOrders.map(o => o.orderID)
+      }));
+      this.handleMenuClose();
+   };
+
+   //// **** END CHECKBOX FUNCTIONS **** ///
+
+   //// ---- FILTER ORDERS FUNCTIONS ---- ////
+
+   // Filter from all orders - Filter orders that match with selected tab status
    filterOrders = statusIndex => {
-      const { orders, filteredOrders } = this.state;
-      const newOrder = orders.filter(
+      const { orders } = this.state;
+      const newFilteredOrders = orders.filter(
          order => order.status === orderStatus[statusIndex].name.en
       );
-      this.setState({ filteredOrders: newOrder });
+      this.setState({ filteredOrders: newFilteredOrders });
    };
 
-   handleOrderPopupOpen = () => {
-      this.setState({ orderPopup: true });
-   };
+   //// **** END FILTER ORDERS FUNCTIONS **** ////
 
-   handleOrderPopupClose = () => {
+   //// ---- SEARCH FUNCTIONS ---- ///
+
+   // Reset search term and results
+   resetSearchTerm = () => {
       this.setState({
-         orderPopup: false
-         /*activeOrderStep: 0,*/
+         term: "",
+         results: []
       });
    };
 
-   handleAddProductOpen = () => {
-      this.setState({ addProductPopup: true });
+   // Focus on search input
+   focusSearchInput = () => {
+      this.myRef.focus();
    };
 
-   handleAddProductClose = () => {
-      this.setState({ addProductPopup: false });
-   };
-
-   handleProductOptionOpen = () => {
-      this.setState({ productOptionPopup: true });
-   };
-
-   handleProductOptionClose = () => {
-      this.setState({ productOptionPopup: false });
-   };
-
-   handleNewName = event => {
-      this.setState({ newCustomerName: event.target.value });
-   };
-
-   handlePrevName = name => {
-      this.setState({ newCustomerName: name });
-   };
-
-   handleNextStep = () => {
-      let { activeOrderStep } = this.state;
-      activeOrderStep += 1;
-      this.setState({ activeOrderStep });
-   };
-
-   handleSelectProduct = productID => {
-      const { products } = this.state;
-      const selectedProduct = products.filter(
-         product => product.id === productID
-      );
+   // Search - set term > filter results from orders in 300ms delay
+   handleInputChange = event => {
       this.setState(
          {
-            selectedProduct: selectedProduct[0]
+            term: event.target.value
          },
          () => {
-            if (this.state.selectedProduct.option.length > 0) {
-               this.handleAddProductClose();
-               this.handleProductOptionOpen();
-            } else {
-               this.setState(
-                  prevState => ({
-                     cart: [...prevState.cart, this.state.selectedProduct],
-                     cartTotal:
-                        prevState.cartTotal + this.state.selectedProduct.price
-                  }),
-                  () => {
-                     this.handleAddProductClose();
-                  }
+            setTimeout(() => {
+               if (this.state.term.length < 1) return this.resetSearchTerm();
+
+               const results = _.filter(
+                  this.state.orders,
+                  _.flow(
+                     _.identity,
+                     _.values,
+                     _.join,
+                     _.toLower,
+                     _.partialRight(_.includes, this.state.term)
+                  )
                );
-            }
+
+               this.setState({
+                  results
+               });
+            }, 300);
          }
       );
    };
 
-   handleOrderSubmit = () => {
-      const { cart, cartTotal, newCustomerName, orders } = this.state;
-      const newOrder = {
-         status: "created",
-         name: newCustomerName,
-         items: cart,
-         price: cartTotal
-      };
-
-      this.setState(
-         prevState => ({
-            orders: [...prevState.orders, newOrder]
-         }),
-         () => {
-            this.handleOrderPopupClose();
-            this.resetState();
-            this.filterOrders(this.state.value);
-         }
-      );
-   };
-
-   resetState = () => {
-      this.setState({
-         newCustomerName: "",
-         activeOrderStep: 0,
-         cart: [],
-         cartTotal: 0,
-         selectedProduct: {},
-         newProduct: {}
-      });
-   };
+   //// **** END SEARCH FUNCTIONS **** ////
 
    componentDidMount() {
       this.filterOrders(this.state.value);
    }
 
+   orderInfo(e, order) {
+      console.log(order);
+      this.props.history.push({
+         pathname: "/order",
+         state: {
+            order
+         }
+      });
+   }
+
+   toggleBottomDrawer = open => {
+      this.setState({
+         isBottomDrawerOpened: open
+      });
+   };
+
+   handleTextFieldChange = name => event => {
+      this.setState({ customerNameField: event.target.value });
+   };
+
    render() {
       const { classes } = this.props;
       const {
-         anchorEl,
-         mobileMoreAnchorEl,
+         statusAnchorEl,
+         menuAnchorEl,
+         checked,
          value,
-         orders,
          filteredOrders,
-         customerNames,
-         newCustomerName,
-         activeOrderStep,
-         products,
-         options,
-         selectedProduct,
-         cart,
-         newProduct
+         term,
+         results
       } = this.state;
-      const isMenuOpen = Boolean(anchorEl);
-      const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+      const isStatusMenuOpen = Boolean(statusAnchorEl);
+      const isMenuOpen = Boolean(menuAnchorEl);
 
-      function statusColor(status) {
+      const newOrder = props => <Link to="/products" {...props} />;
+
+      // Translate status into color
+      function orderStatusColor(status) {
          switch (status) {
             case "created":
                return classes.created;
@@ -759,13 +339,15 @@ class App extends Component {
          }
       }
 
-      function statusText(status) {
+      // Translate status into Thai
+      function orderStatusText(status) {
          const alternateStatus = orderStatus.filter(
             thaiStatus => thaiStatus.name.en === status
          );
          return alternateStatus[0].name.th;
       }
 
+      // Translate payment status into color
       function paymentColor(status, payment) {
          if (status === "submitted") {
             switch (payment) {
@@ -783,6 +365,7 @@ class App extends Component {
          }
       }
 
+      // Translate payment status into Thai
       function paymentText(payment) {
          const alternatePayment = paymentStatus.filter(
             thaiPayment => thaiPayment.name.en === payment
@@ -794,18 +377,26 @@ class App extends Component {
          }
       }
 
-      const renderMenu = (
+      // Calculate time passes from latest updated time to current time
+      function calculateDate(startDate) {
+         const time = moment(startDate, "DDMMYYYYhhmm").fromNow();
+         return time;
+      }
+
+      // Render status change menu popup
+      const renderStatusMenu = (
          <Menu
-            anchorEl={anchorEl}
+            anchorEl={statusAnchorEl}
             anchorOrigin={{ vertical: "top", horizontal: "right" }}
             transformOrigin={{ vertical: "top", horizontal: "right" }}
-            open={isMenuOpen}
+            open={isStatusMenuOpen}
             onClose={this.handleMenuClose}
          >
             {orderStatus.map(status => (
                <MenuItem
                   onClick={this.handleStatusChange.bind(this, status.id)}
                   key={status.id}
+                  className={classes.menuList}
                >
                   {status.name.th}
                </MenuItem>
@@ -813,81 +404,349 @@ class App extends Component {
          </Menu>
       );
 
-      // const renderMobileMenu = (
-      // 	<Menu
-      // 		anchorEl={mobileMoreAnchorEl}
-      // 		anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-      // 		transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-      // 		open={isMobileMenuOpen}
-      // 		onClose={this.handleMobileMenuClose}
-      // 		>
-      // 		<MenuItem onClick={this.handleStatusMenuOpen}>
-      // 			<CreateIcon className={classes.menuIcon} />
-      // 			<p>เปลี่ยนสถานะ</p>
-      // 		</MenuItem>
-      // 	</Menu>
-      // );
+      // Render menu popup
+      const renderMenu = (
+         <Menu
+            anchorEl={menuAnchorEl}
+            anchorOrigin={{ vertical: "top", horizontal: "right" }}
+            transformOrigin={{ vertical: "top", horizontal: "right" }}
+            open={isMenuOpen}
+            onClose={this.handleMenuClose}
+         >
+            <MenuItem
+               key="new_bill"
+               className={classes.menuList}
+               // component={newOrder}
+               onClick={this.toggleBottomDrawer.bind(this, true)}
+            >
+               เปิดบิลใหม่
+            </MenuItem>
+            <MenuItem
+               key="select_all"
+               onClick={this.handleSelectAllCheckbox.bind(this)}
+               className={classes.menuList}
+            >
+               เลือกทั้งหมด
+            </MenuItem>
+            <MenuItem key="print_selected" className={classes.menuList}>
+               พิมพ์ที่เลือก
+            </MenuItem>
+         </Menu>
+      );
 
-      const table = (
+      // Render search results from this.state.results
+      const searchResults = (
          <React.Fragment>
-            {filteredOrders.map(order => (
-               <Card className={classes.card} key={order.orderID}>
-                  <Checkbox
-                     onChange={this.handleToggle(order.orderID)}
-                     checked={this.state.checked.indexOf(order.orderID) !== -1}
-                     value={order.orderID}
-                     className={classes.checkbox}
-                  />
-                  <CardContent className={classes.cardContent}>
+            {results.map(result => (
+               <Card
+                  key="result.orderID"
+                  className={classes.resultCard}
+                  onClick={e => {
+                     this.orderInfo(e, result);
+                  }}
+               >
+                  <div>
                      <Button
                         variant="contained"
                         color="primary"
                         className={classNames(
-                           statusColor(order.status),
-                           classes.statusButton
+                           orderStatusColor(result.status),
+                           classes.orderStatusButton,
+                           classes.textLeft
                         )}
                      >
-                        {statusText(order.status)}
-                     </Button>
-                     <Button
-                        variant="contained"
-                        color="primary"
-                        className={classNames(
-                           paymentColor(order.status, order.paymentStatus),
-                           classes.statusButton,
-                           classes.paymentButton
-                        )}
-                     >
-                        {paymentText(order.paymentStatus)}
-                     </Button>
-                     <div className={classes.receiptDetailLess}>
-                        <Typography variant="body2">{order.name}</Typography>
                         <Typography
-                           variant="body1"
-                           className={classes.textRight}
-                        >
-                           {order.price} บาท
-                        </Typography>
-                     </div>
-                  </CardContent>
+                           variant="body2"
+                           className={classes.orderNumber}
+                        >{`#${result.orderID}`}</Typography>
+                     </Button>
+                  </div>
+                  <div className={classes.resultDetail}>
+                     <Typography
+                        variant="body2"
+                        className={classes.orderClientName}
+                     >
+                        {result.name}
+                     </Typography>
+                     <Typography
+                        variant="body1"
+                        className={classNames(
+                           classes.textRight,
+                           classes.orderPrice
+                        )}
+                     >
+                        {result.price} บาท
+                     </Typography>
+                  </div>
                </Card>
             ))}
          </React.Fragment>
       );
 
+      // Render each order for current tab
+      const orderCard = (
+         <React.Fragment>
+            {/* Sort orders before map, by compare updated time */}
+            {filteredOrders
+               .sort(
+                  (a, b) =>
+                     moment(b.updatedTime, "DDMMYYYYhhmm").format("X") -
+                     moment(a.updatedTime, "DDMMYYYYhhmm").format("X")
+               )
+               .map(order => (
+                  <Card
+                     className={
+                        checked.indexOf(order.orderID) === -1
+                           ? classes.orderCard
+                           : classNames(
+                                classes.orderCard,
+                                classes.orderCardActive
+                             )
+                     }
+                     key={order.orderID}
+                     onClick={e => {
+                        this.orderInfo(e, order);
+                     }}
+                  >
+                     <Checkbox
+                        onChange={this.handleToggle(order.orderID)}
+                        checked={checked.indexOf(order.orderID) !== -1}
+                        value={order.orderID}
+                        className={
+                           checked.indexOf(order.orderID) === -1
+                              ? classes.orderCheckbox
+                              : classNames(
+                                   classes.orderCheckbox,
+                                   classes.orderCheckboxActive
+                                )
+                        }
+                     />
+                     <CardContent className={classes.orderCardContent}>
+                        <div>
+                           <Button
+                              variant="contained"
+                              color="primary"
+                              className={classNames(
+                                 orderStatusColor(order.status),
+                                 classes.orderStatusButton,
+                                 classes.textLeft
+                              )}
+                           >
+                              <Typography
+                                 variant="body2"
+                                 className={classes.orderNumber}
+                              >{`#${order.orderID}`}</Typography>
+                           </Button>
+                           <span>
+                              <Typography
+                                 variant="body1"
+                                 className={classNames(
+                                    orderStatusColor(order.status),
+                                    classes.orderStatusText,
+                                    classes.textLeft
+                                 )}
+                              >
+                                 {` ${orderStatusText(order.status)}`}
+                              </Typography>
+                           </span>
+                           <IconButton
+                              aria-haspopup="true"
+                              color="inherit"
+                              className={classNames(
+                                 classes.orderPrintButton,
+                                 classes.floatRight
+                              )}
+                           >
+                              <PrintIcon />
+                           </IconButton>
+                        </div>
+                        <div className={classes.clearBoth} />
+                        <div className={classes.orderDetail}>
+                           <Typography
+                              variant="body2"
+                              className={classes.orderClientName}
+                           >
+                              {order.name}
+                           </Typography>
+                           <Typography
+                              variant="body1"
+                              className={classNames(
+                                 classes.textRight,
+                                 classes.orderPrice
+                              )}
+                           >
+                              {order.price} บาท
+                           </Typography>
+                        </div>
+                        <div className={classes.orderDetail}>
+                           <Typography
+                              variant="subheading"
+                              className={classes.orderTimeStamp}
+                           >
+                              {calculateDate(order.updatedTime)}
+                           </Typography>
+                        </div>
+                     </CardContent>
+                  </Card>
+               ))}
+         </React.Fragment>
+      );
+
+      const addNewBillPopup = (
+         <Drawer
+            anchor="bottom"
+            open={this.state.isBottomDrawerOpened}
+            onClose={this.toggleBottomDrawer.bind(this, false)}
+         >
+            <div
+               tabIndex={0}
+               role="button"
+               onClick={this.toggleBottomDrawer.bind(this, false)}
+               onKeyDown={this.toggleBottomDrawer.bind(this, false)}
+            />
+            {
+               <React.Fragment>
+                  <div className={classes.drawerContainer}>
+                     <div style={{ textAlign: "right" }}>
+                        <CloseIcon
+                           onClick={this.toggleBottomDrawer.bind(this, false)}
+                           style={{ cursor: "pointer" }}
+                        />
+                     </div>
+                     <Typography variant="h5">เปิดบิลใหม่</Typography>
+                     <TextField
+                        id="outlined-name"
+                        label="ชื่อลูกค้า"
+                        value={this.state.customerNameField}
+                        className={classes.textField}
+                        onChange={this.handleTextFieldChange("customerName")}
+                        margin="normal"
+                        variant="outlined"
+                        fullWidth
+                     />
+                     <Typography variant="h6">ลูกค้าล่าสุด</Typography>
+                     <Card className={classes.card}>
+                        <CardContent
+                           style={{
+                              display: "flex",
+                              flexDirection: "column",
+                              marginLeft: "6px"
+                           }}
+                        >
+                           {
+                              // From const orderCard
+                              <React.Fragment>
+                                 {filteredOrders
+                                    .sort(
+                                       (a, b) =>
+                                          moment(
+                                             b.updatedTime,
+                                             "DDMMYYYYhhmm"
+                                          ).format("X") -
+                                          moment(
+                                             a.updatedTime,
+                                             "DDMMYYYYhhmm"
+                                          ).format("X")
+                                    )
+                                    .filter((order, index) => index < 3)
+                                    .map(order => (
+                                       <Card
+                                          className={
+                                             checked.indexOf(order.orderID) ===
+                                             -1
+                                                ? classes.orderCard
+                                                : classNames(
+                                                     classes.orderCard,
+                                                     classes.orderCardActive
+                                                  )
+                                          }
+                                          key={order.orderID}
+                                          onClick={e => {
+                                             this.setState({
+                                                customerNameField: order.name
+                                             });
+                                          }}
+                                       >
+                                          <CardContent
+                                             className={
+                                                classes.orderCardContent
+                                             }
+                                          >
+                                             <div>
+                                                <Button
+                                                   variant="contained"
+                                                   color="primary"
+                                                   className={classNames(
+                                                      orderStatusColor(
+                                                         order.status
+                                                      ),
+                                                      classes.orderStatusButton,
+                                                      classes.textLeft
+                                                   )}
+                                                >
+                                                   <Typography
+                                                      variant="body2"
+                                                      className={
+                                                         classes.orderNumber
+                                                      }
+                                                   >{`#${
+                                                      order.orderID
+                                                   }`}</Typography>
+                                                </Button>
+                                             </div>
+                                             <div
+                                                className={classes.clearBoth}
+                                             />
+                                             <div
+                                                className={classes.orderDetail}
+                                             >
+                                                <Typography
+                                                   variant="body2"
+                                                   className={
+                                                      classes.orderClientName
+                                                   }
+                                                >
+                                                   {order.name}
+                                                </Typography>
+                                             </div>
+                                          </CardContent>
+                                       </Card>
+                                    ))}
+                              </React.Fragment>
+                           }
+                        </CardContent>
+                     </Card>
+
+                     <Button
+                        variant="contained"
+                        color="primary"
+                        className={classes.button}
+                        component={newOrder}
+                        fullWidth
+                     >
+                        ต่อไป
+                     </Button>
+                  </div>
+               </React.Fragment>
+            }
+         </Drawer>
+      );
+
       return (
          <React.Fragment>
+            {/* Wrapper */}
             <main className={classes.layout}>
+               {/* Fixed top header for logo, search input and menus */}
                <AppBar
                   position="relative"
                   color="secondary"
                   className={classes.header}
                >
                   <Toolbar>
+                     {/* Logo and name of shop */}
                      <IconButton
-                        className={classes.menuButton}
+                        className={classes.avatarMenuButton}
                         color="inherit"
-                        aria-label="Open drawer"
                      >
                         <Avatar
                            alt="Something Apparel"
@@ -896,43 +755,65 @@ class App extends Component {
                         />
                      </IconButton>
                      <Typography
-                        className={classes.title}
+                        className={classes.appBarShopTitle}
                         variant="body2"
                         color="inherit"
                         noWrap
                      >
-                        Shippee Shop Name
+                        Something Apparel
                      </Typography>
-                     {/*
-                        <div className={classes.search}>
-                        <div className={classes.searchIcon}>
-                        <SearchIcon />
-                        </div>
+
+                     {/* Search input */}
+                     <div className={classes.search}>
+                        {/* If there's an input, display close button  */}
+                        {/* Else display search button with focus input function  */}
+                        {term !== "" ? (
+                           <IconButton
+                              aria-haspopup="true"
+                              disableRipple
+                              onClick={this.resetSearchTerm}
+                              color="inherit"
+                              className={classes.searchIcon}
+                           >
+                              <CloseIcon />
+                           </IconButton>
+                        ) : (
+                           <IconButton
+                              aria-haspopup="true"
+                              disableRipple
+                              color="inherit"
+                              onClick={this.focusSearchInput}
+                              className={classes.searchIcon}
+                           >
+                              <SearchIcon />
+                           </IconButton>
+                        )}
                         <InputBase
-                        placeholder="ค้นหาบิล..."
-                        classes={{
-                        root: classes.inputRoot,
-                        input: classes.inputInput,
-                        }}
+                           placeholder="ชื่อลูกค้า / เลขบิล"
+                           classes={{
+                              root: classes.inputRoot,
+                              input: classes.inputInput
+                           }}
+                           autoFocus
+                           inputRef={searchInput => (this.myRef = searchInput)}
+                           onChange={this.handleInputChange}
+                           value={term}
                         />
-                        </div>
-                        */}
+                     </div>
+
                      <div className={classes.grow} />
+
+                     {/* Menu for desktop version */}
                      <div className={classes.sectionDesktop}>
                         <Button
                            aria-owns={isMenuOpen ? "material-appbar" : null}
                            aria-haspopup="true"
                            onClick={this.handleStatusMenuOpen}
                            color="inherit"
-                           className={classes.appBarButton}
+                           className={classes.appBarMenuButton}
                         >
-                           <CreateIcon className={classes.menuIcon} />
-                           <Typography
-                              className={classes.title}
-                              variant="body1"
-                              color="inherit"
-                              noWrap
-                           >
+                           <CreateIcon className={classes.appBarMenuIcon} />
+                           <Typography variant="body1" color="inherit" noWrap>
                               เปลี่ยนสถานะ
                            </Typography>
                         </Button>
@@ -940,18 +821,13 @@ class App extends Component {
                            aria-haspopup="true"
                            color="inherit"
                            className={classNames(
-                              classes.appBarButton,
-                              classes.lastItem
+                              classes.appBarMenuButton,
+                              classes.appBarMenuLastItem
                            )}
                         >
-                           <AddCircleIcon className={classes.menuIcon} />
-                           <Typography
-                              className={classes.title}
-                              variant="body1"
-                              color="inherit"
-                              noWrap
-                           >
-                              เพิ่มออเดอร์
+                           <MenuIcon className={classes.appBarMenuIcon} />
+                           <Typography variant="body1" color="inherit" noWrap>
+                              เมนูเพิ่มเติม
                            </Typography>
                         </Button>
                      </div>
@@ -965,28 +841,54 @@ class App extends Component {
                         </IconButton>
                         <IconButton
                            aria-haspopup="true"
-                           onClick={this.handleOrderPopupOpen}
+                           onClick={this.handleMenuOpen}
                            color="inherit"
                         >
-                           <AddCircleIcon />
+                           <MenuIcon />
                         </IconButton>
                      </div>
                   </Toolbar>
                </AppBar>
+
+               {/* Content Display */}
                <div
                   className={classNames(
                      classes.sectionMobile,
                      classes.flexColumn
                   )}
                >
+                  {/* Search results display */}
+                  {results.length > 0 && (
+                     <div>
+                        <Paper className={classes.resultPaper}>
+                           <Typography
+                              className={classes.resultTitle}
+                              variant="h5"
+                              color="inherit"
+                              noWrap
+                           >
+                              ผลการค้นหา
+                           </Typography>
+                           {searchResults}
+                        </Paper>
+                     </div>
+                  )}
+
+                  {/* Status tab display */}
                   <div className={classes.tabBar}>
-                     <Tabs value={value} onChange={this.handleChange} fullWidth>
+                     <Tabs
+                        value={value}
+                        onChange={this.handleTabChange}
+                        fullWidth
+                     >
                         {orderStatus.map(status => (
                            <Tab key={status.id} label={status.name.th} />
                         ))}
                      </Tabs>
                   </div>
                </div>
+
+               {/* Order list display */}
                <Paper
                   className={classNames(
                      classes.selectAllPaper,
@@ -994,39 +896,71 @@ class App extends Component {
                      classes.flexColumn
                   )}
                >
+                  {/* If there's no orders in the tab, display "ไม่มีออเดอร์" text */}
                   {filteredOrders.length === 0 ? (
-                     <Typography
-                        variant="body2"
-                        className={classes.titleMarginBottom}
-                        align="center"
-                        className={classes.blankOrder}
-                     >
-                        ไม่มีออเดอร์
-                     </Typography>
-                  ) : (
+                     <div className={classes.orderBlank}>
+                        <CancelIcon className={classes.orderBlankIcon} />
+                        <Typography
+                           variant="body1"
+                           align="center"
+                           color="inherit"
+                        >
+                           ไม่มีออเดอร์
+                        </Typography>
+                     </div>
+                  ) : /* Else show select all checkbox with a condition */
+                  /* If there's order checked, display "เลือก " with selected orders amount */
+                  checked.length === 0 ? (
                      <div className={classes.selectAll}>
                         <FormControlLabel
                            control={
                               <Checkbox
                                  checked={
-                                    this.state.checked.length ===
-                                    filteredOrders.length
+                                    checked.length === filteredOrders.length
                                  }
                                  onChange={this.handleSelectAll}
+                                 className={classes.selectAllCheckbox}
                               />
                            }
-                           label={
-                              this.state.checked.length === 0
-                                 ? "เลือกทั้งหมด"
-                                 : `เลือก ${this.state.checked.length}`
+                           label="เลือกทั้งหมด"
+                           className={classes.selectAllLabel}
+                        />
+                     </div>
+                  ) : (
+                     <div
+                        className={classNames(
+                           classes.selectAll,
+                           classes.selectAllActive
+                        )}
+                     >
+                        <FormControlLabel
+                           control={
+                              <Checkbox
+                                 checked={
+                                    checked.length === filteredOrders.length
+                                 }
+                                 onChange={this.handleSelectAll}
+                                 className={classNames(
+                                    classes.selectAllCheckbox,
+                                    classes.selectAllCheckboxActive
+                                 )}
+                              />
                            }
-                           className={classes.formLabel}
+                           label={`เลือก ${checked.length}`}
+                           className={classNames(
+                              classes.selectAllLabel,
+                              classes.selectAllLabelActive
+                           )}
                         />
                      </div>
                   )}
                </Paper>
+
+               {/* Render menus */}
+               {renderStatusMenu}
                {renderMenu}
-               {/*renderMobileMenu*/}
+
+               {/* Display scrollable ontent */}
                <div className={classes.content}>
                   <div
                      className={classNames(
@@ -1034,173 +968,38 @@ class App extends Component {
                         classes.flexColumn
                      )}
                   >
-                     {value === 0 && <TabContainer>{table}</TabContainer>}
-                     {value === 1 && <TabContainer>{table}</TabContainer>}
-                     {value === 2 && <TabContainer>{table}</TabContainer>}
-                     {value === 3 && <TabContainer>{table}</TabContainer>}
-                  </div>
+                     {/* Tab content separated by value */}
+                     {value === 0 && <TabContainer>{orderCard}</TabContainer>}
+                     {value === 1 && <TabContainer>{orderCard}</TabContainer>}
+                     {value === 2 && <TabContainer>{orderCard}</TabContainer>}
+                     {value === 3 && <TabContainer>{orderCard}</TabContainer>}
 
-                  <div
-                     className={classNames(
-                        classes.sectionMobile,
-                        classes.newOrder
-                     )}
-                  >
-                     <Modal
-                        aria-labelledby="new-order-popup"
-                        aria-describedby="add-new-order"
-                        open={this.state.orderPopup}
-                        onClose={this.handleOrderPopupClose}
-                     >
-                        <Paper className={classes.orderPopup}>
-                           {activeOrderStep < orderSteps.length && (
-                              <Typography
-                                 variant="title"
-                                 className={classes.titleMarginBottom}
-                              >
-                                 {orderSteps[activeOrderStep]}
-                              </Typography>
-                           )}
-                           {this.getOrderStepContent(activeOrderStep)}
-                        </Paper>
-                     </Modal>
-                  </div>
-
-                  <div
-                     className={classNames(
-                        classes.sectionMobile,
-                        classes.addProduct
-                     )}
-                  >
-                     <Modal
-                        aria-labelledby="add-product-to-cart"
-                        aria-describedby="add-existing-product-or-create-new-product"
-                        open={this.state.addProductPopup}
-                        onClose={this.handleAddProductClose}
-                     >
-                        <Paper
-                           className={classNames(
-                              classes.orderPopup,
-                              classes.addProductPopup
-                           )}
-                        >
-                           <Typography
-                              variant="title"
-                              className={classes.titleMarginBottom}
-                           >
-                              กรุณาเลือกสินค้า
-                           </Typography>
-                           <Paper className={classes.productsPaper}>
-                              {products.length > 0 &&
-                                 products.map(product => (
-                                    <Button
-                                       key={product.id}
-                                       className={classes.cardButton}
-                                       fullWidth
-                                       onClick={this.handleSelectProduct.bind(
-                                          this,
-                                          product.id
-                                       )}
-                                    >
-                                       <Card className={classes.popupCard}>
-                                          <CardMedia
-                                             className={classes.popupCardImage}
-                                             image={product.image}
-                                             title={product.name}
-                                          />
-                                          <div
-                                             className={
-                                                classes.popupCardDetails
-                                             }
-                                          >
-                                             <CardContent
-                                                className={
-                                                   classes.popupCardContent
-                                                }
-                                             >
-                                                <Typography
-                                                   variant="body2"
-                                                   noWrap
-                                                >
-                                                   {product.name}
-                                                </Typography>
-                                                <Typography variant="body1">
-                                                   {product.price} บาท
-                                                </Typography>
-                                             </CardContent>
-                                          </div>
-                                       </Card>
-                                    </Button>
-                                 ))}
-                           </Paper>
-                           <Button
-                              variant="fab"
-                              mini
-                              color="secondary"
-                              aria-label="Add"
-                              className={this.props.classes.newOrderButton}
-                              onClick={this.handleCreateProductOpen}
-                           >
-                              <AddIcon />
-                           </Button>
-                           <Typography
-                              variant="body2"
-                              className={classNames(
-                                 this.props.classes.titleMarginBottom
-                              )}
-                           >
-                              สร้างสินค้าใหม่
-                           </Typography>
-                        </Paper>
-                     </Modal>
-                  </div>
-
-                  <div
-                     className={classNames(
-                        classes.sectionMobile,
-                        classes.productOption
-                     )}
-                  >
-                     <Modal
-                        aria-labelledby="select-product-option"
-                        aria-describedby="select-product-option"
-                        open={this.state.productOptionPopup}
-                        onClose={this.handleProductOptionClose}
-                     >
-                        <Paper
-                           className={classNames(
-                              classes.orderPopup,
-                              classes.productOptionPopup
-                           )}
-                        >
-                           <Typography
-                              variant="title"
-                              className={classes.titleMarginBottom}
-                           >
-                              กรุณาเลือกตัวเลือกของสินค้า
-                           </Typography>
-                           <Paper className={classes.productsPaper} />
-                           <Button
-                              variant="contained"
-                              color="secondary"
-                              className={classNames(
-                                 this.props.classes.orderPopupButton
-                              )}
-                              fullWidth
-                              onClick={this.handleNextStep}
-                           >
-                              ต่อไป
-                           </Button>
-                        </Paper>
-                     </Modal>
+                     {/* Additional space at the bottom of content */}
+                     <div className={classes.bottomSpace} />
                   </div>
                </div>
 
-               <div className={classes.footer}>Footer</div>
+               {/* Display fixed footer */}
+               <div className={classes.footer}>
+                  <AppBar position="fixed" className={classes.footerAppBar}>
+                     <Toolbar className={classes.footerToolbar}>
+                        <Fab
+                           aria-label="Add"
+                           className={classes.footerFabButton}
+                           // component={newOrder}
+                           onClick={this.toggleBottomDrawer.bind(this, true)}
+                        >
+                           <AddIcon />
+                        </Fab>
+                     </Toolbar>
+                  </AppBar>
+               </div>
+
+               {addNewBillPopup}
             </main>
          </React.Fragment>
       );
    }
 }
 
-export default withStyles(styles)(App);
+export default withStyles(styles)(Merchant);

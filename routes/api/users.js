@@ -30,7 +30,6 @@ router.post("/register", (req, res) => {
   if (req.body.phoneNumber) fields.phoneNumber = req.body.phoneNumber;
   if (req.body.bankAccount) fields.bankAccount = req.body.bankAccount;
   fields.createdAt = Date.now();
-  // fields.updatedAt = Date.now();
 
   User.findOne({ username: req.body.username }).then(profile => {
     if (profile) {
@@ -110,6 +109,17 @@ router.post("/login", (req, res) => {
   });
 });
 
+// @route   GET api/user/info
+// @desc    Get user info
+// @access  Private
+router.get(
+  "/info",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    User.findById(req.user.id).then(user => res.json(user));
+  }
+);
+
 // @route   POST api/user/edit/:username
 // @desc    Edit user
 // @access  Private
@@ -152,48 +162,320 @@ router.post(
   }
 );
 
+// @route   POST api/user/bankAccount
+// @desc    Add a bankaccount
+// @access  Private
 router.post(
-  "/bankAccount/:id",
-  // passport.authenticate("jwt", { session: false }),
+  "/bankAccount",
+  passport.authenticate("jwt", { session: false }),
   (req, res) => {
-    const bankField = {};
-    if (req.body.bankName) bankField.bankName = req.body.bankName;
-    if (req.body.ownerName) bankField.ownerName = req.body.ownerName;
-    if (req.body.accountNumber)
-      bankField.accountNumber = req.body.accountNumber;
-
-    User.findById(req.params.id).then(user => {
-      if (user) {
+    try {
+      User.findById(req.user.id).then(user => {
+        if (
+          user.bankAccount
+            .map(row => row.accountNumber)
+            .indexOf(req.body.accountNumber) !== -1
+        ) {
+          return res.status(400).json({ error: "Already have an account" });
+        }
+        const bankField = {};
+        if (req.body.bankName) bankField.bankName = req.body.bankName;
+        if (req.body.ownerName) bankField.ownerName = req.body.ownerName;
+        if (req.body.accountNumber)
+          bankField.accountNumber = req.body.accountNumber;
         //Update
         user.bankAccount.push(bankField);
 
         user.save().then(user => {
           res.json(user.bankAccount);
         });
+      });
+    } catch (err) {
+      res.json({ error: err });
+    }
+  }
+);
+
+// @route   GET api/user/bankAccount
+// @desc    get all bank account
+// @access  Private
+router.get(
+  "/bankAccount",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    User.findById(req.user.id).then(user => {
+      res.json(user.bankAccount);
+    });
+  }
+);
+
+// @route   DELETE api/user/bankAccount
+// @desc    delete a bankaccount
+// @access  Private
+router.delete(
+  "/bankAccount/:accountNumber",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    User.findById(req.user.id).then(user => {
+      if (user.bankAccount.length === 0) {
+        return res.status(400).json({ error: "Don't have any bankaccount" });
+      } else if (
+        user.bankAccount
+          .map(row => row.accountNumber)
+          .indexOf(req.params.accountNumber) === -1
+      ) {
+        return res.status(400).json({ error: "Wrong account number" });
       }
+      // Get remove index
+      const removeIndex = user.bankAccount
+        .map(item => item.accountNumber.toString())
+        .indexOf(req.params.accountNumber);
+
+      // Splice out of array
+      user.bankAccount.splice(removeIndex, 1);
+
+      // Save
+      user.save().then(user => res.json(user.bankAccount));
+    });
+  }
+);
+
+// @route   Update api/user/bankAccount
+// @desc    delete a bankaccount
+// @access  Private
+router.patch(
+  "/bankAccount/:accountNumber",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    User.findById(req.user.id).then(user => {
+      if (
+        user.bankAccount.filter(
+          row => row.accountNumber === req.params.accountNumber
+        ).length === 0
+      ) {
+        return res.status(400).json({ error: "Wrong account number" });
+      }
+
+      // Get index
+      const index = user.bankAccount
+        .map(item => item.accountNumber)
+        .indexOf(req.params.accountNumber);
+
+      const updated = {
+        accountNumber: req.body.accountNumber
+          ? req.body.accountNumber
+          : user.bankAccount[index].accountNumber,
+        ownerName: req.body.ownerName
+          ? req.body.ownerName
+          : user.bankAccount[index].ownerName,
+        bankName: req.body.bankName
+          ? req.body.bankName
+          : user.bankAccount[index].bankName
+      };
+
+      user.bankAccount[index] = updated;
+
+      user.save().then(user => res.json(user.bankAccount));
+    });
+  }
+);
+
+router.get(
+  "/delivery",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    User.findById(req.user.id).then(user => {
+      res.json(user.delivery);
     });
   }
 );
 
 router.post(
-  "/deliveryType/:id",
-  // passport.authenticate("jwt", { session: false }),
+  "/delivery",
+  passport.authenticate("jwt", { session: false }),
   (req, res) => {
-    const deliveryField = {};
-    if (req.body.delivery_name)
-      deliveryField.delivery_name = req.body.delivery_name;
-    if (req.body.price) deliveryField.price = req.body.price;
-
-    User.findById(req.params.id).then(user => {
+    User.findById(req.user.id).then(user => {
+      if (
+        user.delivery
+          .map(row => row.deliveryName)
+          .indexOf(req.body.deliveryName) !== -1
+      ) {
+        return res
+          .status(400)
+          .json({ error: `${req.body.deliveryName} already exists` });
+      }
+      const deliveryField = {};
       if (user) {
+        if (req.body.deliveryName)
+          deliveryField.deliveryName = req.body.deliveryName;
+        if (req.body.price) deliveryField.price = req.body.price;
         //Update
-        user.deliveryType.push(deliveryField);
+        user.delivery.push(deliveryField);
 
         user.save().then(user => {
-          res.json(user.deliveryType);
+          res.json(user.delivery);
         });
       }
     });
+  }
+);
+
+router.delete(
+  "/delivery/:deliveryName",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    User.findById(req.user.id).then(user => {
+      if (user.delivery.length === 0) {
+        return res.status(400).json({ error: "Don't have any delivery" });
+      } else if (
+        user.delivery
+          .map(row => row.deliveryName)
+          .indexOf(req.params.deliveryName) === -1
+      ) {
+        return res
+          .status(400)
+          .json({ error: `${req.params.deliveryName} does not exists` });
+      }
+      // Get remove index
+      const removeIndex = user.delivery
+        .map(item => item.deliveryName.toString())
+        .indexOf(req.params.deliveryName);
+
+      // Splice out of array
+      user.delivery.splice(removeIndex, 1);
+
+      // Save
+      user.save().then(user => res.json(user.delivery));
+    });
+  }
+);
+
+router.patch(
+  "/delivery/:deliveryName",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    User.findById(req.user.id).then(user => {
+      if (
+        user.delivery.filter(
+          row => row.deliveryName === req.params.deliveryName
+        ).length === 0
+      ) {
+        return res
+          .status(400)
+          .json({ error: `${req.params.deliveryName} does not exists` });
+      }
+
+      // Get index
+      const index = user.delivery
+        .map(item => item.deliveryName)
+        .indexOf(req.params.deliveryName);
+
+      const updated = {
+        deliveryName: req.body.deliveryName
+          ? req.body.deliveryName
+          : user.delivery[index].deliveryName,
+        price: req.body.price ? req.body.price : user.delivery[index].price
+      };
+
+      user.delivery[index] = updated;
+
+      user.save().then(user => res.json(user.delivery));
+    });
+  }
+);
+
+// @route   GET api/user/category
+// @desc    Get all category
+// @access  Private
+router.get(
+  "/category",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    User.findById(req.user.id).then(user => res.json(user.category));
+  }
+);
+
+// @route   POST api/user/category
+// @desc    Create a category
+// @access  Private
+router.post(
+  "/category",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    User.findById(req.user.id).then(user => {
+      if (user.category.map(row => row.main).indexOf(req.body.main) !== -1) {
+        return res
+          .status(400)
+          .json({ error: `${req.body.main} already exists` });
+      }
+      const field = {};
+      if (req.body.main && req.body.sub) {
+        field.main = req.body.main;
+        field.sub = req.body.sub.split(",");
+      }
+
+      //Update
+      user.category.push(field);
+
+      user.save().then(user => {
+        res.json(user.category);
+      });
+    });
+  }
+);
+
+router.delete(
+  "/category/:main",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    User.findById(req.user.id).then(user => {
+      if (user.category.length === 0) {
+        return res.status(400).json({ error: "Don't have any category" });
+      } else if (
+        user.category.map(row => row.main).indexOf(req.params.main) === -1
+      ) {
+        return res.status(400).json({ error: "Wrong category name" });
+      }
+      // Get remove index
+      const removeIndex = user.category
+        .map(item => item.main)
+        .indexOf(req.params.main);
+
+      // Splice out of array
+      user.category.splice(removeIndex, 1);
+
+      // Save
+      user.save().then(user => res.json(user.category));
+    });
+  }
+);
+
+router.patch(
+  "/category/:main",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    try {
+      User.findById(req.user.id).then(user => {
+        if (
+          user.category.filter(row => row.main === req.params.main).length === 0
+        ) {
+          return res
+            .status(400)
+            .json({ error: `${req.params.main} does not exist` });
+        }
+
+        // Get index
+        const index = user.category
+          .map(item => item.main)
+          .indexOf(req.params.main);
+
+        user.category[index] = req.body;
+
+        user.save().then(user => res.json(user.category));
+      });
+    } catch (err) {
+      res.json(err);
+    }
   }
 );
 
