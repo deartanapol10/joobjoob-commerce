@@ -8,15 +8,10 @@ import {
 } from "./types";
 
 // GET all orders
-export const getAllOrders = token => dispatch => {
-  const header = {
-    headers: {
-      Authorization: token
-    }
-  };
+export const getAllOrders = () => dispatch => {
   dispatch(setOrderLoading());
   axios
-    .get("/api/orders", header)
+    .get("/api/orders")
     .then(res => {
       dispatch({
         type: GET_ALL_ORDERS,

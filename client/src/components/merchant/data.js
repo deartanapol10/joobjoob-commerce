@@ -419,6 +419,7 @@ export const originalOrders = [
             name: "Trouser",
             price: 100,
             amount: 2,
+            categoryGroup: "size",
             image: itemImage02
          },
          {
@@ -426,6 +427,7 @@ export const originalOrders = [
             name: "T-Shirt",
             price: 100,
             amount: 1,
+            categoryGroup: "size",
             image: itemImage01
          },
          {
@@ -433,6 +435,7 @@ export const originalOrders = [
             name: "Skirt",
             price: 100,
             amount: 1,
+            categoryGroup: "size",
             image: itemImage02
          }
       ]

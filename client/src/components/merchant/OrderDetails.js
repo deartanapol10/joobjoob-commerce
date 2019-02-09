@@ -2,7 +2,9 @@
 import _ from "lodash";
 
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
+import { connect } from 'react-redux'
+import PropTypes from 'prop-types'
 
 // moment for Time & Calendar Management
 import moment from "moment";
@@ -10,6 +12,8 @@ import "moment/locale/th";
 
 // Combine className in function classNames(className1, className2)
 import classNames from "classnames";
+
+import { getCategory } from '../../actions/categoryAction'
 
 // Import Material UI core components
 import {
@@ -121,7 +125,8 @@ class Merchant extends Component {
          selectedShipping: "เลือกการส่ง",
          shippingName: "เลือกการส่ง",
          shippingCost: 0,
-         isAddShippingPopup: false
+         isAddShippingPopup: false,
+         selectedCategory: "ไม่ระบุรูปแบบสินค้า",
       };
    }
 
@@ -291,19 +296,23 @@ class Merchant extends Component {
 
    //// **** END SEARCH FUNCTIONS **** ////
 
-   handleShippingSelect = name => event => {
+   handleShippingSelect = event => {
       const { shippings } = this.state;
-      if (isNaN(event.target.value) === false) {
-         const selectedShipping = shippings.find(
-            s => s.id === event.target.value
-         );
-         this.setState({
-            selectedShipping: event.target.value,
-            shippingName: selectedShipping.name,
-            shippingCost: selectedShipping.cost
-         });
-      }
+      // if (isNaN(event.target.value) === false) {
+      //    const selectedShipping = shippings.find(
+      //       s => s.id === event.target.value
+      //    );
+      this.setState({
+         selectedShipping: event.target.value,
+         // shippingName: selectedShipping.name,
+         // shippingCost: selectedShipping.cost
+      });
+      // }
    };
+
+   handleCategorySelelect = event => {
+      this.setState({ selectedCategory: event.target.value })
+   }
 
    AddShipping = event => {
       this.setState({ isAddShippingPopup: true });
@@ -320,6 +329,10 @@ class Merchant extends Component {
    componentDidMount() {
       const { order } = this.props.location.state;
       console.log(order), this.filterOrders(this.state.value);
+   }
+
+   componentWillMount() {
+      this.props.getCategory();
    }
 
    orderInfo(e, order) {
@@ -359,6 +372,7 @@ class Merchant extends Component {
       } = this.state;
       const isStatusMenuOpen = Boolean(statusAnchorEl);
       const isMenuOpen = Boolean(menuAnchorEl);
+      const { loading, category } = this.props.category
 
       const toOrders = props => <Link to="/merchant" {...props} />;
       const newOrder = props => <Link to="/products" {...props} />;
@@ -488,10 +502,8 @@ class Merchant extends Component {
                                  id="order-shipping-select"
                                  select
                                  className={classes.textField}
-                                 onChange={this.handleShippingSelect(
-                                    "shipping"
-                                 )}
-                                 value={selectedShipping}
+                                 onChange={this.handleCategorySelelect}
+                                 value={this.state.selectedCategory}
                                  SelectProps={{
                                     MenuProps: {
                                        className: classes.menu
@@ -500,17 +512,18 @@ class Merchant extends Component {
                                  margin="none"
                                  variant="outlined"
                               >
-                                 <MenuItem key={0} value="เลือกการส่ง" disabled>
+                                 <MenuItem key={0} value="ไม่มีรูปแบบสินค้า" disabled>
                                     ไม่ระบุรูปแบบสินค้า
                                  </MenuItem>
-                                 {shippings.map(shipping => (
+                                 {category.length > 0 && category.filter(c => c.main === item.categoryGroup)[0].sub.map(e => (
                                     <MenuItem
-                                       key={shipping.id}
-                                       value={shipping.id}
+                                       key={e}
+                                       value={e}
                                     >
-                                       {shipping.name}
+                                       {e}
                                     </MenuItem>
                                  ))}
+                                 {/* {console.log(category)} */}
                                  <MenuItem
                                     key={9999}
                                     value="เพิ่มการส่ง"
@@ -671,37 +684,37 @@ class Merchant extends Component {
                            </div>
                         ))
                      ) : (
-                        <div
-                           style={{
-                              display: "flex"
-                           }}
-                        >
-                           <TextField
-                              id="outlined-name"
-                              label="การส่ง"
-                              // value={each.cat}
-                              className={classes.textField}
-                              // onChange={this.handleTextFieldChange(
-                              //    "productPrice"
-                              // )}
-                              margin="normal"
-                              variant="outlined"
-                              style={{ marginRight: "15px" }}
-                           />
-                           <TextField
-                              id="outlined-name"
-                              label="ราคา"
-                              // value={each.price}
-                              className={classes.textField}
-                              // onChange={this.handleTextFieldChange(
-                              //    "productOption"
-                              // )}
-                              margin="normal"
-                              variant="outlined"
-                              fullWidth
-                           />
-                        </div>
-                     )}
+                           <div
+                              style={{
+                                 display: "flex"
+                              }}
+                           >
+                              <TextField
+                                 id="outlined-name"
+                                 label="การส่ง"
+                                 // value={each.cat}
+                                 className={classes.textField}
+                                 // onChange={this.handleTextFieldChange(
+                                 //    "productPrice"
+                                 // )}
+                                 margin="normal"
+                                 variant="outlined"
+                                 style={{ marginRight: "15px" }}
+                              />
+                              <TextField
+                                 id="outlined-name"
+                                 label="ราคา"
+                                 // value={each.price}
+                                 className={classes.textField}
+                                 // onChange={this.handleTextFieldChange(
+                                 //    "productOption"
+                                 // )}
+                                 margin="normal"
+                                 variant="outlined"
+                                 fullWidth
+                              />
+                           </div>
+                        )}
                      <div
                         style={{
                            display: "flex"
@@ -752,6 +765,9 @@ class Merchant extends Component {
          </React.Fragment>
       );
 
+      if (loading) {
+         return <div>Loading ...</div>
+      }
       return (
          <React.Fragment>
             {/* Wrapper */}
@@ -877,9 +893,7 @@ class Merchant extends Component {
                                     id="order-shipping-select"
                                     select
                                     className={classes.textField}
-                                    onChange={this.handleShippingSelect(
-                                       "shipping"
-                                    )}
+                                    onChange={this.handleShippingSelect}
                                     value={selectedShipping}
                                     SelectProps={{
                                        MenuProps: {
@@ -1045,4 +1059,13 @@ class Merchant extends Component {
    }
 }
 
-export default withStyles(styles)(Merchant);
+Merchant.propTypes = {
+   getCategory: PropTypes.func.isRequired,
+}
+
+const mapStateToProps = state => ({
+   category: state.category,
+})
+
+const WrappedStyle = withStyles(styles)(Merchant);
+export default connect(mapStateToProps, { getCategory })(withRouter(WrappedStyle));

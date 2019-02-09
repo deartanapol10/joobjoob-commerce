@@ -12,6 +12,7 @@ import { getCategory } from "../actions/categoryAction";
 import { login } from "../actions/authAction";
 import { getBankAccount } from "../actions/bankAccountAction";
 import { getDelivery } from "../actions/deliveryAction";
+import { getAllOrders } from '../actions/orderAction'
 
 class Test extends Component {
   componentDidMount() {
@@ -30,6 +31,7 @@ class Test extends Component {
     this.props.getCategory();
     this.props.getBankAccount();
     this.props.getDelivery();
+    this.props.getAllOrders()
   }
 
   render() {
@@ -61,6 +63,7 @@ export default connect(
     updateStore,
     getCategory,
     getBankAccount,
-    getDelivery
+    getDelivery,
+    getAllOrders
   }
 )(withRouter(Test));
