@@ -607,6 +607,143 @@ class Merchant extends Component {
          </React.Fragment>
       );
 
+      const paymentSelection = (
+         <React.Fragment>
+            <div style={{ display: "flex", justifyContent: "space-evenly" }}>
+               <Card
+                  style={{ width: "40%", padding: "20px", textAlign: "center" }}
+               >
+                  <Typography variant="h5">วันที่เปิดบิล</Typography>
+                  <Typography variant="p">
+                     {moment(order.createdTime, "DDMMYYYYhhmm").format("LL")}
+                  </Typography>
+               </Card>
+
+               <Card
+                  style={{ width: "40%", padding: "20px", textAlign: "center" }}
+               >
+                  <Typography variant="h5">วันหมดอายุ</Typography>
+                  <Typography variant="p">
+                     {moment(order.expiredAt, "DDMMYYYYhhmm").format("LL")}
+                  </Typography>
+               </Card>
+            </div>
+
+            <Typography
+               variant="h5"
+               style={{ textAlign: "center", margin: "30px" }}
+            >
+               เลือกบัญชีธนาคาร
+            </Typography>
+
+            <Card
+               style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  padding: "20px",
+                  textAlign: "right",
+                  marginBottom: "15px"
+               }}
+            >
+               <img
+                  src="http://lh3.googleusercontent.com/rDGtTFrrEEIhFXBqcF_jGDZbZXdU9DRIVnMZps9AQ_ir-FvV0cQwb54-5UBIh4sdwA=w300"
+                  width="75px"
+                  height="75px"
+               />
+               <span>
+                  <Typography variant="subtitle1">123 456789 012</Typography>
+                  <Typography variant="subtitle1">
+                     พี่ปั๊กกะเป้าเองจ้า
+                  </Typography>
+               </span>
+            </Card>
+
+            <Card style={{ padding: "30px", textAlign: "center" }}>
+               <Typography>
+                  <AddIcon />
+                  เพิ่มบัญชีธนาคาร
+               </Typography>
+            </Card>
+         </React.Fragment>
+      );
+
+      const shippingForm = (
+         <React.Fragment>
+            <Card className={classes.itemCard}>
+               <CardContent
+                  className={classes.itemCardContent}
+                  style={{
+                     display: "flex",
+                     flexDirection: "column",
+                     textAlign: "center"
+                  }}
+               >
+                  <Typography variant="h5" style={{ margin: "20px" }}>
+                     ข้อมูลจัดส่ง
+                  </Typography>
+                  <TextField
+                     id="item-comment"
+                     className={classNames(classes.margin, classes.textField)}
+                     variant="outlined"
+                     placeholder="ชื่อผู้รับ"
+                     style={{ marginBottom: "20px" }}
+                  />
+                  <TextField
+                     id="item-comment"
+                     className={classNames(classes.margin, classes.textField)}
+                     variant="outlined"
+                     placeholder="เบอร์ติดต่อ"
+                     style={{ marginBottom: "20px" }}
+                  />
+                  <TextField
+                     id="item-comment"
+                     className={classNames(classes.margin, classes.textField)}
+                     variant="outlined"
+                     placeholder="ที่อยู่จัดส่ง"
+                     style={{ marginBottom: "20px" }}
+                     multiline
+                     rows={4}
+                  />
+                  <TextField
+                     id="item-comment"
+                     className={classNames(classes.margin, classes.textField)}
+                     variant="outlined"
+                     placeholder="หมายเหตุ"
+                     style={{ marginBottom: "20px" }}
+                     multiline
+                     rows={3}
+                  />
+
+                  <Typography variant="h5" style={{ textAlign: "left" }}>
+                     วิธีจัดส่ง
+                  </Typography>
+
+                  <div
+                     style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center"
+                     }}
+                  >
+                     <Typography variant="p">
+                        {this.state.shippingName}
+                     </Typography>
+                     <TextField
+                        id="item-comment"
+                        className={classNames(
+                           classes.margin,
+                           classes.textField
+                        )}
+                        variant="outlined"
+                        placeholder="รหัสพัสดุ"
+                     />
+                  </div>
+               </CardContent>
+            </Card>
+         </React.Fragment>
+      );
+
       const addShippingPopup = (
          <React.Fragment>
             <Drawer
@@ -860,6 +997,12 @@ class Merchant extends Component {
                   >
                      {/* Tab content separated by value */}
                      {value === 0 && <TabContainer>{itemList}</TabContainer>}
+                     {value === 1 && (
+                        <TabContainer>{paymentSelection}</TabContainer>
+                     )}
+                     {value === 2 && (
+                        <TabContainer>{shippingForm}</TabContainer>
+                     )}
 
                      {/* Additional space at the bottom of content */}
                      <div className={classes.bottomSpace} />
