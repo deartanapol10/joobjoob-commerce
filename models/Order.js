@@ -56,14 +56,13 @@ const OrderSchema = new Schema({
         default: false
       },
       paymentTime: {
-        type: Date
+        type: String
       },
       trackingNumber: {
         type: String
       },
       createdAt: {
-        type: Date,
-        default: Date.now
+        type: String,
       },
       expiredAt: {
         type: Date,

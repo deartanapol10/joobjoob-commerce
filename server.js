@@ -5,7 +5,6 @@ const bodyParser = require("body-parser");
 const expressValidator = require("express-validator");
 const session = require("express-session");
 const passport = require("passport");
-// const multer = require('multer');
 // Import router file
 const orders = require("./routes/api/orders");
 const users = require("./routes/api/users");
@@ -55,6 +54,7 @@ app.use(expressValidator());
 //[Upload] show picture 
 //localhost:8000/uploads/1548591284172result-clipboard.png
 app.use('/uploads', express.static('uploads'));
+app.use('/showImgSlip', express.static('slipImg'));
 
 app.use("/api/users", users);
 app.use("/api/orders", orders);

@@ -3,11 +3,9 @@ const express = require("express");
 const datetime = require('node-datetime');
 const router = express.Router();
 const multer = require('multer');
-// const upload = multer({dest: 'uploads/'});
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    // cb(null, __dirname + '/uploads');
     cb(null, './uploads');
   },
   filename: function (req, file, cb) {
@@ -39,7 +37,6 @@ const Product = require("../../models/Product");
 // @route   POST api/product/
 //Add product and Upload picture
 router.post('/add_product', upload.single('productImage'), function (req, res, next) {
-  console.log(req.file);
   const new_product = new Product();
   new_product.storeId = req.body.storeId
   new_product.productName = req.body.productName
@@ -88,28 +85,6 @@ router.get('/get_product/:id', function (req, res) {
   }
 });
 
-// @route   POST api/product/
-//Add product
-// router.post('/add_product', function (req, res) {
-//   const new_product = new Product();
-//   new_product.storeId = req.body.storeId
-//   new_product.productName = req.body.productName
-//   new_product.categoryGroup = req.body.categoryGroup
-//   new_product.detail = req.body.detail
-//   new_product.price = req.body.price
-//   new_product.createdAt = Date.now()
-//   new_product.save(function (err) {
-//     if (err) return res.status(400).json({
-//       'Message': 'Unable to ADD the porduct!!',
-//       'err': err
-//     });
-//     res.status(200).json({
-//       'Message': 'Add New Product successfully',
-//       'Data id': new_product.productName,
-//       'Data obj': new_product
-//     });
-//   });
-// });
 
 // @route   GET api/product/
 // Del product
