@@ -198,15 +198,15 @@ class Customer extends Component {
     } else {
       // create a product item to add in product component
       var newItem = [];
-      for (let i = 0; i < order.products.length; i++) {
-        newItem.push({
-          id: order.products[i].product._id,
-          name: order.products[i].product.productName,
-          price: order.products[i].product.price,
-          amount: order.products[i].quantity,
-          image: itemImage01
-        });
-      }
+      // for (let i = 0; i < order.products.length; i++) {
+      //   newItem.push({
+      //     id: order.products[i].product._id,
+      //     name: order.products[i].product.productName,
+      //     price: order.products[i].product.price,
+      //     amount: order.products[i].quantity,
+      //     image: itemImage01
+      //   });
+      // }
       return (
         <React.Fragment>
           <main className={classes.layout}>
