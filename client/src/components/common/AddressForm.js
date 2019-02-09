@@ -85,7 +85,7 @@ class AddressForm extends Component {
       //   fieldValidationErrors.phone_number = phone_numberValid ? '' : ' is too short';
       //   break;
       case 'address':
-        addressValid = value.match(/^\d+[\/\]?+\s[A-z]/);
+        addressValid = value.match(/^\d+[\/\?+\s[A-z]/);
         fieldValidationErrors.address = addressValid ? '' : ' is invalid';
         break;
       case 'province':
@@ -186,7 +186,7 @@ class AddressForm extends Component {
           </Grid>
           <Grid item xs={12} sm={6}>
             <div className={`form-group ${this.errorClass(this.state.formErrors.province)}`} margin="dense">
-              <TextField type="province" required className="form-control" name="province"
+              <TextField type="province" className="form-control" name="province"
                 required
                 id="province-input"
                 label="จังหวัด"
@@ -197,7 +197,7 @@ class AddressForm extends Component {
           </Grid>
           <Grid item xs={12} sm={6}>
             <div className={`form-group ${this.errorClass(this.state.formErrors.zip_code)}`} margin="dense">
-              <TextField type="zip_code" required className="form-control" name="zip_code"
+              <TextField type="zip_code" className="form-control" name="zip_code"
                 required
                 id="postal-code-input"
                 label="รหัสไปรษณีย์"

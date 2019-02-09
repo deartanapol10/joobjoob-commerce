@@ -1,34 +1,79 @@
-import { createMuiTheme } from '@material-ui/core/styles';
-import red from '@material-ui/core/colors/red';
-import pink from '@material-ui/core/colors/pink';
+import { createMuiTheme } from "@material-ui/core/styles";
+import red from "@material-ui/core/colors/red";
+import pink from "@material-ui/core/colors/pink";
+import { fade } from "@material-ui/core/styles/colorManipulator";
 
 export default createMuiTheme({
 	palette: {
-		primary: red,
-		secondary: pink,
+		primary: pink,
+		secondary: red,
 	},
 	typography: {
 		useNextVariants: true,
 		fontFamily: [
-			'Mitr',
-			'Roboto',
-		].join(','),
+			"Mitr",
+			"Roboto",
+		].join(","),
 	},
 	overrides: {
+		MuiToolbar: {
+			regular: {
+				minHeight: 72,
+			},
+		},
 		MuiButton: {
 			root: {
-				color: 'black',
-				backgroundColor: 'rgba(0,0,0,0)',
-				'&:hover': {
-					backgroundColor: 'rgba(0,0,0,0.2)',
+				fontSize: "0.875rem",
+				color: "#fff",
+				backgroundColor: "#03DAC6",
+				"&:hover": {
+					backgroundColor: fade("#03DAC6", 0.5),
 				},
-				padding: '12px 16px',
-				fontSize: '1rem',
-				'&$sizeSmall': {
-					fontWeight: '400',
-					color: '#888',
+				"&:disabled": {
+					color: fade("#fff", 0.5),
+					backgroundColor: fade("#000", 0.08),
 				}
 			},
+		},
+		MuiButtonBase: {
+			root: {
+				"&:focus": {
+					outline: "none",
+				},
+			},
+		},
+		MuiBadge: {
+			badge: {
+				fontSize: 14,
+			},
+			invisible: {
+				display: "none",
+			},
+		},
+		MuiFormControlLabel: {
+			root: {
+				marginBottom: 0,
+			}
+		},
+		MuiInputBase: {
+			input: {
+				"&$disabled": {
+					opacity: 0.6,
+				},
+			},
+		},
+		MuiOutlinedInput: {
+			root: {
+				"& $notchedOutline": {
+					borderColor: fade("#000", 0.5),
+					border: "1px solid",
+				},
+				"&$disabled": {
+					"& $notchedOutline": {
+						borderColor: fade("#000", 0.3),
+					}
+				}
+			}
 		},
 		MuiStepLabel: {
 			iconContainer: {
@@ -37,21 +82,21 @@ export default createMuiTheme({
 		},
 		MuiStepIcon: {
 			root: {
-				color: '#999',
-				'&$active': {
+				color: "#999",
+				"&$active": {
 					color: pink[100],
 				},
-				'&$completed': {
+				"&$completed": {
 					color: pink[500],
 				},
-				'&$error': {
+				"&$error": {
 					color: pink[100],
 				}
 			},
 		},
 		MuiIconButton: {
 			root: {
-				padding: '12px',
+				padding: 12,
 			},
 		},
 	},

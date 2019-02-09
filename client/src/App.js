@@ -8,6 +8,8 @@ import store from "./store";
 import Login from "./components/auth/Login";
 import Customer from "./components/customer/Customer";
 import Merchant from "./components/merchant/Merchant";
+import ProductSelection from "./components/merchant/ProductSelection";
+import OrderDetails from "./components/merchant/OrderDetails";
 import Receipt from "./receipt/SellerReceipt";
 import Test from "./components/Test";
 
@@ -41,6 +43,8 @@ class App extends Component {
             <Route exact path="/:userid/:orderid" component={Customer} />
             <Route exact path="/merchant" component={Merchant} />
             <Route exact path="/receipt" component={Receipt} />
+            <Route path="/products" component={ProductSelection} />
+            <Route path="/order" component={OrderDetails} />
             <Route exact path="/redux" component={Test} />
           </React.Fragment>
         </Router>
