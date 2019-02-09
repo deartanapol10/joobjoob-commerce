@@ -3,7 +3,8 @@ import _ from "lodash";
 
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-
+import { connect } from "react-redux";
+import { orders } from "../../actions/orderAction";
 // moment for Time & Calendar Management
 import moment from "moment";
 import "moment/locale/th";
@@ -319,7 +320,7 @@ class Merchant extends Component {
 
    componentDidMount() {
       const { order } = this.props.location.state;
-      console.log(order), this.filterOrders(this.state.value);
+      // console.log(order), this.filterOrders(this.state.value);
    }
 
    orderInfo(e, order) {
@@ -1045,4 +1046,8 @@ class Merchant extends Component {
    }
 }
 
+const mapStateToProps = state => ({
+   location: state.location
+ });
+ 
 export default withStyles(styles)(Merchant);

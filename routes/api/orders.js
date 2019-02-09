@@ -40,17 +40,17 @@ const Order = require("../../models/Order");
 // @desc    Get all orders
 // @access  private
 // @url     /api/orders
-router.get(
-  "/",
-  passport.authenticate("jwt", { session: false }),
-  (req, res) => {
-    User.findById(req.user.id)
-      .then(user => {
-        res.json(user.order);
-      })
-      .catch(err => res.status(400).json(err));
-  }
-);
+// router.get(
+//   "/",
+//   passport.authenticate("jwt", { session: false }),
+//   (req, res) => {
+//     User.findById(req.user.id)
+//       .then(user => {
+//         res.json(user.order);
+//       })
+//       .catch(err => res.status(400).json(err));
+//   }
+// );
 
 // @route  GET api/orders/
 //test router
@@ -59,8 +59,8 @@ router.get('/test_add_order', function (req, res) {
 });
 
 // @route   GET api/orders/
-//get orders
-router.get('/get_order/:id', function (req, res) {
+//Search orders
+router.get('/:id', function (req, res) {
   if (req.params.id != null) {
     Order.findById(req.params.id).then(order => {
       res.json(order);
@@ -71,10 +71,17 @@ router.get('/get_order/:id', function (req, res) {
   }
 });
 
+// @route   GET api/orders/
+//get orders
+router.get('/', function (req, res) {
+    Order.find().then(order => {
+      res.json(order);
+    });
+});
+
 // @route   POST api/orders/
 //add order
-//Add product and Upload picture
-router.post('/add_order', function (req, res) {
+router.post('/', function (req, res) {
   const today = new Date();
   const dd = today.getDate();
   const mm = today.getMonth() + 1;
@@ -82,8 +89,8 @@ router.post('/add_order', function (req, res) {
   const h = today.getHours();
   const mintue = today.getMinutes();
   const sec = today.getSeconds();
-
   const date_formated = dd+"/"+mm+"/"+yy +" " +h+":"+mintue+":"+sec
+  
   const new_order = new Order();
   new_order.storeId = req.body.storeId
   new_order.products = req.body.products
@@ -96,6 +103,7 @@ router.post('/add_order', function (req, res) {
   new_order.paymentStatus = req.body.paymentStatus
   new_order.trackingNumber = req.body.trackingNumber
   new_order.createdAt = date_formated
+  new_order.expiredAt = 
 
   new_order.save(function (err) {
     if (err) return res.status(400).json({
@@ -122,8 +130,8 @@ router.put('/upload/slip/:id',upload.single('paymentSlip'), function (req, res) 
   const h = paytime_now.getHours();
   const mintue = paytime_now.getMinutes();
   const sec = paytime_now.getSeconds();
-
   const payment_time = dd+"/"+mm+"/"+yy +" " +h+":"+mintue+":"+sec
+  
   Order.findByIdAndUpdate(req.params.id, { $set:{ "paymentSlip": req.file.path, "paymentTime":payment_time }}, function (err, order) {
     if (err) return res.status(400).json({
       'Message': 'Unable to UPDATE the order!!',
@@ -139,7 +147,7 @@ router.put('/upload/slip/:id',upload.single('paymentSlip'), function (req, res) 
 
 // @route  GET api/orders/
 // del order
-router.get('/del_order/:id', function (req, res) {
+router.delete('/:id', function (req, res) {
   if (req.params.id != null) {
     Order.findById(req.params.id).then(order => {
       order.remove();
@@ -153,7 +161,7 @@ router.get('/del_order/:id', function (req, res) {
 
 // @route  PUT api/orders/
 //update order
-router.put('/update_order/:id', function (req, res) {
+router.put('/:id', function (req, res) {
   Order.findByIdAndUpdate(req.params.id, { $set: req.body }, function (err, order) {
     if (err) return res.status(400).json({
       'Message': 'Unable to UPDATE the order!!',
@@ -169,7 +177,7 @@ router.put('/update_order/:id', function (req, res) {
 
 // @route  PUT api/orders/
 //update status order
-router.put('/update_status/:status', function (req, res) {
+router.put('/status/:status', function (req, res) {
   if (req.body.id == null) {
       res.status(400).json({ 
         'Error' : 'Can\'t update status order',

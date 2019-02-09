@@ -67,9 +67,10 @@ const OrderSchema = new Schema({
         default: ""
       },
       createdAt: {
-        type: String,
+        type: String
       },
       expiredAt: {
+        // type: String
         type: Date,
         default: new Date(+new Date() + 2 * 24 * 60 * 60 * 1000)
       },

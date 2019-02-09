@@ -36,7 +36,7 @@ const Product = require("../../models/Product");
 
 // @route   POST api/product/
 //Add product and Upload picture
-router.post('/add_product', upload.single('productImage'), function (req, res, next) {
+router.post('/', upload.single('productImage'), function (req, res, next) {
   const new_product = new Product();
   new_product.storeId = req.body.storeId
   new_product.productName = req.body.productName
@@ -73,8 +73,8 @@ router.get('/test_product', function (req, res) {
 });
 
 // @route   GET api/product/
-//Get product
-router.get('/get_product/:id', function (req, res) {
+//Search  product
+router.get('/:id', function (req, res) {
   if (req.params.id != null) {
     Product.findById(req.params.id).then(product => {
       res.json(product);
@@ -85,10 +85,18 @@ router.get('/get_product/:id', function (req, res) {
   }
 });
 
+// @route   GET api/product/
+//Get all products
+router.get('/', function (req, res) {
+    Product.find().then(product => {
+      res.json(product);
+    });
+  
+});
 
 // @route   GET api/product/
 // Del product
-router.get('/del_product/:id', function (req, res) {
+router.delete('/:id', function (req, res) {
   if (req.params.id != null) {
     Product.findById(req.params.id).then(product => {
       product.remove();
@@ -102,7 +110,7 @@ router.get('/del_product/:id', function (req, res) {
 
 // @route   PUT api/product/
 // Update product
-router.put('/update_product/:id', function (req, res) {
+router.put('/:id', function (req, res) {
   Product.findByIdAndUpdate(req.params.id, { $set: req.body }, function (err, product) {
     // updatedAt = Date.now();
     if (err) return res.status(400).json({

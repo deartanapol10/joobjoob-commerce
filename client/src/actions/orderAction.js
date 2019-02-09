@@ -3,8 +3,11 @@ import {
   GET_ORDER,
   LOADING,
   CHANGE_ORDER_STATUS,
+  CHANGE_ORDER,
   CREATE_ORDER,
-  GET_ALL_ORDERS
+  GET_ALL_ORDERS,
+  UPLOADS_SLIP,
+  DELETE_ORDER
 } from "./types";
 
 // GET all orders
@@ -16,7 +19,7 @@ export const getAllOrders = token => dispatch => {
   };
   dispatch(setOrderLoading());
   axios
-    .get("/api/orders", header)
+    .get("/api/orders/", header)
     .then(res => {
       dispatch({
         type: GET_ALL_ORDERS,
@@ -32,10 +35,10 @@ export const getAllOrders = token => dispatch => {
 };
 
 // Get a order
-export const getOrder = (userid, orderid) => dispatch => {
+export const getOrder = (orderid) => dispatch => {
   dispatch(setOrderLoading());
   axios
-    .get("/api/orders/" + userid + "/" + orderid)
+    .get("/api/orders/" + orderid)
     .then(res => {
       dispatch({
         type: GET_ORDER,
@@ -58,10 +61,11 @@ export const setOrderLoading = () => {
 };
 
 // Change order status
-export const changeOrderStatus = (userId, orderId, status) => dispatch => {
+export const changeOrderStatus = (statusWord,allIds) => dispatch => {
   dispatch(setOrderLoading());
   axios
-    .patch("/api/orders/" + userId + "/" + orderId, status)
+    .put("/api/orders/status/"+ statusWord,allIds
+    )
     .then(res => {
       dispatch({
         type: CHANGE_ORDER_STATUS,
@@ -76,11 +80,51 @@ export const changeOrderStatus = (userId, orderId, status) => dispatch => {
     });
 };
 
-// Create order
-export const createOrder = (userId, order) => dispatch => {
+// Change order
+export const changeOrder = (changeId) => dispatch => {
   dispatch(setOrderLoading());
   axios
-    .post("/api/orders/" + userId, order)
+    .put("/api/orders/"+ changeId
+    )
+    .then(res => {
+      dispatch({
+        type: CHANGE_ORDER,
+        payload: res.data
+      });
+    })
+    .catch(err => {
+      dispatch({
+        type: CHANGE_ORDER,
+        payload: {}
+      });
+    });
+};
+
+// Uploads slip 
+export const uploadSlip = (id,imgSlip) => dispatch => {
+  dispatch(setOrderLoading());
+  axios
+    .put("/api/orders/upload/slip/"+ id,imgSlip
+    )
+    .then(res => {
+      dispatch({
+        type: UPLOADS_SLIP,
+        payload: res.data
+      });
+    })
+    .catch(err => {
+      dispatch({
+        type: UPLOADS_SLIP,
+        payload: {}
+      });
+    });
+};
+
+// Create order
+export const createOrder = (new_order) => dispatch => {
+  dispatch(setOrderLoading());
+  axios
+    .post("/api/orders/" ,new_order)
     .then(res => {
       dispatch({
         type: CREATE_ORDER,
@@ -90,6 +134,25 @@ export const createOrder = (userId, order) => dispatch => {
     .catch(err => {
       dispatch({
         type: CREATE_ORDER,
+        payload: {}
+      });
+    });
+};
+
+//Delete Order
+export const delOrder = (delId) => dispatch => {
+  dispatch(setOrderLoading());
+  axios
+    .delete("/api/orders/" + delId)
+    .then(res => {
+      dispatch({
+        type: DELETE_ORDER,
+        payload: res.data
+      });
+    })
+    .catch(err => {
+      dispatch({
+        type: DELETE_ORDER,
         payload: {}
       });
     });
