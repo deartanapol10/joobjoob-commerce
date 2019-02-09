@@ -14,6 +14,8 @@ import "moment/locale/th";
 import classNames from "classnames";
 
 import { getCategory } from '../../actions/categoryAction'
+import { getBankAccount } from '../../actions/bankAccountAction'
+import { getDelivery } from '../../actions/deliveryAction'
 
 // Import Material UI core components
 import {
@@ -297,15 +299,16 @@ class Merchant extends Component {
    //// **** END SEARCH FUNCTIONS **** ////
 
    handleShippingSelect = event => {
-      const { shippings } = this.state;
+      const { delivery } = this.props.delivery
+      const selectedDelivery = delivery.filter(d => d.deliveryName === event.target.value)[0]
       // if (isNaN(event.target.value) === false) {
       //    const selectedShipping = shippings.find(
       //       s => s.id === event.target.value
       //    );
       this.setState({
          selectedShipping: event.target.value,
-         // shippingName: selectedShipping.name,
-         // shippingCost: selectedShipping.cost
+         shippingName: selectedDelivery.deliveryName,
+         shippingCost: selectedDelivery.price
       });
       // }
    };
@@ -332,6 +335,8 @@ class Merchant extends Component {
    }
 
    componentWillMount() {
+      this.props.getDelivery();
+      this.props.getBankAccount();
       this.props.getCategory();
    }
 
@@ -367,12 +372,15 @@ class Merchant extends Component {
          results,
          shippings,
          selectedShipping,
+         selectedCategory,
          shippingName,
          shippingCost
       } = this.state;
       const isStatusMenuOpen = Boolean(statusAnchorEl);
       const isMenuOpen = Boolean(menuAnchorEl);
       const { loading, category } = this.props.category
+      const { bankAccount } = this.props.bankAccount
+      const { delivery } = this.props.delivery
 
       const toOrders = props => <Link to="/merchant" {...props} />;
       const newOrder = props => <Link to="/products" {...props} />;
@@ -499,11 +507,11 @@ class Merchant extends Component {
                         <div className={classes.itemCardDetails}>
                            <span className={classes.itemOptionSelect}>
                               <TextField
-                                 id="order-shipping-select"
+                                 id="order-category-select"
                                  select
                                  className={classes.textField}
                                  onChange={this.handleCategorySelelect}
-                                 value={this.state.selectedCategory}
+                                 value={selectedCategory}
                                  SelectProps={{
                                     MenuProps: {
                                        className: classes.menu
@@ -523,7 +531,6 @@ class Merchant extends Component {
                                        {e}
                                     </MenuItem>
                                  ))}
-                                 {/* {console.log(category)} */}
                                  <MenuItem
                                     key={9999}
                                     value="เพิ่มการส่ง"
@@ -636,29 +643,30 @@ class Merchant extends Component {
                เลือกบัญชีธนาคาร
             </Typography>
 
-            <Card
-               style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  padding: "20px",
-                  textAlign: "right",
-                  marginBottom: "15px"
-               }}
-            >
-               <img
-                  src="http://lh3.googleusercontent.com/rDGtTFrrEEIhFXBqcF_jGDZbZXdU9DRIVnMZps9AQ_ir-FvV0cQwb54-5UBIh4sdwA=w300"
-                  width="75px"
-                  height="75px"
-               />
-               <span>
-                  <Typography variant="subtitle1">123 456789 012</Typography>
-                  <Typography variant="subtitle1">
-                     พี่ปั๊กกะเป้าเองจ้า
-                  </Typography>
-               </span>
-            </Card>
-
+            {bankAccount.length > 0 && bankAccount.map(e => (
+               <Card
+                  style={{
+                     display: "flex",
+                     justifyContent: "space-between",
+                     alignItems: "center",
+                     padding: "20px",
+                     textAlign: "right",
+                     marginBottom: "15px"
+                  }}
+               >
+                  <img
+                     src="http://www.ojgold.co.th/wp-content/uploads/cache/2016/03/krungsri-icon/1894182860.png"
+                     width="75px"
+                     height="75px"
+                  />
+                  <span>
+                     <Typography variant="subtitle1">{e.accountNumber}</Typography>
+                     <Typography variant="subtitle1">
+                        {e.ownerName}
+                     </Typography>
+                  </span>
+               </Card>
+            ))}
             <Card style={{ padding: "30px", textAlign: "center" }}>
                <Typography>
                   <AddIcon />
@@ -777,8 +785,8 @@ class Merchant extends Component {
                         </Typography>
                      )}
 
-                     {this.state.shippings ? (
-                        this.state.shippings.map(each => (
+                     {delivery.length > 0 ? (
+                        delivery.map(each => (
                            <div
                               style={{
                                  display: "flex"
@@ -787,7 +795,7 @@ class Merchant extends Component {
                               <TextField
                                  id="outlined-name"
                                  label="การส่ง"
-                                 value={each.name}
+                                 value={each.deliveryName}
                                  className={classes.textField}
                                  // onChange={this.handleTextFieldChange(
                                  //    "productPrice"
@@ -799,7 +807,7 @@ class Merchant extends Component {
                               <TextField
                                  id="outlined-name"
                                  label="ราคา"
-                                 value={each.cost}
+                                 value={each.price}
                                  className={classes.textField}
                                  // onChange={this.handleTextFieldChange(
                                  //    "productOption"
@@ -1053,12 +1061,12 @@ class Merchant extends Component {
                                     >
                                        เลือกการส่ง
                                     </MenuItem>
-                                    {shippings.map(shipping => (
+                                    {delivery.map(d => (
                                        <MenuItem
-                                          key={shipping.id}
-                                          value={shipping.id}
+                                          key={d.deliveryName}
+                                          value={d.deliveryName}
                                        >
-                                          {shipping.name}
+                                          {d.deliveryName}
                                        </MenuItem>
                                     ))}
                                     <MenuItem
@@ -1208,7 +1216,9 @@ Merchant.propTypes = {
 
 const mapStateToProps = state => ({
    category: state.category,
+   bankAccount: state.bankAccount,
+   delivery: state.delivery,
 })
 
 const WrappedStyle = withStyles(styles)(Merchant);
-export default connect(mapStateToProps, { getCategory })(withRouter(WrappedStyle));
+export default connect(mapStateToProps, { getCategory, getBankAccount, getDelivery })(withRouter(WrappedStyle));
