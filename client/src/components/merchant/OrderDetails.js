@@ -3,8 +3,9 @@ import _ from "lodash";
 
 import React, { Component } from "react";
 import { Link, withRouter } from "react-router-dom";
-import { connect } from 'react-redux'
-import PropTypes from 'prop-types'
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+
 
 // moment for Time & Calendar Management
 import moment from "moment";
@@ -16,6 +17,7 @@ import classNames from "classnames";
 import { getCategory } from '../../actions/categoryAction'
 import { getBankAccount } from '../../actions/bankAccountAction'
 import { getDelivery } from '../../actions/deliveryAction'
+import { getOrder } from '../../actions/orderAction'
 
 // Import Material UI core components
 import {
@@ -331,10 +333,11 @@ class Merchant extends Component {
 
    componentDidMount() {
       const { order } = this.props.location.state;
-      console.log(order), this.filterOrders(this.state.value);
+      // console.log(order), this.filterOrders(this.state.value);
    }
 
    componentWillMount() {
+      this.props.getOrder();
       this.props.getDelivery();
       this.props.getBankAccount();
       this.props.getCategory();
@@ -360,7 +363,7 @@ class Merchant extends Component {
 
    render() {
       const { classes } = this.props;
-      const { order } = this.props.location.state;
+      // const { order } = this.props.location.state;
       const {
          statusAnchorEl,
          menuAnchorEl,
@@ -381,6 +384,8 @@ class Merchant extends Component {
       const { loading, category } = this.props.category
       const { bankAccount } = this.props.bankAccount
       const { delivery } = this.props.delivery
+      const { order } = this.props.order
+      console.log( order )
 
       const toOrders = props => <Link to="/merchant" {...props} />;
       const newOrder = props => <Link to="/products" {...props} />;
@@ -406,7 +411,8 @@ class Merchant extends Component {
          const alternateStatus = orderStatus.filter(
             thaiStatus => thaiStatus.name.en === status
          );
-         return alternateStatus[0].name.th;
+         return null;
+         // return alternateStatus[0].name.th;
       }
 
       // Translate payment status into color
@@ -468,7 +474,7 @@ class Merchant extends Component {
       const itemList = (
          <React.Fragment>
             {/* Sort orders before map, by compare updated time */}
-            {order.items.map(item => (
+            {/* {order.products.map(item => (
                <Card className={classes.itemCard} key={item.id}>
                   <CardContent className={classes.itemCardContent}>
                      <CardMedia
@@ -610,7 +616,7 @@ class Merchant extends Component {
                      />
                   </CardActions>
                </Card>
-            ))}
+            ))} */}
          </React.Fragment>
       );
 
@@ -1218,7 +1224,8 @@ const mapStateToProps = state => ({
    category: state.category,
    bankAccount: state.bankAccount,
    delivery: state.delivery,
+   order: state.order
 })
 
 const WrappedStyle = withStyles(styles)(Merchant);
-export default connect(mapStateToProps, { getCategory, getBankAccount, getDelivery })(withRouter(WrappedStyle));
+export default connect(mapStateToProps, { getCategory, getBankAccount, getDelivery, getOrder })(withRouter(WrappedStyle));

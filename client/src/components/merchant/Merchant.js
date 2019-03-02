@@ -2,14 +2,17 @@
 import _ from "lodash";
 
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
-
+import { Link, withRouter } from "react-router-dom";
+import { connect } from 'react-redux';
+import Loader from 'react-loader-spinner'
 // moment for Time & Calendar Management
 import moment from "moment";
 import "moment/locale/th";
 
 // Combine className in function classNames(className1, className2)
 import classNames from "classnames";
+
+import { getAllOrders } from '../../actions/orderAction'
 
 // Import Material UI core components
 import {
@@ -85,7 +88,7 @@ function TabContainer(props) {
 class Merchant extends Component {
    constructor(props) {
       super(props);
-
+      this.state = { isLoading: true }
       // Ref for inputs
       this.myRef = React.createRef();
 
@@ -95,7 +98,8 @@ class Merchant extends Component {
          mobileMoreAnchorEl: null,
          value: 0,
          checked: [],
-         orders: originalOrders,
+         // orders: originalOrders,
+         // orders : this.props,
          filteredOrders: [],
          customerNames: customerNamesList,
          newCustomerName: "",
@@ -154,14 +158,14 @@ class Merchant extends Component {
    async handleStatusChange(id) {
       const { checked, orders, value } = this.state;
       if (checked.length !== 0) {
-         const targetStatus = orderStatus.filter(status => status.id === id);
+         const targetStatus = orderStatus.filter(orderStatus => orderStatus.id === id);
          for (let i = 0; i < checked.length; i++) {
             await this.setState(
                {
                   orders: this.state.orders.map(order => {
-                     if (order.orderID === checked[i]) {
+                     if (order._id === checked[i]) {
                         return Object.assign({}, order, {
-                           status: targetStatus[0].name.en
+                           orderStatus: targetStatus[0].name.en
                         });
                      } else {
                         return order;
@@ -183,7 +187,7 @@ class Merchant extends Component {
 
    //// ---- CHECKBOX FUNCTIONS ---- ///
 
-   // Toggle individual checkbox - Check if there's orderID in checked orders >
+   // Toggle individual checkbox - Check if there's id in checked orders >
    // if none, push new order into checked orders > if yes, remove it.
    handleToggle = value => () => {
       const { checked } = this.state;
@@ -201,13 +205,13 @@ class Merchant extends Component {
       });
    };
 
-   // Select all checkboxes in current tab - Copy all orderId from filteredOrders into checked orders >
+   // Select all checkboxes in current tab - Copy all id from filteredOrders into checked orders >
    // else clear checked orders
    handleSelectAll = event => {
       const { filteredOrders } = this.state;
       if (event.target.checked) {
          this.setState(state => ({
-            checked: filteredOrders.map(o => o.orderID)
+            checked: filteredOrders.map(o => o.id)
          }));
          return;
       }
@@ -217,7 +221,7 @@ class Merchant extends Component {
    // Select all checkboxes function for non-checkbox button(s)
    handleSelectAllCheckbox = () => {
       this.setState(state => ({
-         checked: this.state.filteredOrders.map(o => o.orderID)
+         checked: this.state.filteredOrders.map(o => o.id)
       }));
       this.handleMenuClose();
    };
@@ -228,16 +232,14 @@ class Merchant extends Component {
 
    // Filter from all orders - Filter orders that match with selected tab status
    filterOrders = statusIndex => {
-      const { orders } = this.state;
+      const { orders } = this.props.orders;
+      console.log(this.props.orders);
       const newFilteredOrders = orders.filter(
-         order => order.status === orderStatus[statusIndex].name.en
+         order => order.orderStatus === orderStatus[statusIndex].name.en
       );
       this.setState({ filteredOrders: newFilteredOrders });
+      console.log(newFilteredOrders)
    };
-
-   //// **** END FILTER ORDERS FUNCTIONS **** ////
-
-   //// ---- SEARCH FUNCTIONS ---- ///
 
    // Reset search term and results
    resetSearchTerm = () => {
@@ -283,14 +285,22 @@ class Merchant extends Component {
 
    //// **** END SEARCH FUNCTIONS **** ////
 
-   componentDidMount() {
-      this.filterOrders(this.state.value);
+   handleItemAmount = (add, id) => {
+      const { orders } = this.props.orders;
+   };
+
+   componentWillMount() {
+      this.props.getAllOrders();
    }
 
+   componentDidMount() {
+      this.setState({isLoading: false})
+      this.filterOrders(this.state.value);
+   }
    orderInfo(e, order) {
       console.log(order);
       this.props.history.push({
-         pathname: "/order",
+         pathname: "/order/"+order._id,
          state: {
             order
          }
@@ -320,6 +330,8 @@ class Merchant extends Component {
       } = this.state;
       const isStatusMenuOpen = Boolean(statusAnchorEl);
       const isMenuOpen = Boolean(menuAnchorEl);
+      const { orders } = this.props.orders;
+      console.log(orders)
 
       const newOrder = props => <Link to="/products" {...props} />;
 
@@ -367,7 +379,7 @@ class Merchant extends Component {
 
       // Translate payment status into Thai
       function paymentText(payment) {
-         const alternatePayment = paymentStatus.filter(
+         const alternatePayment = orders.paymentStatus.filter(
             thaiPayment => thaiPayment.name.en === payment
          );
          if (alternatePayment.length !== 0) {
@@ -439,7 +451,7 @@ class Merchant extends Component {
          <React.Fragment>
             {results.map(result => (
                <Card
-                  key="result.orderID"
+                  key="result.id"
                   className={classes.resultCard}
                   onClick={e => {
                      this.orderInfo(e, result);
@@ -458,7 +470,7 @@ class Merchant extends Component {
                         <Typography
                            variant="body2"
                            className={classes.orderNumber}
-                        >{`#${result.orderID}`}</Typography>
+                        >{`#${result.id}`}</Typography>
                      </Button>
                   </div>
                   <div className={classes.resultDetail}>
@@ -496,29 +508,29 @@ class Merchant extends Component {
                .map(order => (
                   <Card
                      className={
-                        checked.indexOf(order.orderID) === -1
+                        checked.indexOf(order._id) === -1
                            ? classes.orderCard
                            : classNames(
-                                classes.orderCard,
-                                classes.orderCardActive
-                             )
+                              classes.orderCard,
+                              classes.orderCardActive
+                           )
                      }
-                     key={order.orderID}
+                     key={order._id}
                      onClick={e => {
                         this.orderInfo(e, order);
                      }}
                   >
                      <Checkbox
-                        onChange={this.handleToggle(order.orderID)}
-                        checked={checked.indexOf(order.orderID) !== -1}
-                        value={order.orderID}
+                        onChange={this.handleToggle(order._id)}
+                        checked={checked.indexOf(order._id) !== -1}
+                        value={order._id}
                         className={
-                           checked.indexOf(order.orderID) === -1
+                           checked.indexOf(order._id) === -1
                               ? classes.orderCheckbox
                               : classNames(
-                                   classes.orderCheckbox,
-                                   classes.orderCheckboxActive
-                                )
+                                 classes.orderCheckbox,
+                                 classes.orderCheckboxActive
+                              )
                         }
                      />
                      <CardContent className={classes.orderCardContent}>
@@ -535,18 +547,22 @@ class Merchant extends Component {
                               <Typography
                                  variant="body2"
                                  className={classes.orderNumber}
-                              >{`#${order.orderID}`}</Typography>
+                              // -----test order id-------
+                              // >{`#${order._id}`}
+                              >{`#${order.deliveryType}`}
+
+                              </Typography>
                            </Button>
                            <span>
                               <Typography
                                  variant="body1"
                                  className={classNames(
-                                    orderStatusColor(order.status),
+                                    orderStatusColor(order.orderStatus),
                                     classes.orderStatusText,
                                     classes.textLeft
                                  )}
                               >
-                                 {` ${orderStatusText(order.status)}`}
+                                 {` ${orderStatusText(order.orderStatus)}`}
                               </Typography>
                            </span>
                            <IconButton
@@ -566,7 +582,7 @@ class Merchant extends Component {
                               variant="body2"
                               className={classes.orderClientName}
                            >
-                              {order.name}
+                              {order.customerName}
                            </Typography>
                            <Typography
                               variant="body1"
@@ -652,18 +668,18 @@ class Merchant extends Component {
                                     .map(order => (
                                        <Card
                                           className={
-                                             checked.indexOf(order.orderID) ===
-                                             -1
+                                             checked.indexOf(order._id) ===
+                                                -1
                                                 ? classes.orderCard
                                                 : classNames(
-                                                     classes.orderCard,
-                                                     classes.orderCardActive
-                                                  )
+                                                   classes.orderCard,
+                                                   classes.orderCardActive
+                                                )
                                           }
-                                          key={order.orderID}
+                                          key={order._id}
                                           onClick={e => {
                                              this.setState({
-                                                customerNameField: order.name
+                                                customerNameField: order.customerName
                                              });
                                           }}
                                        >
@@ -690,8 +706,8 @@ class Merchant extends Component {
                                                          classes.orderNumber
                                                       }
                                                    >{`#${
-                                                      order.orderID
-                                                   }`}</Typography>
+                                                      order._id
+                                                      }`}</Typography>
                                                 </Button>
                                              </div>
                                              <div
@@ -706,7 +722,7 @@ class Merchant extends Component {
                                                       classes.orderClientName
                                                    }
                                                 >
-                                                   {order.name}
+                                                   {order.customerName}
                                                 </Typography>
                                              </div>
                                           </CardContent>
@@ -731,7 +747,9 @@ class Merchant extends Component {
             }
          </Drawer>
       );
-
+      if (this.state.isLoading) {
+         return <Loader type="Grid" color="#somecolor" height={80} width={80} />
+      }
       return (
          <React.Fragment>
             {/* Wrapper */}
@@ -778,16 +796,16 @@ class Merchant extends Component {
                               <CloseIcon />
                            </IconButton>
                         ) : (
-                           <IconButton
-                              aria-haspopup="true"
-                              disableRipple
-                              color="inherit"
-                              onClick={this.focusSearchInput}
-                              className={classes.searchIcon}
-                           >
-                              <SearchIcon />
-                           </IconButton>
-                        )}
+                              <IconButton
+                                 aria-haspopup="true"
+                                 disableRipple
+                                 color="inherit"
+                                 onClick={this.focusSearchInput}
+                                 className={classes.searchIcon}
+                              >
+                                 <SearchIcon />
+                              </IconButton>
+                           )}
                         <InputBase
                            placeholder="ชื่อลูกค้า / เลขบิล"
                            classes={{
@@ -896,10 +914,13 @@ class Merchant extends Component {
                      classes.flexColumn
                   )}
                >
+               
                   {/* If there's no orders in the tab, display "ไม่มีออเดอร์" text */}
                   {filteredOrders.length === 0 ? (
+                     
                      <div className={classes.orderBlank}>
                         <CancelIcon className={classes.orderBlankIcon} />
+                        <Loader type="TailSpin" color="#somecolor" height={80} width={80} />
                         <Typography
                            variant="body1"
                            align="center"
@@ -909,51 +930,51 @@ class Merchant extends Component {
                         </Typography>
                      </div>
                   ) : /* Else show select all checkbox with a condition */
-                  /* If there's order checked, display "เลือก " with selected orders amount */
-                  checked.length === 0 ? (
-                     <div className={classes.selectAll}>
-                        <FormControlLabel
-                           control={
-                              <Checkbox
-                                 checked={
-                                    checked.length === filteredOrders.length
+                     /* If there's order checked, display "เลือก " with selected orders amount */
+                     checked.length === 0 ? (
+                        <div className={classes.selectAll}>
+                           <FormControlLabel
+                              control={
+                                 <Checkbox
+                                    checked={
+                                       checked.length === filteredOrders.length
+                                    }
+                                    onChange={this.handleSelectAll}
+                                    className={classes.selectAllCheckbox}
+                                 />
+                              }
+                              label="เลือกทั้งหมด"
+                              className={classes.selectAllLabel}
+                           />
+                        </div>
+                     ) : (
+                           <div
+                              className={classNames(
+                                 classes.selectAll,
+                                 classes.selectAllActive
+                              )}
+                           >
+                              <FormControlLabel
+                                 control={
+                                    <Checkbox
+                                       checked={
+                                          checked.length === filteredOrders.length
+                                       }
+                                       onChange={this.handleSelectAll}
+                                       className={classNames(
+                                          classes.selectAllCheckbox,
+                                          classes.selectAllCheckboxActive
+                                       )}
+                                    />
                                  }
-                                 onChange={this.handleSelectAll}
-                                 className={classes.selectAllCheckbox}
-                              />
-                           }
-                           label="เลือกทั้งหมด"
-                           className={classes.selectAllLabel}
-                        />
-                     </div>
-                  ) : (
-                     <div
-                        className={classNames(
-                           classes.selectAll,
-                           classes.selectAllActive
-                        )}
-                     >
-                        <FormControlLabel
-                           control={
-                              <Checkbox
-                                 checked={
-                                    checked.length === filteredOrders.length
-                                 }
-                                 onChange={this.handleSelectAll}
+                                 label={`เลือก ${checked.length}`}
                                  className={classNames(
-                                    classes.selectAllCheckbox,
-                                    classes.selectAllCheckboxActive
+                                    classes.selectAllLabel,
+                                    classes.selectAllLabelActive
                                  )}
                               />
-                           }
-                           label={`เลือก ${checked.length}`}
-                           className={classNames(
-                              classes.selectAllLabel,
-                              classes.selectAllLabelActive
-                           )}
-                        />
-                     </div>
-                  )}
+                           </div>
+                        )}
                </Paper>
 
                {/* Render menus */}
@@ -1001,5 +1022,9 @@ class Merchant extends Component {
       );
    }
 }
-
-export default withStyles(styles)(Merchant);
+const mapStateToProps = state => ({
+   orders: state.orders
+})
+// export default withStyles(styles)(Merchant);
+const WrappedStyle = withStyles(styles)(Merchant);
+export default connect(mapStateToProps, { getAllOrders })(withRouter(WrappedStyle));

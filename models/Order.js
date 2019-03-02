@@ -3,83 +3,83 @@ const Schema = mongoose.Schema;
 
 // Create Order Scheme
 const OrderSchema = new Schema({
-  order: [
+  // order: [
+  // {
+  storeId: {
+    type: Schema.Types.ObjectId,
+    ref: "store"
+  },
+  products: [
     {
-      storeId: {
+      product: {
         type: Schema.Types.ObjectId,
-        ref: "store"
+        ref: "product"
       },
-      products: [
-        {
-          product: {
-            type: Schema.Types.ObjectId,
-            ref: "product"
-          },
-          quantity: {
-            type: Number,
-            required: true
-          },
-          size: {
-            type: String
-          },
-          description: {
-            type: String
-          }
-        }
-      ],
-      customerName: {
+      quantity: {
+        type: Number,
+        required: true
+      },
+      size: {
         type: String
       },
-      comment: {
+      description: {
         type: String
-      },
-      orderStatus: {
-        type: String,
-        default: "created"
-      },
-      URL: {
-        type: String
-      },
-      bankID: {
-        type: Schema.Types.ObjectId,
-        ref: "user.bankAccount"
-      },
-      deliveryType: {
-        type: String
-      },
-      deliveryPrice: {
-        type: Number
-      },
-      paymentSlip: {
-        //Slip image
-        type: String
-      },
-      paymentStatus: {
-        type: String,
-        default: false
-      },
-      paymentTime: {
-        type: Date
-      },
-      trackingNumber: {
-        type: Date
-      },
-      createdAt: {
-        type: Date,
-        default: Date.now
-      },
-      expiredAt: {
-        type: Date,
-        default: new Date(+new Date() + 2 * 24 * 60 * 60 * 1000)
-      },
-      updatedAt: {
-        type: Date
-      },
-      deletedFlag: {
-        type: Boolean
       }
     }
-  ]
+  ],
+  customerName: {
+    type: String
+  },
+  comment: {
+    type: String
+  },
+  orderStatus: {
+    type: String,
+    default: "created"
+  },
+  URL: {
+    type: String
+  },
+  bankID: {
+    type: Schema.Types.ObjectId,
+    ref: "user"
+  },
+  deliveryType: {
+    type: String
+  },
+  deliveryPrice: {
+    type: Number
+  },
+  paymentSlip: {
+    //Slip image
+    type: String
+  },
+  paymentStatus: {
+    type: String,
+    default: "pending"
+  },
+  paymentTime: {
+    type: Date
+  },
+  trackingNumber: {
+    type: String,
+  },
+  createdAt: {
+    type: String,
+    default: new Date().toLocaleString()
+  },
+  expiredAt: {
+    type: String,
+    default: new Date(+new Date() + 2 * 24 * 60 * 60 * 1000).toLocaleString()
+  },
+  updatedAt: {
+    type: Date
+  },
+  deletedFlag: {
+    type: Boolean
+  }
+  // }
+  // ]
 });
 
 module.exports = Order = mongoose.model("order", OrderSchema);

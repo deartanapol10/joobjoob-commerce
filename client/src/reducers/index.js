@@ -12,9 +12,10 @@ export default combineReducers({
   auth: authReducer,
   errors: errorReducer,
   order: orderReducer,
+  orders: orderReducer,
   store: storeReducer,
   bankAccount: bankAccountReducer,
   category: categoryReducer,
   product: productReducer,
-  delivery: deliveryReducer
+  delivery: deliveryReducer,
 });

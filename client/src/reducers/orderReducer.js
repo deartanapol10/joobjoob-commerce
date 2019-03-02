@@ -40,7 +40,7 @@ export default function(state = initialState, action) {
     case GET_ALL_ORDERS:
       return {
         ...state,
-        opders: action.payload,
+        orders : action.payload,
         loading: false
       };
     default:

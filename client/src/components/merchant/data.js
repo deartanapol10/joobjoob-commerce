@@ -51,10 +51,10 @@ export const paymentStatus = [
 
 export const originalOrders = [
    {
-      orderID: "0001",
+      id: "0001",
       url:
          "https://shippee.com/5b715fcf03656e1cf0beaaa6/5b8b631c0f611d2acc29f55f",
-      status: "created",
+      orderStatus: "created",
       paymentStatus: "pending",
       name: "คุณมิ",
       customerName: "",
@@ -77,7 +77,7 @@ export const originalOrders = [
       updatedTime: "120120191325",
       submitTime: "",
       expiredAt: "031120181325",
-      items: [
+      products: [
          {
             id: 1,
             name: "Lorem Ipsum",
@@ -95,10 +95,10 @@ export const originalOrders = [
       ]
    },
    {
-      orderID: "0002",
+      id: "0002",
       url:
          "https://shippee.com/5b715fcf03656e1cf0beaaa6/5b8b631c0f611d2acc29f55f",
-      status: "submitted",
+      orderStatus: "submitted",
       paymentStatus: "waitForConfirmation",
       name: "คุณแดง",
       customerName: "แดง แด๊ง แดง",
@@ -146,10 +146,10 @@ export const originalOrders = [
       ]
    },
    {
-      orderID: "0003",
+      id: "0003",
       url:
          "https://shippee.com/5b715fcf03656e1cf0beaaa6/5b8b631c0f611d2acc29f55f",
-      status: "shipped",
+      orderStatus: "shipped",
       paymentStatus: "confirmed",
       name: "คุณดำ",
       customerName: "ดำ ด๊ำ ดำ",
@@ -183,10 +183,10 @@ export const originalOrders = [
       ]
    },
    {
-      orderID: "0004",
+      id: "0004",
       url:
          "https://shippee.com/5b715fcf03656e1cf0beaaa6/5b8b631c0f611d2acc29f55f",
-      status: "created",
+      orderStatus: "created",
       paymentStatus: "waitForConfirmation",
       name: "คุณม่วง",
       customerName: "แดง แด๊ง แดง",
@@ -234,10 +234,10 @@ export const originalOrders = [
       ]
    },
    {
-      orderID: "0005",
+      id: "0005",
       url:
          "https://shippee.com/5b715fcf03656e1cf0beaaa6/5b8b631c0f611d2acc29f55f",
-      status: "created",
+      orderStatus: "created",
       paymentStatus: "waitForConfirmation",
       name: "คุณเหลือง",
       customerName: "แดง แด๊ง แดง",
@@ -285,262 +285,43 @@ export const originalOrders = [
       ]
    },
    {
-      orderID: "0006",
-      url:
-         "https://shippee.com/5b715fcf03656e1cf0beaaa6/5b8b631c0f611d2acc29f55f",
-      status: "created",
+      id: "0009",
       paymentStatus: "waitForConfirmation",
-      name: "คุณฟ้า",
-      customerName: "แดง แด๊ง แดง",
-      address: {
-         houseNo: "111",
-         road: "สุขุมวิท 55",
-         subDistrict: "คลองตันเหนือ",
-         district: "วัฒนา",
-         province: "กทม.",
-         postalCode: "10110"
-      },
-      additionalNote: "ถ้ากดกริ่งแล้วไม่มีคนออกมา ให้ฝากไว้ที่ป้อมยาม",
-      phone: "0888888888",
-      price: 300,
-      bankAccount: "KBANK",
-      shipping: "EMS",
-      trackingNo: "",
-      receipt: itemImage01,
-      createdTime: "291020181105",
-      updatedTime: "291020181545",
-      submitTime: "291020181545",
-      expiredAt: "061120181105",
-      items: [
+      orderStatus: "created",
+      createdAt: "2019-2-24 15:20:20",
+      expiredAt: "2019-2-26 15:20:20",
+      products: [
          {
-            id: 1,
-            name: "Trouser",
+            id: "5bbf20862ec760839c91b17f",
+            amount: 67,
             price: 100,
-            amount: 2,
-            image: itemImage02
-         },
-         {
-            id: 2,
-            name: "T-Shirt",
-            price: 100,
-            amount: 1,
-            image: itemImage01
-         },
-         {
-            id: 3,
-            name: "Skirt",
-            price: 100,
-            amount: 1,
-            image: itemImage02
+            name: "Test createdAt"
          }
-      ]
-   },
-   {
-      orderID: "0007",
-      url:
-         "https://shippee.com/5b715fcf03656e1cf0beaaa6/5b8b631c0f611d2acc29f55f",
-      status: "created",
-      paymentStatus: "waitForConfirmation",
-      name: "คุณน้ำเงิน",
-      customerName: "แดง แด๊ง แดง",
-      address: {
-         houseNo: "111",
-         road: "สุขุมวิท 55",
-         subDistrict: "คลองตันเหนือ",
-         district: "วัฒนา",
-         province: "กทม.",
-         postalCode: "10110"
-      },
-      additionalNote: "ถ้ากดกริ่งแล้วไม่มีคนออกมา ให้ฝากไว้ที่ป้อมยาม",
-      phone: "0888888888",
-      price: 300,
-      bankAccount: "KBANK",
-      shipping: "EMS",
-      trackingNo: "",
-      receipt: itemImage01,
-      createdTime: "291020181105",
-      updatedTime: "140120191559",
-      submitTime: "291020181545",
-      expiredAt: "061120181105",
-      items: [
-         {
-            id: 1,
-            name: "Trouser",
-            price: 100,
-            amount: 2,
-            image: itemImage02
-         },
-         {
-            id: 2,
-            name: "T-Shirt",
-            price: 100,
-            amount: 1,
-            image: itemImage01
-         },
-         {
-            id: 3,
-            name: "Skirt",
-            price: 100,
-            amount: 1,
-            image: itemImage02
-         }
-      ]
-   },
-   {
-      orderID: "0008",
-      url:
-         "https://shippee.com/5b715fcf03656e1cf0beaaa6/5b8b631c0f611d2acc29f55f",
-      status: "created",
-      paymentStatus: "waitForConfirmation",
-      name: "คุณเงิน",
-      customerName: "แดง แด๊ง แดง",
-      address: {
-         houseNo: "111",
-         road: "สุขุมวิท 55",
-         subDistrict: "คลองตันเหนือ",
-         district: "วัฒนา",
-         province: "กทม.",
-         postalCode: "10110"
-      },
-      additionalNote: "ถ้ากดกริ่งแล้วไม่มีคนออกมา ให้ฝากไว้ที่ป้อมยาม",
-      phone: "0888888888",
-      price: 300,
-      bankAccount: "KBANK",
-      shipping: "EMS",
-      trackingNo: "",
-      receipt: itemImage01,
-      createdTime: "291020181105",
-      updatedTime: "140120191608",
-      submitTime: "291020181545",
-      expiredAt: "061120181105",
-      items: [
-         {
-            id: 1,
-            name: "Trouser",
-            price: 100,
-            amount: 2,
-            categoryGroup: "size",
-            image: itemImage02
-         },
-         {
-            id: 2,
-            name: "T-Shirt",
-            price: 100,
-            amount: 1,
-            categoryGroup: "size",
-            image: itemImage01
-         },
-         {
-            id: 3,
-            name: "Skirt",
-            price: 100,
-            amount: 1,
-            categoryGroup: "size",
-            image: itemImage02
-         }
-      ]
-   },
-   {
-      orderID: "0009",
-      url:
-         "https://shippee.com/5b715fcf03656e1cf0beaaa6/5b8b631c0f611d2acc29f55f",
-      status: "created",
-      paymentStatus: "waitForConfirmation",
-      name: "คุณทอง",
-      customerName: "แดง แด๊ง แดง",
-      address: {
-         houseNo: "111",
-         road: "สุขุมวิท 55",
-         subDistrict: "คลองตันเหนือ",
-         district: "วัฒนา",
-         province: "กทม.",
-         postalCode: "10110"
-      },
-      additionalNote: "ถ้ากดกริ่งแล้วไม่มีคนออกมา ให้ฝากไว้ที่ป้อมยาม",
-      phone: "0888888888",
-      price: 300,
-      bankAccount: "KBANK",
-      shipping: "EMS",
-      trackingNo: "",
-      receipt: itemImage01,
-      createdTime: "291020181105",
-      updatedTime: "291020181545",
-      submitTime: "291020181545",
-      expiredAt: "061120181105",
-      items: [
-         {
-            id: 1,
-            name: "Trouser",
-            price: 100,
-            amount: 2,
-            image: itemImage02
-         },
-         {
-            id: 2,
-            name: "T-Shirt",
-            price: 100,
-            amount: 1,
-            image: itemImage01
-         },
-         {
-            id: 3,
-            name: "Skirt",
-            price: 100,
-            amount: 1,
-            image: itemImage02
-         }
-      ]
-   },
-   {
-      orderID: "0010",
-      url:
-         "https://shippee.com/5b715fcf03656e1cf0beaaa6/5b8b631c0f611d2acc29f55f",
-      status: "created",
-      paymentStatus: "waitForConfirmation",
-      name: "คุณส้ม",
-      customerName: "แดง แด๊ง แดง",
-      address: {
-         houseNo: "111",
-         road: "สุขุมวิท 55",
-         subDistrict: "คลองตันเหนือ",
-         district: "วัฒนา",
-         province: "กทม.",
-         postalCode: "10110"
-      },
-      additionalNote: "ถ้ากดกริ่งแล้วไม่มีคนออกมา ให้ฝากไว้ที่ป้อมยาม",
-      phone: "0888888888",
-      price: 300,
-      bankAccount: "KBANK",
-      shipping: "EMS",
-      trackingNo: "",
-      receipt: itemImage01,
-      createdTime: "291020181105",
-      updatedTime: "291020181545",
-      submitTime: "291020181545",
-      expiredAt: "061120181105",
-      items: [
-         {
-            id: 1,
-            name: "Trouser",
-            price: 100,
-            amount: 2,
-            image: itemImage02
-         },
-         {
-            id: 2,
-            name: "T-Shirt",
-            price: 100,
-            amount: 1,
-            image: itemImage01
-         },
-         {
-            id: 3,
-            name: "Skirt",
-            price: 100,
-            amount: 1,
-            image: itemImage02
-         }
-      ]
+         //  {
+         //      "_id": {
+         //          "$oid": "5c7253c98dca532148f7a5f4"
+         //      },
+         //      "product": {
+         //          "$oid": "5bbf20862ec760839c91b17f"
+         //      },
+         //      "quantity": 67,
+         //      "size": "L",
+         //      "description": "Test createdAt"
+         //  }
+      ],
+      // "storeId": {
+      //     "$oid": "5c1dddbb73f91850fc9cf34a"
+      // },
+      customerName: "PCreatedAt",
+      name: "พริมเอง",
+      additionalNote: "To test createdAt order",
+      url: "http://shippee.com/orders/",
+      // "bankID": {
+      //     "$oid": "5c397f45134aca01a4415e7f"
+      // },
+      price: 999,
+      deliveryType: "Kerry",
+      trackingNumber: ""
    }
 ];
 

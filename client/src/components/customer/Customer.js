@@ -201,9 +201,9 @@ class Customer extends Component {
       for (let i = 0; i < order.products.length; i++) {
         newItem.push({
           id: order.products[i].product._id,
-          name: order.products[i].product.productName,
-          price: order.products[i].product.price,
-          amount: order.products[i].quantity,
+          name: order.products[i].product.quantity,
+          price: order.products[i].product.size,
+          amount: order.products[i].description,
           image: itemImage01
         });
       }
