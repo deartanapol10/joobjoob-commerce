@@ -5,6 +5,9 @@ const Schema = mongoose.Schema;
 const OrderSchema = new Schema({
   // order: [
   // {
+  orderId : {
+    type: Number,
+  },
   storeId: {
     type: Schema.Types.ObjectId,
     ref: "store"
@@ -49,6 +52,10 @@ const OrderSchema = new Schema({
   },
   deliveryPrice: {
     type: Number
+  },
+  price: {
+    type: Number,
+    required: true
   },
   paymentSlip: {
     //Slip image

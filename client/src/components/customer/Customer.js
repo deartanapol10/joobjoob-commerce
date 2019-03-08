@@ -76,7 +76,7 @@ class Customer extends Component {
   componentWillMount() {
     let userid = this.props.match.params.userid;
     let orderid = this.props.match.params.orderid;
-    this.props.getOrder(userid, orderid);
+    this.props.getOrder(orderid);
   }
 
   getStepContent = step => {
@@ -159,7 +159,7 @@ class Customer extends Component {
       {
         shipping: event.target.value
       },
-      function() {
+      function () {
         this.calculateTotal();
       }
     );
@@ -191,22 +191,28 @@ class Customer extends Component {
 
   render() {
     const { classes } = this.props;
-    const { order, loading } = this.props.order;
-
-    if (order === null || loading) {
+    const { order , loading } = this.props.order;
+    console.log(order)
+    console.log(order !== "undefined");
+    // const {firstName='', lastName='', id=''} = this.props.author
+    if (loading === true || order === null || order === "undefined" ) {
       return <CircularProgress className={classes.loading} />;
-    } else {
+    } 
+    
+    else {
+      console.log(order.products)
       // create a product item to add in product component
       var newItem = [];
-      for (let i = 0; i < order.products.length; i++) {
-        newItem.push({
-          id: order.products[i].product._id,
-          name: order.products[i].product.quantity,
-          price: order.products[i].product.size,
-          amount: order.products[i].description,
-          image: itemImage01
-        });
-      }
+        // for (let i = 0; i < order.products.length; i++) {
+        //   newItem.push({
+        //     // id: order.products[i].product._id,
+        //     name: order.products[i].product.quantity,
+        //     price: order.products[i].product.size,
+        //     amount: order.products[i].description,
+        //     image: itemImage01
+        //   });
+        // }
+
       return (
         <React.Fragment>
           <main className={classes.layout}>
@@ -246,7 +252,7 @@ class Customer extends Component {
                     gutterBottom
                     className={classes.titleSecondary}
                   >
-                    Order ID: {order._id}
+                    Order ID: {order.orderId}
                   </Typography>
                   <List disablePadding>
                     <ListItem className={classes.listItem}>

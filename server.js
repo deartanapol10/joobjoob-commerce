@@ -13,6 +13,7 @@ var product = require("./routes/api/product");
 var category = require("./routes/api/category");
 var store = require("./routes/api/store");
 
+
 // DB config
 const db = require("./config/keys").mongoURI;
 

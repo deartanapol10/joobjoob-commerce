@@ -108,7 +108,7 @@ class Merchant extends Component {
          mobileMoreAnchorEl: null,
          value: 0,
          checked: [],
-         orders: originalOrders,
+         // orders: originalOrders,
          filteredOrders: [],
          customerNames: customerNamesList,
          newCustomerName: "",
@@ -328,11 +328,12 @@ class Merchant extends Component {
    };
 
    handleItemAmount = (add, id) => {
-      const { order } = this.props.location.state;
+      const { order } = this.props.location.state.order;
    };
 
    componentDidMount() {
-      const { order } = this.props.location.state;
+      const { order } = this.props.location.state.order;
+      console.log(this.props.order)
       // console.log(order), this.filterOrders(this.state.value);
    }
 
@@ -387,6 +388,7 @@ class Merchant extends Component {
       const { order } = this.props.order
       console.log( order )
 
+      // <Route path={`${match.path}/:topicId`} component={Topic} />
       const toOrders = props => <Link to="/merchant" {...props} />;
       const newOrder = props => <Link to="/products" {...props} />;
 

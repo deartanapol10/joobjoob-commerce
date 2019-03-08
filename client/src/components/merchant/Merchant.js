@@ -88,7 +88,6 @@ function TabContainer(props) {
 class Merchant extends Component {
    constructor(props) {
       super(props);
-      this.state = { isLoading: true }
       // Ref for inputs
       this.myRef = React.createRef();
 
@@ -98,8 +97,6 @@ class Merchant extends Component {
          mobileMoreAnchorEl: null,
          value: 0,
          checked: [],
-         // orders: originalOrders,
-         // orders : this.props,
          filteredOrders: [],
          customerNames: customerNamesList,
          newCustomerName: "",
@@ -233,12 +230,10 @@ class Merchant extends Component {
    // Filter from all orders - Filter orders that match with selected tab status
    filterOrders = statusIndex => {
       const { orders } = this.props.orders;
-      console.log(this.props.orders);
       const newFilteredOrders = orders.filter(
          order => order.orderStatus === orderStatus[statusIndex].name.en
       );
       this.setState({ filteredOrders: newFilteredOrders });
-      console.log(newFilteredOrders)
    };
 
    // Reset search term and results
@@ -294,17 +289,16 @@ class Merchant extends Component {
    }
 
    componentDidMount() {
-      this.setState({isLoading: false})
       this.filterOrders(this.state.value);
    }
    orderInfo(e, order) {
-      console.log(order);
       this.props.history.push({
-         pathname: "/order/"+order._id,
+         pathname: "/order/"+ order._id,
          state: {
             order
          }
       });
+      console.log(order);
    }
 
    toggleBottomDrawer = open => {
@@ -549,7 +543,7 @@ class Merchant extends Component {
                                  className={classes.orderNumber}
                               // -----test order id-------
                               // >{`#${order._id}`}
-                              >{`#${order.deliveryType}`}
+                              >{`#${order.orderId}`}
 
                               </Typography>
                            </Button>
@@ -599,7 +593,8 @@ class Merchant extends Component {
                               variant="subheading"
                               className={classes.orderTimeStamp}
                            >
-                              {calculateDate(order.updatedTime)}
+                              {(order.expiredAt)}
+                              {/* {calculateDate(order.updatedTime)} */}
                            </Typography>
                         </div>
                      </CardContent>
@@ -747,9 +742,7 @@ class Merchant extends Component {
             }
          </Drawer>
       );
-      if (this.state.isLoading) {
-         return <Loader type="Grid" color="#somecolor" height={80} width={80} />
-      }
+
       return (
          <React.Fragment>
             {/* Wrapper */}
@@ -914,10 +907,9 @@ class Merchant extends Component {
                      classes.flexColumn
                   )}
                >
-               
+
                   {/* If there's no orders in the tab, display "ไม่มีออเดอร์" text */}
                   {filteredOrders.length === 0 ? (
-                     
                      <div className={classes.orderBlank}>
                         <CancelIcon className={classes.orderBlankIcon} />
                         <Loader type="TailSpin" color="#somecolor" height={80} width={80} />
@@ -990,7 +982,116 @@ class Merchant extends Component {
                      )}
                   >
                      {/* Tab content separated by value */}
-                     {value === 0 && <TabContainer>{orderCard}</TabContainer>}
+                     {value === 0 && <TabContainer>{(
+                        <React.Fragment>
+                           {/* Sort orders before map, by compare updated time */}
+                           {orders
+                              .sort(
+                                 (a, b) =>
+                                    moment(b.updatedTime, "DDMMYYYYhhmm").format("X") -
+                                    moment(a.updatedTime, "DDMMYYYYhhmm").format("X")
+                              ).filter(order => order.orderStatus === "created")
+                              .map(order => (
+                                 <Card
+                                    className={
+                                       checked.indexOf(order._id) === -1
+                                          ? classes.orderCard
+                                          : classNames(
+                                             classes.orderCard,
+                                             classes.orderCardActive
+                                          )
+                                    }
+                                    key={order._id}
+                                    onClick={e => {
+                                       this.orderInfo(e, order);
+                                    }}
+                                 >
+                                    <Checkbox
+                                       onChange={this.handleToggle(order._id)}
+                                       checked={checked.indexOf(order._id) !== -1}
+                                       value={order._id}
+                                       className={
+                                          checked.indexOf(order._id) === -1
+                                             ? classes.orderCheckbox
+                                             : classNames(
+                                                classes.orderCheckbox,
+                                                classes.orderCheckboxActive
+                                             )
+                                       }
+                                    />
+                                    <CardContent className={classes.orderCardContent}>
+                                       <div>
+                                          <Button
+                                             variant="contained"
+                                             color="primary"
+                                             className={classNames(
+                                                orderStatusColor(order.status),
+                                                classes.orderStatusButton,
+                                                classes.textLeft
+                                             )}
+                                          >
+                                             <Typography
+                                                variant="body2"
+                                                className={classes.orderNumber}
+                                             >{`#${order.orderId}`}
+
+                                             </Typography>
+                                          </Button>
+                                          <span>
+                                             <Typography
+                                                variant="body1"
+                                                className={classNames(
+                                                   orderStatusColor(order.orderStatus),
+                                                   classes.orderStatusText,
+                                                   classes.textLeft
+                                                )}
+                                             >
+                                                {` ${orderStatusText(order.orderStatus)}`}
+                                             </Typography>
+                                          </span>
+                                          <IconButton
+                                             aria-haspopup="true"
+                                             color="inherit"
+                                             className={classNames(
+                                                classes.orderPrintButton,
+                                                classes.floatRight
+                                             )}
+                                          >
+                                             <PrintIcon />
+                                          </IconButton>
+                                       </div>
+                                       <div className={classes.clearBoth} />
+                                       <div className={classes.orderDetail}>
+                                          <Typography
+                                             variant="body2"
+                                             className={classes.orderClientName}
+                                          >
+                                             {order.customerName}
+                                          </Typography>
+                                          <Typography
+                                             variant="body1"
+                                             className={classNames(
+                                                classes.textRight,
+                                                classes.orderPrice
+                                             )}
+                                          >
+                                             {order.price} บาท
+                           </Typography>
+                                       </div>
+                                       <div className={classes.orderDetail}>
+                                          <Typography
+                                             variant="subheading"
+                                             className={classes.orderTimeStamp}
+                                          >
+                                             {(order.expiredAt)}
+                                             {/* {calculateDate(order.updatedTime)} */}
+                                          </Typography>
+                                       </div>
+                                    </CardContent>
+                                 </Card>
+                              ))}
+                        </React.Fragment>
+                     )}</TabContainer>}
                      {value === 1 && <TabContainer>{orderCard}</TabContainer>}
                      {value === 2 && <TabContainer>{orderCard}</TabContainer>}
                      {value === 3 && <TabContainer>{orderCard}</TabContainer>}
