@@ -4,6 +4,7 @@ import { getOrder } from "../../actions/orderAction";
 import { connect } from "react-redux";
 import Spinner from "../common/Spinner";
 import moment from "moment";
+import Loader from 'react-loader-spinner'
 
 import {
   Grid,
@@ -192,26 +193,23 @@ class Customer extends Component {
   render() {
     const { classes } = this.props;
     const { order , loading } = this.props.order;
-    console.log(order)
-    console.log(order !== "undefined");
-    // const {firstName='', lastName='', id=''} = this.props.author
-    if (loading === true || order === null || order === "undefined" ) {
+
+    if (loading === true || order === null || order === "undefined" || order.length == 0 ) {
       return <CircularProgress className={classes.loading} />;
     } 
     
     else {
-      console.log(order.products)
       // create a product item to add in product component
       var newItem = [];
-        // for (let i = 0; i < order.products.length; i++) {
-        //   newItem.push({
-        //     // id: order.products[i].product._id,
-        //     name: order.products[i].product.quantity,
-        //     price: order.products[i].product.size,
-        //     amount: order.products[i].description,
-        //     image: itemImage01
-        //   });
-        // }
+        for (let i = 0; i < order.products.length; i++) {
+          newItem.push({
+            id: order.products[i].product._id,
+            name: order.products[i].product.size,
+            price: order.products[i].product.quantity,
+            amount: order.products[i].description,
+            image: itemImage01
+          });
+        }
 
       return (
         <React.Fragment>

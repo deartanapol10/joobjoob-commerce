@@ -44,7 +44,8 @@ import {
    TextField,
    Toolbar,
    Typography,
-   withStyles
+   withStyles,
+   CircularProgress
 } from "@material-ui/core";
 
 import Fab from "@material-ui/core/Fab";
@@ -293,7 +294,7 @@ class Merchant extends Component {
    }
    orderInfo(e, order) {
       this.props.history.push({
-         pathname: "/order/"+ order._id,
+         pathname: "/order/" + order._id,
          state: {
             order
          }
@@ -324,7 +325,7 @@ class Merchant extends Component {
       } = this.state;
       const isStatusMenuOpen = Boolean(statusAnchorEl);
       const isMenuOpen = Boolean(menuAnchorEl);
-      const { orders } = this.props.orders;
+      const { orders, loading } = this.props.orders;
       console.log(orders)
 
       const newOrder = props => <Link to="/products" {...props} />;
@@ -742,10 +743,13 @@ class Merchant extends Component {
             }
          </Drawer>
       );
-
+      if (loading === true || orders === null || orders === "undefined") {
+         return <CircularProgress className={classes.loading} />;
+      }
       return (
          <React.Fragment>
             {/* Wrapper */}
+
             <main className={classes.layout}>
                {/* Fixed top header for logo, search input and menus */}
                <AppBar
@@ -909,7 +913,34 @@ class Merchant extends Component {
                >
 
                   {/* If there's no orders in the tab, display "ไม่มีออเดอร์" text */}
-                  {filteredOrders.length === 0 ? (
+                  { orders.filter(order => order.orderStatus === "created") > 0?  (
+                     <div
+                              className={classNames(
+                                 classes.selectAll,
+                                 classes.selectAllActive
+                              )}
+                           >
+                              <FormControlLabel
+                                 control={
+                                    <Checkbox
+                                       checked={
+                                          checked.length === filteredOrders.length
+                                       }
+                                       onChange={this.handleSelectAll}
+                                       className={classNames(
+                                          classes.selectAllCheckbox,
+                                          classes.selectAllCheckboxActive
+                                       )}
+                                    />
+                                 }
+                                 label={`เลือก ${checked.length}`}
+                                 className={classNames(
+                                    classes.selectAllLabel,
+                                    classes.selectAllLabelActive
+                                 )}
+                              />
+                           </div>
+                  ): filteredOrders.length === 0 &&  orders.filter(order => order.orderStatus === "created") === 0?  (
                      <div className={classes.orderBlank}>
                         <CancelIcon className={classes.orderBlankIcon} />
                         <Loader type="TailSpin" color="#somecolor" height={80} width={80} />
@@ -921,7 +952,7 @@ class Merchant extends Component {
                            ไม่มีออเดอร์
                         </Typography>
                      </div>
-                  ) : /* Else show select all checkbox with a condition */
+                  ) :/* Else show select all checkbox with a condition */
                      /* If there's order checked, display "เลือก " with selected orders amount */
                      checked.length === 0 ? (
                         <div className={classes.selectAll}>
@@ -982,9 +1013,9 @@ class Merchant extends Component {
                      )}
                   >
                      {/* Tab content separated by value */}
+                     
                      {value === 0 && <TabContainer>{(
                         <React.Fragment>
-                           {/* Sort orders before map, by compare updated time */}
                            {orders
                               .sort(
                                  (a, b) =>
@@ -1084,7 +1115,6 @@ class Merchant extends Component {
                                              className={classes.orderTimeStamp}
                                           >
                                              {(order.expiredAt)}
-                                             {/* {calculateDate(order.updatedTime)} */}
                                           </Typography>
                                        </div>
                                     </CardContent>
@@ -1095,6 +1125,10 @@ class Merchant extends Component {
                      {value === 1 && <TabContainer>{orderCard}</TabContainer>}
                      {value === 2 && <TabContainer>{orderCard}</TabContainer>}
                      {value === 3 && <TabContainer>{orderCard}</TabContainer>}
+
+
+
+
 
                      {/* Additional space at the bottom of content */}
                      <div className={classes.bottomSpace} />

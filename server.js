@@ -53,6 +53,11 @@ require("./config/passport")(passport);
 //Express-Validator Middleware
 app.use(expressValidator());
 
+//[Upload] show picture 
+//localhost:8000/uploads/1548591284172result-clipboard.png
+app.use('/uploads', express.static('uploads'));
+app.use('/showImgSlip', express.static('slipImg'));
+
 app.use("/api/user", users);
 app.use("/api/orders", orders);
 app.use("/api/product", product);
