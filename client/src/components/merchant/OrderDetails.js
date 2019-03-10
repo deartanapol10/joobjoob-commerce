@@ -18,6 +18,7 @@ import { getCategory } from '../../actions/categoryAction'
 import { getBankAccount } from '../../actions/bankAccountAction'
 import { getDelivery } from '../../actions/deliveryAction'
 import { getOrder } from '../../actions/orderAction'
+import { getAllProduct } from '../../actions/productAction'
 
 // Import Material UI core components
 import {
@@ -52,7 +53,8 @@ import {
    TextField,
    Toolbar,
    Typography,
-   withStyles
+   withStyles,
+   CircularProgress
 } from "@material-ui/core";
 
 import Fab from "@material-ui/core/Fab";
@@ -86,6 +88,7 @@ import {
 
 // Import JSS styles
 import styles from "./styles";
+import { stat } from "fs";
 
 // Init moment to local time format
 moment.locale("th");
@@ -118,7 +121,7 @@ class Merchant extends Component {
          productOptionPopup: false,
          cart: [],
          cartTotal: 0,
-         products: productsList,
+         // products: productsList,
          options: optionsList,
          selectedProduct: {},
          newProduct: {},
@@ -342,6 +345,7 @@ class Merchant extends Component {
       this.props.getDelivery();
       this.props.getBankAccount();
       this.props.getCategory();
+      this.props.getAllProduct();
    }
 
    orderInfo(e, order) {
@@ -386,7 +390,9 @@ class Merchant extends Component {
       const { bankAccount } = this.props.bankAccount
       const { delivery } = this.props.delivery
       const { order } = this.props.order
-      console.log( order )
+      const { product } = this.props.product
+      console.log(order)
+      console.log(product)
 
       // <Route path={`${match.path}/:topicId`} component={Topic} />
       const toOrders = props => <Link to="/merchant" {...props} />;
@@ -472,153 +478,162 @@ class Merchant extends Component {
          </Menu>
       );
 
+      if (order === null || order === "undefined" || order.length == 0) {
+         return <div>Loading...</div>
+      }
+
       // Render each order for current tab
       const itemList = (
          <React.Fragment>
             {/* Sort orders before map, by compare updated time */}
-            {/* {order.products.map(item => (
-               <Card className={classes.itemCard} key={item.id}>
-                  <CardContent className={classes.itemCardContent}>
-                     <CardMedia
-                        className={classes.itemCardMedia}
-                        image={item.image}
-                        title={item.name}
-                     />
-                     <span className={classes.itemCardDetailsWrapper}>
-                        <div className={classes.itemCardDetails}>
-                           <Typography
-                              variant="body2"
-                              className={classes.itemCardTitle}
-                           >
-                              {item.name}
-                           </Typography>
-                           <div className={classes.grow} />
-                           <span className={classes.itemPriceInput}>
-                              <TextField
-                                 id="item-price"
-                                 className={classNames(
-                                    classes.margin,
-                                    classes.textField
-                                 )}
-                                 variant="outlined"
-                                 defaultValue={`${item.price}.00`}
-                                 InputProps={{
-                                    endAdornment: (
-                                       <InputAdornment position="end">
-                                          บาท
-                                       </InputAdornment>
-                                    )
-                                 }}
-                              />
-                           </span>
-                        </div>
-                        <div className={classes.itemCardDetails}>
-                           <span className={classes.itemOptionSelect}>
-                              <TextField
-                                 id="order-category-select"
-                                 select
-                                 className={classes.textField}
-                                 onChange={this.handleCategorySelelect}
-                                 value={selectedCategory}
-                                 SelectProps={{
-                                    MenuProps: {
-                                       className: classes.menu
-                                    }
-                                 }}
-                                 margin="none"
-                                 variant="outlined"
+            {order.products
+               .map(item => (
+                  <Card className={classes.itemCard} key={item.id}>
+                     <CardContent className={classes.itemCardContent}>
+                        <CardMedia
+                           className={classes.itemCardMedia}
+                           image={"http://localhost:8000/uploads/"+product.filter(pd => pd._id == item.product).map(pd => pd.productImage)}
+                           title={item.name}
+                        />
+                        <span className={classes.itemCardDetailsWrapper}>
+                           <div className={classes.itemCardDetails}>
+                              <Typography
+                                 variant="body2"
+                                 className={classes.itemCardTitle}
                               >
-                                 <MenuItem key={0} value="ไม่มีรูปแบบสินค้า" disabled>
-                                    ไม่ระบุรูปแบบสินค้า
+                                 {`${
+                                    product.filter(pd => pd._id == item.product).map(pd => pd.productName)
+                                    }`}
+                              </Typography>
+                              <div className={classes.grow} />
+                              <span className={classes.itemPriceInput}>
+                                 <TextField
+                                    id="item-price"
+                                    className={classNames(
+                                       classes.margin,
+                                       classes.textField
+                                    )}
+                                    variant="outlined"
+                                    defaultValue={`${
+                                       product.filter(pd => pd._id == item.product).map(pd => pd.price)
+                                       }`}
+                                    InputProps={{
+                                       endAdornment: (
+                                          <InputAdornment position="end">
+                                             บาท
+                                       </InputAdornment>
+                                       )
+                                    }}
+                                 />
+                              </span>
+                           </div>
+                           <div className={classes.itemCardDetails}>
+                              <span className={classes.itemOptionSelect}>
+                                 <TextField
+                                    id="order-category-select"
+                                    select
+                                    className={classes.textField}
+                                    onChange={this.handleCategorySelelect}
+                                    value={selectedCategory}
+                                    SelectProps={{
+                                       MenuProps: {
+                                          className: classes.menu
+                                       }
+                                    }}
+                                    margin="none"
+                                    variant="outlined"
+                                 >
+                                    <MenuItem key={0} value="ไม่มีรูปแบบสินค้า" disabled>
+                                       ไม่ระบุรูปแบบสินค้า
                                  </MenuItem>
-                                 {category.length > 0 && category.filter(c => c.main === item.categoryGroup)[0].sub.map(e => (
+                                    {/* {category.length > 0 && category.filter(c => c.main === item.categoryGroup)[0].sub.map(e => (
                                     <MenuItem
                                        key={e}
                                        value={e}
                                     >
                                        {e}
                                     </MenuItem>
-                                 ))}
-                                 <MenuItem
-                                    key={9999}
-                                    value="เพิ่มการส่ง"
-                                    className={classes.orderAddShipping}
-                                 >
-                                    <span
-                                       className={
-                                          classes.orderAddShippingButton
-                                       }
-                                       onClick={this.AddShipping}
+                                 ))} */}
+                                    <MenuItem
+                                       key={9999}
+                                       value="เพิ่มการส่ง"
+                                       className={classes.orderAddShipping}
                                     >
-                                       <AddIcon />
-                                       เพิ่มการส่ง
-                                    </span>
-                                 </MenuItem>
-                              </TextField>
-                           </span>
-                           <div className={classes.grow} />
-                           <span
-                              className={classNames(
-                                 classes.itemPriceInput,
-                                 classes.itemAmountInput
-                              )}
-                           >
-                              <TextField
-                                 id="order-total"
-                                 className={classNames(
-                                    classes.margin,
-                                    classes.textField
-                                 )}
-                                 variant="outlined"
-                                 defaultValue="1"
-                                 InputProps={{
-                                    startAdornment: (
-                                       <IconButton
-                                          onClick={this.handleItemAmount(
-                                             false,
-                                             item.id
-                                          )}
-                                          className={classNames(
-                                             classes.itemAmountButton,
-                                             classes.itemAmountRemove
-                                          )}
-                                       >
-                                          <RemoveIcon />
-                                       </IconButton>
-                                    ),
-                                    endAdornment: (
-                                       <IconButton
-                                          onClick={this.handleItemAmount(
-                                             true,
-                                             item.id
-                                          )}
-                                          className={classNames(
-                                             classes.itemAmountButton,
-                                             classes.itemAmountAdd
-                                          )}
+                                       <span
+                                          className={
+                                             classes.orderAddShippingButton
+                                          }
+                                          onClick={this.AddShipping}
                                        >
                                           <AddIcon />
-                                       </IconButton>
-                                    )
-                                 }}
-                              />
-                           </span>
-                        </div>
-                     </span>
-                  </CardContent>
-                  <CardActions className={classes.itemCardComment}>
-                     <TextField
-                        id="item-comment"
-                        className={classNames(
-                           classes.margin,
-                           classes.textField
-                        )}
-                        variant="outlined"
-                        placeholder="รายละเอียดเพิ่มเติม"
-                     />
-                  </CardActions>
-               </Card>
-            ))} */}
+                                          เพิ่มการส่ง
+                                    </span>
+                                    </MenuItem>
+                                 </TextField>
+                              </span>
+                              <div className={classes.grow} />
+                              <span
+                                 className={classNames(
+                                    classes.itemPriceInput,
+                                    classes.itemAmountInput
+                                 )}
+                              >
+                                 <TextField
+                                    id="order-total"
+                                    className={classNames(
+                                       classes.margin,
+                                       classes.textField
+                                    )}
+                                    variant="outlined"
+                                    defaultValue="1"
+                                    InputProps={{
+                                       startAdornment: (
+                                          <IconButton
+                                             onClick={this.handleItemAmount(
+                                                false,
+                                                item.id
+                                             )}
+                                             className={classNames(
+                                                classes.itemAmountButton,
+                                                classes.itemAmountRemove
+                                             )}
+                                          >
+                                             <RemoveIcon />
+                                          </IconButton>
+                                       ),
+                                       endAdornment: (
+                                          <IconButton
+                                             onClick={this.handleItemAmount(
+                                                true,
+                                                item.id
+                                             )}
+                                             className={classNames(
+                                                classes.itemAmountButton,
+                                                classes.itemAmountAdd
+                                             )}
+                                          >
+                                             <AddIcon />
+                                          </IconButton>
+                                       )
+                                    }}
+                                 />
+                              </span>
+                           </div>
+                        </span>
+                     </CardContent>
+                     <CardActions className={classes.itemCardComment}>
+                        <TextField
+                           id="item-comment"
+                           className={classNames(
+                              classes.margin,
+                              classes.textField
+                           )}
+                           variant="outlined"
+                           placeholder="รายละเอียดเพิ่มเติม"
+                        />
+                     </CardActions>
+                  </Card>
+               ))}
          </React.Fragment>
       );
 
@@ -1226,8 +1241,9 @@ const mapStateToProps = state => ({
    category: state.category,
    bankAccount: state.bankAccount,
    delivery: state.delivery,
-   order: state.order
+   order: state.order,
+   product: state.product
 })
 
 const WrappedStyle = withStyles(styles)(Merchant);
-export default connect(mapStateToProps, { getCategory, getBankAccount, getDelivery, getOrder })(withRouter(WrappedStyle));
+export default connect(mapStateToProps, { getCategory, getBankAccount, getDelivery, getOrder, getAllProduct })(withRouter(WrappedStyle));

@@ -11,6 +11,7 @@ export const DELETE_ORDER = "DELETE_ORDER";
 export const LOGIN = "LOGIN";
 export const SET_USER_LOADING = "SET_USER_LOADING";
 export const GET_ALL_PRODUCT = "GET_ALL_PRODUCT";
+export const GET_PRODUCT = "GET_PRODUCT";
 export const PRODUCT_LOADING = "PRODUCT_LOADING";
 export const ADD_PRODUCT = "ADD_PRODUCT";
 export const EDIT_PRODUCT = "EDIT_PRODUCT";

@@ -702,7 +702,7 @@ class Merchant extends Component {
                                                          classes.orderNumber
                                                       }
                                                    >{`#${
-                                                      order._id
+                                                      order.orderId
                                                       }`}</Typography>
                                                 </Button>
                                              </div>
@@ -913,46 +913,19 @@ class Merchant extends Component {
                >
 
                   {/* If there's no orders in the tab, display "ไม่มีออเดอร์" text */}
-                  { orders.filter(order => order.orderStatus === "created") > 0?  (
-                     <div
-                              className={classNames(
-                                 classes.selectAll,
-                                 classes.selectAllActive
-                              )}
+                  {filteredOrders.length === 0 ? (
+                        <div className={classes.orderBlank}>
+                           <CancelIcon className={classes.orderBlankIcon} />
+                           {/* <Loader type="TailSpin" color="#somecolor" height={80} width={80} /> */}
+                           <Typography
+                              variant="body1"
+                              align="center"
+                              color="inherit"
                            >
-                              <FormControlLabel
-                                 control={
-                                    <Checkbox
-                                       checked={
-                                          checked.length === filteredOrders.length
-                                       }
-                                       onChange={this.handleSelectAll}
-                                       className={classNames(
-                                          classes.selectAllCheckbox,
-                                          classes.selectAllCheckboxActive
-                                       )}
-                                    />
-                                 }
-                                 label={`เลือก ${checked.length}`}
-                                 className={classNames(
-                                    classes.selectAllLabel,
-                                    classes.selectAllLabelActive
-                                 )}
-                              />
-                           </div>
-                  ): filteredOrders.length === 0 &&  orders.filter(order => order.orderStatus === "created") === 0?  (
-                     <div className={classes.orderBlank}>
-                        <CancelIcon className={classes.orderBlankIcon} />
-                        <Loader type="TailSpin" color="#somecolor" height={80} width={80} />
-                        <Typography
-                           variant="body1"
-                           align="center"
-                           color="inherit"
-                        >
-                           ไม่มีออเดอร์
+                              ไม่มีออเดอร์
                         </Typography>
-                     </div>
-                  ) :/* Else show select all checkbox with a condition */
+                        </div>
+                     ) :/* Else show select all checkbox with a condition */
                      /* If there's order checked, display "เลือก " with selected orders amount */
                      checked.length === 0 ? (
                         <div className={classes.selectAll}>
@@ -997,7 +970,8 @@ class Merchant extends Component {
                                  )}
                               />
                            </div>
-                        )}
+                        )
+                        }
                </Paper>
 
                {/* Render menus */}
@@ -1013,7 +987,7 @@ class Merchant extends Component {
                      )}
                   >
                      {/* Tab content separated by value */}
-                     
+
                      {value === 0 && <TabContainer>{(
                         <React.Fragment>
                            {orders
