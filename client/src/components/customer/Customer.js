@@ -216,7 +216,7 @@ class Customer extends Component {
           image: index.map(pd => pd.productImage)
         });
       }
-      console.log(newItem)
+
 
 
       return (
