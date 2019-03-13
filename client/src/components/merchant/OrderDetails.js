@@ -3,6 +3,7 @@ import _ from "lodash";
 
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
+import Calendar from "react-calendar-material";
 
 // moment for Time & Calendar Management
 import moment from "moment";
@@ -123,7 +124,11 @@ class Merchant extends Component {
          shippingName: "เลือกการส่ง",
          shippingCost: 0,
          isAddShippingPopup: false,
-         isEditAccountPopup: false
+         isEditAccountPopup: false,
+         calendarPopup: false,
+         currentCalendar: "",
+         dateBillCreated: "",
+         dateBillExpire: "",
       };
    }
 
@@ -293,6 +298,29 @@ class Merchant extends Component {
 
    //// **** END SEARCH FUNCTIONS **** ////
 
+   handleCalendarOpen = calendar => event => {
+      this.setState({ 
+         calendarPopup: true,
+         currentCalendar: calendar
+      });
+   };
+
+   handleCalendarClose = d => {
+      console.log(d);
+      if(this.state.currentCalendar === "created") {
+         this.setState({
+            dateBillCreated: d,
+         });
+      } else {
+         this.setState({
+            dateBillExpire: d,
+         })
+      }
+      this.setState({ 
+         calendarPopup: false,
+      });
+   };
+
    handleShippingSelect = name => event => {
       const { shippings } = this.state;
       if (isNaN(event.target.value) === false) {
@@ -325,7 +353,8 @@ class Merchant extends Component {
 
    componentDidMount() {
       const { order } = this.props.location.state;
-      console.log(order), this.filterOrders(this.state.value);
+      console.log(order);
+      this.filterOrders(this.state.value);
    }
 
    orderInfo(e, order) {
@@ -361,7 +390,11 @@ class Merchant extends Component {
          shippings,
          selectedShipping,
          shippingName,
-         shippingCost
+         shippingCost,
+         currentCalendar,
+         calendarPopup,
+         dateBillCreated,
+         dateBillExpire,
       } = this.state;
       const isStatusMenuOpen = Boolean(statusAnchorEl);
       const isMenuOpen = Boolean(menuAnchorEl);
@@ -602,22 +635,31 @@ class Merchant extends Component {
 
       const paymentSelection = (
          <React.Fragment>
-            <div style={{ display: "flex", justifyContent: "space-evenly" }}>
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
                <Card
-                  style={{ width: "40%", padding: "20px", textAlign: "center" }}
+                  style={{ width: "48%", padding: "20px", textAlign: "center" }}
+                  onClick={this.handleCalendarOpen("created")}
                >
                   <Typography variant="h5">วันที่เปิดบิล</Typography>
                   <Typography variant="p">
-                     {moment(order.createdTime, "DDMMYYYYhhmm").format("LL")}
+                     {dateBillCreated ? 
+                        moment(dateBillCreated, "DDMMYYYY").format("LL")
+                     :
+                        moment(order.createdTime, "DDMMYYYY").format("LL")
+                     }
                   </Typography>
                </Card>
-
                <Card
-                  style={{ width: "40%", padding: "20px", textAlign: "center" }}
+                  style={{ width: "48%", padding: "20px", textAlign: "center" }}
+                  onClick={this.handleCalendarOpen("expire")}
                >
                   <Typography variant="h5">วันหมดอายุ</Typography>
                   <Typography variant="p">
-                     {moment(order.expiredAt, "DDMMYYYYhhmm").format("LL")}
+                     {dateBillExpire ? 
+                        moment(dateBillExpire, "DDMMYYYY").format("LL")
+                     :
+                        moment(order.expiredAt, "DDMMYY").format("LL")   
+                     }
                   </Typography>
                </Card>
             </div>
@@ -1339,6 +1381,19 @@ class Merchant extends Component {
 
                {addShippingPopup}
                {editAccountPopup}
+               {calendarPopup &&
+               
+                  <Calendar
+                     accentColor={'pink'}
+                     orientation={'flex-col'}
+                     showHeader={true}
+                     className={classes.calendarPanel}
+                     onDatePicked={(d) => {
+                        {this.handleCalendarClose(d)}
+                     }}
+                  />
+
+               }
             </main>
          </React.Fragment>
       );

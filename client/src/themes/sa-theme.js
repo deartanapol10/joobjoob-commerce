@@ -45,6 +45,7 @@ export default createMuiTheme({
 		MuiBadge: {
 			badge: {
 				fontSize: 14,
+				transform: "none",
 			},
 			invisible: {
 				display: "none",

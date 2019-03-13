@@ -413,7 +413,7 @@ class Customer extends Component {
    }
 }
 
-Customer.proptypes = {
+Customer.propTypes = {
    getOrder: PropTypes.func.isRequired,
    order: PropTypes.object.isRequired
 };
