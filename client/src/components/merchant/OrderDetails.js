@@ -6,6 +6,7 @@ import { Link, withRouter } from "react-router-dom";
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
+import Calendar from "react-calendar-material";
 
 // moment for Time & Calendar Management
 import moment from "moment";
@@ -28,6 +29,7 @@ import {
    Button,
    Card,
    CardActions,
+   CardActionArea,
    CardContent,
    CardMedia,
    Checkbox,
@@ -134,6 +136,11 @@ class Merchant extends Component {
          shippingCost: 0,
          isAddShippingPopup: false,
          selectedCategory: "ไม่ระบุรูปแบบสินค้า",
+         isEditAccountPopup: false,
+         calendarPopup: false,
+         currentCalendar: "",
+         dateBillCreated: "",
+         dateBillExpire: "",
       };
    }
 
@@ -315,7 +322,29 @@ class Merchant extends Component {
          shippingName: selectedDelivery.deliveryName,
          shippingCost: selectedDelivery.price
       });
-      // }
+   }
+
+   handleCalendarOpen = calendar => event => {
+      this.setState({
+         calendarPopup: true,
+         currentCalendar: calendar
+      });
+   };
+
+   handleCalendarClose = d => {
+      console.log(d);
+      if (this.state.currentCalendar === "created") {
+         this.setState({
+            dateBillCreated: d,
+         });
+      } else {
+         this.setState({
+            dateBillExpire: d,
+         })
+      }
+      this.setState({
+         calendarPopup: false,
+      });
    };
 
    handleCategorySelelect = event => {
@@ -328,6 +357,10 @@ class Merchant extends Component {
 
    addShippingPopupDrawer = open => {
       this.setState({ isAddShippingPopup: open });
+   };
+
+   editAccountPopupDrawer = open => {
+      this.setState({ isEditAccountPopup: open });
    };
 
    handleItemAmount = (add, id) => {
@@ -346,6 +379,9 @@ class Merchant extends Component {
       this.props.getBankAccount();
       this.props.getCategory();
       this.props.getAllProduct();
+      const { order } = this.props.location.state;
+      console.log(order);
+      //this.filterOrders(this.state.value);
    }
 
    orderInfo(e, order) {
@@ -382,7 +418,11 @@ class Merchant extends Component {
          selectedShipping,
          selectedCategory,
          shippingName,
-         shippingCost
+         shippingCost,
+         currentCalendar,
+         calendarPopup,
+         dateBillCreated,
+         dateBillExpire,
       } = this.state;
       const isStatusMenuOpen = Boolean(statusAnchorEl);
       const isMenuOpen = Boolean(menuAnchorEl);
@@ -492,7 +532,7 @@ class Merchant extends Component {
                      <CardContent className={classes.itemCardContent}>
                         <CardMedia
                            className={classes.itemCardMedia}
-                           image={"http://localhost:8000/"+product.filter(pd => pd._id == item.product).map(pd => pd.productImage)}
+                           image={"http://localhost:8000/" + product.filter(pd => pd._id == item.product).map(pd => pd.productImage)}
                            title={item.name}
                         />
                         <span className={classes.itemCardDetailsWrapper}>
@@ -639,22 +679,31 @@ class Merchant extends Component {
 
       const paymentSelection = (
          <React.Fragment>
-            <div style={{ display: "flex", justifyContent: "space-evenly" }}>
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
                <Card
-                  style={{ width: "40%", padding: "20px", textAlign: "center" }}
+                  style={{ width: "48%", padding: "20px", textAlign: "center" }}
+                  onClick={this.handleCalendarOpen("created")}
                >
                   <Typography variant="h5">วันที่เปิดบิล</Typography>
                   <Typography variant="p">
-                     {moment(order.createdTime, "DDMMYYYYhhmm").format("LL")}
+                     {dateBillCreated ?
+                        moment(dateBillCreated, "DDMMYYYY").format("LL")
+                        :
+                        moment(order.createdTime, "DDMMYYYY").format("LL")
+                     }
                   </Typography>
                </Card>
-
                <Card
-                  style={{ width: "40%", padding: "20px", textAlign: "center" }}
+                  style={{ width: "48%", padding: "20px", textAlign: "center" }}
+                  onClick={this.handleCalendarOpen("expire")}
                >
                   <Typography variant="h5">วันหมดอายุ</Typography>
                   <Typography variant="p">
-                     {moment(order.expiredAt, "DDMMYYYYhhmm").format("LL")}
+                     {dateBillExpire ?
+                        moment(dateBillExpire, "DDMMYYYY").format("LL")
+                        :
+                        moment(order.expiredAt, "DDMMYY").format("LL")
+                     }
                   </Typography>
                </Card>
             </div>
@@ -667,27 +716,28 @@ class Merchant extends Component {
             </Typography>
 
             {bankAccount.length > 0 && bankAccount.map(e => (
-               <Card
-                  style={{
-                     display: "flex",
-                     justifyContent: "space-between",
-                     alignItems: "center",
-                     padding: "20px",
-                     textAlign: "right",
-                     marginBottom: "15px"
-                  }}
-               >
-                  <img
-                     src="http://www.ojgold.co.th/wp-content/uploads/cache/2016/03/krungsri-icon/1894182860.png"
-                     width="75px"
-                     height="75px"
-                  />
-                  <span>
-                     <Typography variant="subtitle1">{e.accountNumber}</Typography>
-                     <Typography variant="subtitle1">
-                        {e.ownerName}
-                     </Typography>
-                  </span>
+               <Card style={{ marginBottom: "15px" }}>
+                  <CardActionArea
+                     style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        padding: "20px",
+                        textAlign: "right",
+                     }}
+                  >
+                     <img
+                        src="http://www.ojgold.co.th/wp-content/uploads/cache/2016/03/krungsri-icon/1894182860.png"
+                        width="75px"
+                        height="75px"
+                     />
+                     <span>
+                        <Typography variant="subtitle1">{e.accountNumber}</Typography>
+                        <Typography variant="subtitle1">
+                           {e.ownerName}
+                        </Typography>
+                     </span>
+                  </CardActionArea>
                </Card>
             ))}
             <Card style={{ padding: "30px", textAlign: "center" }}>
@@ -696,6 +746,150 @@ class Merchant extends Component {
                   เพิ่มบัญชีธนาคาร
                </Typography>
             </Card>
+         </React.Fragment>
+      );
+
+      const tempBankAccount = [
+         {
+            value: "0",
+            label: "Bank Name 00"
+         },
+         {
+            value: "1",
+            label: "Bank Name 01"
+         },
+         {
+            value: "2",
+            label: "Bank Name 02"
+         },
+         {
+            value: "3",
+            label: "Bank Name 03"
+         }
+      ];
+
+      const editAccountPopup = (
+         <React.Fragment>
+            <Drawer
+               anchor="bottom"
+               open={this.state.isEditAccountPopup}
+               onClose={this.editAccountPopupDrawer.bind(this, false)}
+            >
+               <div
+                  tabIndex={0}
+                  role="button"
+                  onClick={this.editAccountPopupDrawer.bind(this, false)}
+                  onKeyDown={this.editAccountPopupDrawer.bind(this, false)}
+               />
+               {
+                  <div className={classes.drawerContainer}>
+                     <div style={{ textAlign: "right" }}>
+                        <CloseIcon
+                           style={{ cursor: "pointer" }}
+                           onClick={this.editAccountPopupDrawer.bind(
+                              this,
+                              false
+                           )}
+                        />
+                     </div>
+
+                     <Typography variant="h5" style={{ marginBottom: "30px" }}>
+                        เพิ่ม/แก้ไขบัญชีธนาคารใหม่
+                     </Typography>
+                     <Card style={{ marginBottom: "15px" }}>
+                        <CardActionArea
+                           style={{
+                              display: "flex",
+                              justifyContent: "space-between",
+                              alignItems: "center",
+                              padding: "20px",
+                              textAlign: "right"
+                           }}
+                        >
+                           <img
+                              src="http://lh3.googleusercontent.com/rDGtTFrrEEIhFXBqcF_jGDZbZXdU9DRIVnMZps9AQ_ir-FvV0cQwb54-5UBIh4sdwA=w300"
+                              width="75px"
+                              height="75px"
+                           />
+                           <span>
+                              <Typography variant="subtitle1">
+                                 123 456789 012
+                              </Typography>
+                              <Typography variant="subtitle1">
+                                 พี่ปั๊กกะเป้าเองจ้า
+                              </Typography>
+                           </span>
+                        </CardActionArea>
+                     </Card>
+
+                     <Card
+                        style={{
+                           display: "flex",
+                           flexDirection: "column",
+                           padding: "30px",
+                           marginBottom: "15px"
+                        }}
+                     >
+                        <TextField
+                           id="standard-select-currency"
+                           select
+                           label="Select"
+                           className={classes.textField}
+                           // value={values.currency}
+                           // onChange={handleChange("currency")}
+                           SelectProps={{
+                              MenuProps: {
+                                 className: classes.menu
+                              }
+                           }}
+                           margin="normal"
+                        >
+                           {tempBankAccount.map(option => (
+                              <MenuItem key={option.value} value={option.value}>
+                                 {option.label}
+                              </MenuItem>
+                           ))}
+                        </TextField>
+                        <TextField
+                           id="item-comment"
+                           className={classNames(
+                              classes.margin,
+                              classes.textField
+                           )}
+                           variant="outlined"
+                           placeholder="เลขบัญชี"
+                           style={{ marginBottom: "20px" }}
+                        />
+                        <TextField
+                           id="item-comment"
+                           className={classNames(
+                              classes.margin,
+                              classes.textField
+                           )}
+                           variant="outlined"
+                           placeholder="ชื่อบัญชี"
+                           style={{ marginBottom: "20px" }}
+                        />
+                        <Button
+                           variant="contained"
+                           color="primary"
+                           className={classes.button}
+                        >
+                           บันทึกบัญชีธนาคารใหม่
+                        </Button>
+                     </Card>
+
+                     <Button
+                        variant="contained"
+                        color="primary"
+                        className={classes.button}
+                        fullWidth
+                     >
+                        เสร็จสิ้น
+                     </Button>
+                  </div>
+               }
+            </Drawer>
          </React.Fragment>
       );
 
@@ -1227,6 +1421,20 @@ class Merchant extends Component {
                </div>
 
                {addShippingPopup}
+               {editAccountPopup}
+               {calendarPopup &&
+
+                  <Calendar
+                     accentColor={'pink'}
+                     orientation={'flex-col'}
+                     showHeader={true}
+                     className={classes.calendarPanel}
+                     onDatePicked={(d) => {
+                        { this.handleCalendarClose(d) }
+                     }}
+                  />
+
+               }
             </main>
          </React.Fragment>
       );

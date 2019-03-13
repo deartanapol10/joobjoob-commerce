@@ -1,0 +1,26 @@
+.header {
+    padding: 24px 60px 0;
+    max-height: 192px;
+}
+
+.header-month {
+    font-size: 1rem;
+}
+
+.header-day {
+    font-size: 3rem;
+    margin-bottom: 24px;
+}
+
+p {
+    margin-bottom: 0;
+}
+
+.flex-col {
+
+    position: absolute;
+    z-index: 10000;
+    background: white;
+    height: 100vh;
+
+}

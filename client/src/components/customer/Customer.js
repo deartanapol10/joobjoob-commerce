@@ -194,29 +194,29 @@ class Customer extends Component {
 
   render() {
     const { classes } = this.props;
-    const { order , loading } = this.props.order;
+    const { order, loading } = this.props.order;
     const { product } = this.props.product
     console.log(product)
     console.log(order)
-    
-    if (loading === true || order === null || order === "undefined" || order.length == 0 ) {
+
+    if (loading === true || order === null || order === "undefined" || order.length == 0) {
       return <CircularProgress className={classes.loading} />;
-    } 
-    
+    }
+
     else {
       // create a product item to add in product component
       const newItem = [];
-        for (let i = 0; i < order.products.length; i++) {
-          const index = product.filter(pd => pd._id === order.products[i].product) 
-          newItem.push({
-            id: order.products[i].product,
-            name: index.map(pd => pd.productName),
-            price: index.map(pd => pd.price),
-            amount: order.products[i].quantity,
-            image: index.map(pd => pd.productImage)
-          });
-        }
-        console.log(newItem)
+      for (let i = 0; i < order.products.length; i++) {
+        const index = product.filter(pd => pd._id === order.products[i].product)
+        newItem.push({
+          id: order.products[i].product,
+          name: index.map(pd => pd.productName),
+          price: index.map(pd => pd.price),
+          amount: order.products[i].quantity,
+          image: index.map(pd => pd.productImage)
+        });
+      }
+      console.log(newItem)
 
 
       return (
@@ -287,7 +287,7 @@ class Customer extends Component {
                       <Card className={classes.card} key={item.id}>
                         <CardMedia
                           className={classes.cardMedia}
-                          image={"http://localhost:8000/"+item.image}
+                          image={"http://localhost:8000/" + item.image}
                           title={item.name}
                         />
                         <CardContent className={classes.content}>
@@ -402,7 +402,7 @@ class Customer extends Component {
   }
 }
 
-Customer.proptypes = {
+Customer.propTypes = {
   getOrder: PropTypes.func.isRequired,
   order: PropTypes.object.isRequired
 };
@@ -412,4 +412,4 @@ const mapStateToProps = state => ({
   product: state.product
 });
 
-export default connect(mapStateToProps,{ getOrder, getAllProduct } )(withStyles(styles)(Customer));
+export default connect(mapStateToProps, { getOrder, getAllProduct })(withStyles(styles)(Customer));

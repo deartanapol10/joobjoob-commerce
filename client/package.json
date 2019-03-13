@@ -10,6 +10,7 @@
     "moment": "^2.23.0",
     "peer": "^0.2.10",
     "react": "^16.5.2",
+    "react-calendar-material": "^0.1.8",
     "react-dom": "^16.5.2",
     "react-number-format": "^3.6.2",
     "react-redux": "^5.0.7",
