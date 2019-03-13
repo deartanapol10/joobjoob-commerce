@@ -1,6 +1,6 @@
 // CRUD mongoDB
 const express = require("express");
-const datetime = require('node-datetime');
+// const datetime = require('node-datetime');
 const router = express.Router();
 const multer = require('multer');
 
@@ -43,12 +43,12 @@ router.post('/', upload.single('productImage'), function (req, res, next) {
   new_product.categoryGroup = req.body.categoryGroup
   new_product.detail = req.body.detail
   new_product.price = req.body.price
-  new_product.createdAt = Date.now()
+  new_product.createdAt = Date.now().toLocaleString()
   new_product.productImage = req.file.path
   new_product
     .save()
     .then(result => {
-      console.log(result);
+      console.log(req.file);
       res.status(200).json({
         message: "Created product successfully",
         createdProduct: {
@@ -112,7 +112,7 @@ router.delete('/:id', function (req, res) {
 // Update product
 router.put('/:id', function (req, res) {
   Product.findByIdAndUpdate(req.params.id, { $set: req.body }, function (err, product) {
-    // updatedAt = Date.now();
+    updatedAt = Date.now().toLocaleString();
     if (err) return res.status(400).json({
       'Message': 'Unable to UPDATE the product!!',
       'err': err

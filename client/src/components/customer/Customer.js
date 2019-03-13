@@ -5,6 +5,7 @@ import { connect } from "react-redux";
 import Spinner from "../common/Spinner";
 import moment from "moment";
 import Loader from 'react-loader-spinner'
+import { getAllProduct } from '../../actions/productAction'
 
 import {
   Grid,
@@ -78,6 +79,7 @@ class Customer extends Component {
     let userid = this.props.match.params.userid;
     let orderid = this.props.match.params.orderid;
     this.props.getOrder(orderid);
+    this.props.getAllProduct();
   }
 
   getStepContent = step => {
@@ -193,23 +195,29 @@ class Customer extends Component {
   render() {
     const { classes } = this.props;
     const { order , loading } = this.props.order;
-
+    const { product } = this.props.product
+    console.log(product)
+    console.log(order)
+    
     if (loading === true || order === null || order === "undefined" || order.length == 0 ) {
       return <CircularProgress className={classes.loading} />;
     } 
     
     else {
       // create a product item to add in product component
-      var newItem = [];
+      const newItem = [];
         for (let i = 0; i < order.products.length; i++) {
+          const index = product.filter(pd => pd._id === order.products[i].product) 
           newItem.push({
-            id: order.products[i].product._id,
-            name: order.products[i].size,
-            price: order.products[i].quantity,
-            amount: order.products[i].description,
-            image: itemImage01
+            id: order.products[i].product,
+            name: index.map(pd => pd.productName),
+            price: index.map(pd => pd.price),
+            amount: order.products[i].quantity,
+            image: index.map(pd => pd.productImage)
           });
         }
+        console.log(newItem)
+
 
       return (
         <React.Fragment>
@@ -279,7 +287,7 @@ class Customer extends Component {
                       <Card className={classes.card} key={item.id}>
                         <CardMedia
                           className={classes.cardMedia}
-                          image={item.image}
+                          image={"http://localhost:8000/"+item.image}
                           title={item.name}
                         />
                         <CardContent className={classes.content}>
@@ -400,10 +408,8 @@ Customer.proptypes = {
 };
 
 const mapStateToProps = state => ({
-  order: state.order
+  order: state.order,
+  product: state.product
 });
 
-export default connect(
-  mapStateToProps,
-  { getOrder }
-)(withStyles(styles)(Customer));
+export default connect(mapStateToProps,{ getOrder, getAllProduct } )(withStyles(styles)(Customer));

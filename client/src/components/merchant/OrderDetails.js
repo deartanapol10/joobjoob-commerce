@@ -492,7 +492,7 @@ class Merchant extends Component {
                      <CardContent className={classes.itemCardContent}>
                         <CardMedia
                            className={classes.itemCardMedia}
-                           image={"http://localhost:8000/uploads/"+product.filter(pd => pd._id == item.product).map(pd => pd.productImage)}
+                           image={"http://localhost:8000/"+product.filter(pd => pd._id == item.product).map(pd => pd.productImage)}
                            title={item.name}
                         />
                         <span className={classes.itemCardDetailsWrapper}>

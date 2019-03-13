@@ -24,10 +24,11 @@ const ProductSchema = new Schema({
   productImage: { type: String, required: true },
 
   createdAt: {
-    type: Date
+    type: String,
+    default: new Date().toLocaleString()
   },
   updatedAt: {
-    type: Date
+    type: String
   },
   deletedFlag: {
     type: Boolean
